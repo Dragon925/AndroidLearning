@@ -1,6 +1,6 @@
 package com.github.dragon925.androidlearning.collections;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.util.Collections;
 import java.util.List;

@@ -20,8 +20,7 @@ public class ElementaryTraining {
      * @return среднее значение для введенных чисел
      */
     public double averageValue(int firstValue, int secondValue) {
-        //TODO: implement it
-        return 0;
+        return (firstValue + secondValue) / 2.0;
     }
 
     /**
@@ -34,8 +33,10 @@ public class ElementaryTraining {
      * @return сумма новых трех чисел
      */
     public double complicatedAmount(int firstValue, int secondValue, int thirdValue) {
-        //TODO: implement it
-        return 0;
+        firstValue *= 2;
+        secondValue -= 3;
+        thirdValue *= thirdValue;
+        return firstValue + secondValue + thirdValue;
     }
 
     /**
@@ -47,7 +48,11 @@ public class ElementaryTraining {
      * @return новое значение
      */
     public int changeValue(int value) {
-        //TODO: implement it
+        if (value > 3) {
+            value += 10;
+        } else {
+            value -= 10;
+        }
         return value;
     }
 
@@ -62,8 +67,26 @@ public class ElementaryTraining {
      * @return новое число
      */
     public int swapNumbers(int value) {
-        //TODO: implement it
-        return 0;
+        if (value > 99999 || value < 10) return value;
+
+        int lastNum = value % 10;
+        value /= 10;
+        int power;
+
+        if (value < 10) {
+            power = 1;
+        } else if (value < 100) {
+            power = 10;
+        } else if (value < 1000) {
+            power = 100;
+        } else {
+            power = 1000;
+        }
+
+        int firstNum = value / power;
+        value %= power;
+
+        return 10 * (power * lastNum + value) + firstNum;
     }
 
     /**
@@ -77,7 +100,11 @@ public class ElementaryTraining {
      * @return новое число
      */
     public int zeroEvenNumber(int value) {
-        //TODO: implement it
-        return 0;
+        if (value > 99999 || value < 10) return value;
+
+        int secondNum = value % 100 / 10;
+        int fourthNum = value % 10000 / 1000;
+
+        return value - 10 * secondNum - 1000 * fourthNum;
     }
 }
