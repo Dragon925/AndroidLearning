@@ -71,18 +71,8 @@ public class ElementaryTraining {
 
         int lastNum = value % 10;
         value /= 10;
-        int power;
 
-        if (value < 10) {
-            power = 1;
-        } else if (value < 100) {
-            power = 10;
-        } else if (value < 1000) {
-            power = 100;
-        } else {
-            power = 1000;
-        }
-
+        int power = (int) Math.pow(10, (int) Math.log10(value));
         int firstNum = value / power;
         value %= power;
 

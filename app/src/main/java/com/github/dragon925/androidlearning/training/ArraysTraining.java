@@ -19,17 +19,18 @@ public class ArraysTraining {
      * @return отсортированный массив
      */
     public int[] sort(int[] valuesArray) {
-        for (int i = 0; i < valuesArray.length - 1; i++) {
-            for (int j = 0; j < valuesArray.length - i - 1; j++) {
-                if (valuesArray[j] > valuesArray[j + 1]) {
-                    int temp = valuesArray[j];
-                    valuesArray[j] = valuesArray[j + 1];
-                    valuesArray[j + 1] = temp;
+        int[] sortedArray = valuesArray.clone();
+        for (int i = 0; i < sortedArray.length - 1; i++) {
+            for (int j = 0; j < sortedArray.length - i - 1; j++) {
+                if (sortedArray[j] > sortedArray[j + 1]) {
+                    int temp = sortedArray[j];
+                    sortedArray[j] = sortedArray[j + 1];
+                    sortedArray[j + 1] = temp;
                 }
             }
         }
 
-        return valuesArray;
+        return sortedArray;
     }
 
     /**
@@ -105,7 +106,9 @@ public class ArraysTraining {
      * элементов
      */
     public int maxCountSymbol(int[] array) {
-        int[] sortedArray = sort(array.clone());
+        if (array.length == 0) return 0;
+
+        int[] sortedArray = sort(array);
         int maxCount = 0;
         int currentCount = 1;
 
@@ -119,6 +122,6 @@ public class ArraysTraining {
                 currentCount = 1;
             }
         }
-        return maxCount;
+        return Math.max(maxCount, currentCount);
     }
 }
