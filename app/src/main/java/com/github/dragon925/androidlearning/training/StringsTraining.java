@@ -22,8 +22,14 @@ public class StringsTraining {
      * элементов строки text
      */
     public String getOddCharacterString(String text) {
-        //TODO: implement it
-        return "";
+        StringBuilder result = new StringBuilder(text.length() / 2);
+        for (int i = 0; i < text.length(); i++) {
+            if (i % 2 != 0) {
+                result.append(text.charAt(i));
+            }
+        }
+
+        return result.toString();
     }
 
     /**
@@ -37,8 +43,22 @@ public class StringsTraining {
      * вернуть пустой массив
      */
     public int[] getArrayLastSymbol(String text) {
-        //TODO: implement it
-        return new int[]{};
+        if (text == null || text.isEmpty()) return new int[0];
+
+        int[] symbolIndexes = new int[text.length() - 1];
+        int lastSymbol = text.charAt(text.length() - 1);
+        int count = 0;
+        for (int i = 0; i < text.length() - 1; i++) {
+            if (text.charAt(i) == lastSymbol) {
+                symbolIndexes[count] = i;
+                count++;
+            }
+        }
+
+        int[] result = new int[count];
+        System.arraycopy(symbolIndexes, 0, result, 0, count);
+
+        return result;
     }
 
     /**
@@ -49,8 +69,8 @@ public class StringsTraining {
      * @return количество цифр в строке
      */
     public int getNumbersCount(String text) {
-        //TODO: implement it
-        return 0;
+        String numbers = text.replaceAll("[^0-9]", "");
+        return numbers.length();
     }
 
     /**
@@ -61,7 +81,13 @@ public class StringsTraining {
      * @return текст, где цифры заменены словами
      */
     public String replaceAllNumbers(String text) {
-        //TODO: implement it
+        String[] numbers = {
+                "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"
+        };
+        for (int i = 0; i < numbers.length; i++) {
+            text = text.replace(String.valueOf(i), numbers[i]);
+        }
+
         return text;
     }
 
@@ -73,8 +99,16 @@ public class StringsTraining {
      * @return измененная строка
      */
     public String capitalReverse(String text) {
-        //TODO: implement it
-        return text;
+        char[] chars = text.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            if (Character.isUpperCase(chars[i])) {
+                chars[i] = Character.toLowerCase(chars[i]);
+            } else {
+                chars[i] = Character.toUpperCase(chars[i]);
+            }
+        }
+
+        return new String(chars);
     }
 
 }

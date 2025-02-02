@@ -2,8 +2,10 @@ package com.github.dragon925.androidlearning.collections;
 
 import androidx.annotation.NonNull;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Набор тренингов по работе со строками в java.
@@ -27,8 +29,21 @@ public class CollectionsBlock<T extends Comparable> {
      * @throws NullPointerException если один из параметров null
      */
     public List<T> collectionTask0(@NonNull List<T> firstList, @NonNull List<T> secondList) {
-        //TODO: implement it
-        return Collections.emptyList();
+        Objects.requireNonNull(firstList);
+        Objects.requireNonNull(secondList);
+        ArrayList<T> result = new ArrayList<>();
+        for (int i = 0, j = 0; i + j < firstList.size() + secondList.size(); ) {
+            if ((i < firstList.size())
+                    && ((j >= secondList.size()) || (firstList.get(i).compareTo(secondList.get(j)) > 0))) {
+                result.add(firstList.get(i));
+                i++;
+            } else {
+                result.add(secondList.get(j));
+                j++;
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -39,8 +54,14 @@ public class CollectionsBlock<T extends Comparable> {
      * @throws NullPointerException если один из параметров null
      */
     public List<T> collectionTask1(@NonNull List<T> inputList) {
-        //TODO: implement it
-        return Collections.emptyList();
+        Objects.requireNonNull(inputList);
+        ArrayList<T> result = new ArrayList<>();
+        for (int i = 0; i < inputList.size(); i++) {
+            result.add(inputList.get(i));
+            result.addAll(inputList.subList(0, i));
+        }
+
+        return result;
     }
 
     /**
@@ -52,8 +73,10 @@ public class CollectionsBlock<T extends Comparable> {
      * @throws NullPointerException если один из параметров null
      */
     public boolean collectionTask2(@NonNull List<T> firstList, @NonNull List<T> secondList) {
-        //TODO: implement it
-        return true;
+        var firstSet = new HashSet<>(Objects.requireNonNull(firstList));
+        var secondSet = new HashSet<>(Objects.requireNonNull(secondList));
+
+        return firstSet.equals(secondSet);
     }
 
     /**
@@ -68,8 +91,15 @@ public class CollectionsBlock<T extends Comparable> {
      * @throws NullPointerException если один из параметров null
      */
     public List<T> collectionTask3(@NonNull List<T> inputList, int n) {
-        //TODO: implement it
-        return Collections.emptyList();
+        var result = new ArrayList<>(Objects.requireNonNull(inputList));
+
+        for (int i = 0; i < inputList.size(); i++) {
+            int shift = (i + n) % inputList.size();
+            int newIndex = (shift < 0) ? inputList.size() + shift : shift;
+            result.set(newIndex, inputList.get(i));
+        }
+
+        return result;
     }
 
     /**
@@ -84,8 +114,18 @@ public class CollectionsBlock<T extends Comparable> {
      */
     public List<String> collectionTask4(@NonNull List<String> inputList, @NonNull String a,
                                         @NonNull String b) {
-        //TODO: implement it
-        return Collections.emptyList();
+        Objects.requireNonNull(inputList);
+        Objects.requireNonNull(a);
+        Objects.requireNonNull(b);
+
+        var result = new ArrayList<>(inputList);
+        for (int i = 0; i < inputList.size(); i++) {
+            if (inputList.get(i).equals(a)) {
+                result.set(i, b);
+            }
+        }
+
+        return result;
     }
 
     /*
@@ -97,5 +137,7 @@ public class CollectionsBlock<T extends Comparable> {
       в алфавитном порядке. Найдите средний балл каждой группы по каждому предмету.
       Определите самого старшего студента и самого младшего студентов.
       Для каждой группы найдите лучшего с точки зрения успеваемости студента.
+
+      Классы Student, Grade. Поиск запрашиваемых значений в StudentListTest
      */
 }
