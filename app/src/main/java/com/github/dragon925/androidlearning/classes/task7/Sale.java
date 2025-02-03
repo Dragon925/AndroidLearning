@@ -1,4 +1,4 @@
-package com.github.dragon925.androidlearning.classes.task_7;
+package com.github.dragon925.androidlearning.classes.task7;
 
 import androidx.annotation.NonNull;
 

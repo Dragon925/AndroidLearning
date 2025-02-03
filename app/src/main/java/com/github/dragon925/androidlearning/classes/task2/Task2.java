@@ -1,4 +1,4 @@
-package com.github.dragon925.androidlearning.classes.task_2;
+package com.github.dragon925.androidlearning.classes.task2;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +26,7 @@ public class Task2 {
 
     public void fillRandom(int min, int max) {
         for (int i = 0; i < length; i++) {
-            numbers.add((int) (Math.random() * (max - min) + min));
+            numbers.add((int) Math.round(Math.random() * (max - min) + min));
         }
     }
 

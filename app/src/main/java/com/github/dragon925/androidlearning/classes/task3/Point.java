@@ -1,4 +1,4 @@
-package com.github.dragon925.androidlearning.classes.task_3;
+package com.github.dragon925.androidlearning.classes.task3;
 
 public class Point {
     private final double x;

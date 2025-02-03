@@ -1,4 +1,4 @@
-package com.github.dragon925.androidlearning.classes.task_6;
+package com.github.dragon925.androidlearning.classes.task6;
 
 import java.util.Objects;
 

@@ -1,4 +1,4 @@
-package com.github.dragon925.androidlearning.classes.task_3;
+package com.github.dragon925.androidlearning.classes.task3;
 
 /**
  * Описать класс, представляющий треугольник.
@@ -27,7 +27,10 @@ public class Triangle {
         this.sideB = getSideLength(pointB, pointC);
         this.sideC = getSideLength(pointC, pointA);
 
-        if (sideA + sideB <= sideC || sideB + sideC <= sideA || sideC + sideA <= sideB) {
+        double determinant = (pointB.getX() - pointA.getX()) * (pointC.getY() - pointA.getY())
+                - (pointB.getY() - pointA.getY()) * (pointC.getX() - pointA.getX());
+
+        if (Math.round(determinant) < 1e-10) {
             throw new IllegalArgumentException("Triangle can't be created");
         }
     }

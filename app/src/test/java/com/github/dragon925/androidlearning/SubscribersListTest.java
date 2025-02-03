@@ -1,6 +1,6 @@
 package com.github.dragon925.androidlearning;
 
-import com.github.dragon925.androidlearning.classes.task_5.Subscriber;
+import com.github.dragon925.androidlearning.classes.task5.Subscriber;
 
 import org.junit.BeforeClass;
 import org.junit.Test;

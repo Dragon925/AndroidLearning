@@ -1,4 +1,4 @@
-package com.github.dragon925.androidlearning.classes.task_4;
+package com.github.dragon925.androidlearning.classes.task4;
 
 
 /**
@@ -68,21 +68,18 @@ public class Time {
     }
 
     public void addHours(int hours) {
-        int totalHours = (this.hour + hours) % 24;
-        this.hour = (24 + totalHours) % 24;
+        this.hour = Math.floorMod(this.hour + hours, 24);
     }
 
     public void addMinutes(int minutes) {
-        int extraHours = (this.minute + minutes) / 60;
-        int totalMinutes = (this.minute + minutes) % 60;
-        this.minute = (60 + totalMinutes) % 60;
-        addHours(extraHours);
+        int totalMinutes = this.minute + minutes;
+        this.minute = Math.floorMod(totalMinutes, 60);
+        addHours(Math.floorDiv(totalMinutes, 60));
     }
 
     public void addSeconds(int seconds) {
-        int extraMinutes = (this.second + seconds) / 60;
-        int totalSeconds = (this.second + seconds) % 60;
-        this.second = (60 + totalSeconds) % 60;
-        addMinutes(extraMinutes);
+        int totalSeconds = this.second + seconds;
+        this.second = Math.floorMod(totalSeconds, 60);
+        addMinutes(Math.floorDiv(totalSeconds, 60));
     }
 }

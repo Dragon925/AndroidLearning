@@ -32,7 +32,8 @@ public class CollectionsBlock<T extends Comparable> {
         Objects.requireNonNull(firstList);
         Objects.requireNonNull(secondList);
         ArrayList<T> result = new ArrayList<>();
-        for (int i = 0, j = 0; i + j < firstList.size() + secondList.size(); ) {
+        var totalSize = firstList.size() + secondList.size();
+        for (int i = 0, j = 0; i + j < totalSize; ) {
             if ((i < firstList.size())
                     && ((j >= secondList.size()) || (firstList.get(i).compareTo(secondList.get(j)) > 0))) {
                 result.add(firstList.get(i));

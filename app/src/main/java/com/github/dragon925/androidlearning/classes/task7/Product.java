@@ -1,6 +1,4 @@
-package com.github.dragon925.androidlearning.classes.task_7;
-
-import java.util.Objects;
+package com.github.dragon925.androidlearning.classes.task7;
 
 public class Product {
 
