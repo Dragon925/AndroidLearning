@@ -32,6 +32,7 @@ class Book(
 
         other as Book
 
+        if (name != other.name) return false
         if (price != other.price) return false
         if (wordCount != other.wordCount) return false
 
@@ -39,7 +40,8 @@ class Book(
     }
 
     override fun hashCode(): Int {
-        var result = price.hashCode()
+        var result = name.hashCode()
+        result = 31 * result + price.hashCode()
         result = 31 * result + wordCount
         return result
     }
