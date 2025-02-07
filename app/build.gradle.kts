@@ -36,6 +36,7 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
     }
 }
 
@@ -50,7 +51,12 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+    implementation(libs.material)
+    implementation(libs.bundles.android.views)
+
     implementation(libs.retrofit)
+
+    implementation(libs.bundles.android.navigation)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
