@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">AndroidLearning</string>
+    <string name="app_name">Хочу помочь</string>
+    <string name="action_edit">Редактировать</string>
+    <string name="news">Новости</string>
+    <string name="search">Поиск</string>
+    <string name="help">Помощь</string>
+    <string name="history">История</string>
+    <string name="profile">Профиль</string>
+    <string name="birthday">Дата рождения</string>
+    <string name="field_of_activity">Сфера деятельности</string>
+    <string name="receive_notification">Получать push-уведомления</string>
+    <string name="logout">Выйти из аккаунта</string>
+    <string name="friends">Ваши друзья</string>
+    <string name="description_avatar">Аватар</string>
 </resources>

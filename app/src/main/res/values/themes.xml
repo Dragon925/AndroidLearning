@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     
     <style name="Base.Theme.AndroidLearning" parent="Theme.Material3.DayNight.NoActionBar">
-
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="colorPrimary">@color/leaf</item>
+    </style>
+    
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white_three</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splashscreen</item>
+        <item name="android:windowSplashScreenBrandingImage" tools:targetApi="s">@drawable/ic_splashscreen_branding</item>
+        <item name="postSplashScreenTheme">@style/Theme.AndroidLearning</item>
     </style>
 
     <style name="Theme.AndroidLearning" parent="Base.Theme.AndroidLearning" />

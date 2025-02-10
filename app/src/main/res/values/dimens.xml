@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="spacing_xxs">4dp</dimen>
+    <dimen name="spacing_xs">8dp</dimen>
+    <dimen name="spacing_s">12dp</dimen>
+    <dimen name="spacing_m">16dp</dimen>
+    <dimen name="spacing_l">20dp</dimen>
+    <dimen name="spacing_xl">24dp</dimen>
+    <dimen name="spacing_xxl">28dp</dimen>
+    <dimen name="spacing_xxl_2">32dp</dimen>
+
+    <dimen name="avatar_size">48dp</dimen>
+    <dimen name="profile_image_height">220dp</dimen>
+    <dimen name="bottom_nav_plus_app_bar_height">112dp</dimen>
+</resources>
