@@ -1,4 +1,4 @@
-package com.github.dragon925.androidlearning
+package com.github.dragon925.androidlearning.ui
 
 import android.content.Context
 

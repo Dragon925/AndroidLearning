@@ -1,10 +1,11 @@
-package com.github.dragon925.androidlearning
+package com.github.dragon925.androidlearning.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.github.dragon925.androidlearning.ui.models.FriendItem
 import com.github.dragon925.androidlearning.databinding.ItemFriendBinding
 
 class FriendsListAdapter :
@@ -42,7 +43,7 @@ class FriendsListAdapter :
         override fun areItemsTheSame(
             oldItem: FriendItem,
             newItem: FriendItem,
-        ): Boolean = oldItem == newItem
+        ): Boolean = oldItem.id == newItem.id
 
         override fun areContentsTheSame(
             oldItem: FriendItem,

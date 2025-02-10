@@ -8,6 +8,9 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.github.dragon925.androidlearning.databinding.ActivityMainBinding
+import com.github.dragon925.androidlearning.ui.adapters.FriendsListAdapter
+import com.github.dragon925.androidlearning.ui.adapters.SimpleItemDecoration
+import com.github.dragon925.androidlearning.ui.models.FriendItem
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -50,9 +53,9 @@ class MainActivity : AppCompatActivity() {
             tvFieldOfActivity.text = "Хирургия, травматология"
             friendsAdapter.submitList(
                 listOf(
-                    FriendItem(R.drawable.avatar_1, "Дмитрий Валерьевич"),
-                    FriendItem(R.drawable.avatar_2, "Евгений Александров"),
-                    FriendItem(R.drawable.avatar_3, "Виктор Кузнецов"),
+                    FriendItem(1, R.drawable.avatar_1, "Дмитрий Валерьевич"),
+                    FriendItem(2, R.drawable.avatar_2, "Евгений Александров"),
+                    FriendItem(3, R.drawable.avatar_3, "Виктор Кузнецов"),
                 ),
             )
         }

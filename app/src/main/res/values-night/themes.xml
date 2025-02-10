@@ -2,7 +2,11 @@
 <resources>
 
     <style name="Base.Theme.AndroidLearning" parent="Theme.Material3.DayNight.NoActionBar">
-
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="colorPrimary">@color/leaf</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:colorBackground">@color/white</item>
     </style>
 
 </resources>
