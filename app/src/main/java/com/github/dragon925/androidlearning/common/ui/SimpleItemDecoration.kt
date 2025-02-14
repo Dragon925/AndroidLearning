@@ -1,10 +1,9 @@
-package com.github.dragon925.androidlearning.ui.adapters
+package com.github.dragon925.androidlearning.common.ui
 
 import android.content.Context
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.github.dragon925.androidlearning.ui.dpToPx
 
 class SimpleItemDecoration(
     context: Context,

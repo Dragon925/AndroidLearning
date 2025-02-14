@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/TextStyle8"
+    android:id="@+id/tv_result"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/spacing_l"
+    android:layout_marginEnd="@dimen/spacing_xs"
+    android:layout_marginVertical="@dimen/spacing_l"
+    app:drawableEndCompat="@drawable/ic_chevron_right"
+    app:drawableTint="@color/warm_grey"
+    android:drawablePadding="@dimen/spacing_m"
+    android:ellipsize="end"
+    android:maxLines="1"
+    tools:text="Search result">
+
+</TextView>

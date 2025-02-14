@@ -12,4 +12,20 @@
     <string name="logout">Выйти из аккаунта</string>
     <string name="friends">Ваши друзья</string>
     <string name="description_avatar">Аватар</string>
+    <string name="choose_photo">Выбрать фото</string>
+    <string name="take_photo">Сделать снимок</string>
+    <string name="delete">Удалить</string>
+
+    <string name="camera_permission_denied">Нет доступа к камере</string>
+    <string name="choose_help_category">Выберите категорию помощи</string>
+
+    <string name="help_category_kids">Дети</string>
+    <string name="help_category_adult">Взрослые</string>
+    <string name="help_category_elderly">Пожилые</string>
+    <string name="help_category_animals">Животные</string>
+    <string name="help_category_event">Мероприятия</string>
+
+    <string name="search_hint">Введите название организации</string>
+    <string name="tab_by_event">По мероприятиям</string>
+    <string name="tab_by_nko">По НКО</string>
 </resources>

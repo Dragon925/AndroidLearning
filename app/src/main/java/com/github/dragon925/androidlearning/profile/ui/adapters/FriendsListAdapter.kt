@@ -1,17 +1,16 @@
-package com.github.dragon925.androidlearning.ui.adapters
+package com.github.dragon925.androidlearning.profile.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.github.dragon925.androidlearning.ui.models.FriendItem
+import com.github.dragon925.androidlearning.profile.ui.models.FriendItem
 import com.github.dragon925.androidlearning.databinding.ItemFriendBinding
 
-class FriendsListAdapter :
-    ListAdapter<FriendItem, FriendsListAdapter.FriendViewHolder>(
+class FriendsListAdapter : ListAdapter<FriendItem, FriendsListAdapter.FriendViewHolder>(
         ItemDiffCallback(),
-    ) {
+) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
