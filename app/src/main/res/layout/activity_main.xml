@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:clipChildren="false">
 
     <androidx.fragment.app.FragmentContainerView
         android:name="com.github.dragon925.androidlearning.help.ui.fragments.HelpCategoriesFragment"
@@ -20,6 +21,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:menu="@menu/menu_navigation"
-        app:labelVisibilityMode="labeled"/>
+        app:labelVisibilityMode="labeled"
+        android:background="@color/white_three"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:itemActiveIndicatorStyle="@android:color/transparent">
+
+        <ImageButton
+            android:id="@+id/btn_help"
+            android:layout_width="@dimen/bottom_nav_button_size"
+            android:layout_height="@dimen/bottom_nav_button_size"
+            android:src="@drawable/ic_help_filled"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/spacing_xl"
+            android:background="@drawable/bg_nav_button"
+            app:tint="@color/white"
+            android:contentDescription="@string/help"/>
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 </LinearLayout>

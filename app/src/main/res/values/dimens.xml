@@ -12,4 +12,5 @@
     <dimen name="avatar_size">48dp</dimen>
     <dimen name="profile_image_height">220dp</dimen>
     <dimen name="bottom_nav_plus_app_bar_height">112dp</dimen>
+    <dimen name="bottom_nav_button_size">64dp</dimen>
 </resources>

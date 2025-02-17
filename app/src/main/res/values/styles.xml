@@ -215,6 +215,7 @@
 
     <style name="Widget.App.AppBarLayout" parent="Widget.Material3.AppBarLayout">
         <item name="android:background">?attr/colorPrimary</item>
+        <item name="liftOnScrollColor">?attr/colorPrimary</item>
     </style>
 
     <style name="Widget.App.Toolbar" parent="Widget.Material3.Toolbar">

@@ -50,5 +50,11 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+        binding.btnHelp.setOnClickListener {
+            binding.bottomNavBar.selectedItemId = R.id.screen_help
+            supportFragmentManager.beginTransaction()
+                .replace(binding.mainNavContainer.id, HelpCategoriesFragment.newInstance())
+                .commit()
+        }
     }
 }
