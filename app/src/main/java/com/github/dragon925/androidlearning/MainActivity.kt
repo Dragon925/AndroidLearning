@@ -1,47 +1,60 @@
 package com.github.dragon925.androidlearning
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.github.dragon925.androidlearning.ui.theme.AndroidLearningTheme
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.github.dragon925.androidlearning.databinding.ActivityMainBinding
+import com.github.dragon925.androidlearning.help.ui.fragments.HelpCategoriesFragment
+import com.github.dragon925.androidlearning.profile.ui.fragments.ProfileFragment
+import com.github.dragon925.androidlearning.search.ui.fragments.SearchFragment
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent {
-            AndroidLearningTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
+            insets
+        }
+
+        binding.bottomNavBar.selectedItemId = R.id.screen_help
+        binding.bottomNavBar.setOnItemSelectedListener { item ->
+            when(item.itemId) {
+                R.id.screen_help -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(binding.mainNavContainer.id, HelpCategoriesFragment.newInstance())
+                        .commit()
+                    true
                 }
+                R.id.screen_profile -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(binding.mainNavContainer.id, ProfileFragment.newInstance(0))
+                        .commit()
+                    true
+                }
+                R.id.screen_search -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(binding.mainNavContainer.id, SearchFragment.newInstance())
+                        .commit()
+                    true
+                }
+                else -> false
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    AndroidLearningTheme {
-        Greeting("Android")
+        binding.btnHelp.setOnClickListener {
+            binding.bottomNavBar.selectedItemId = R.id.screen_help
+            supportFragmentManager.beginTransaction()
+                .replace(binding.mainNavContainer.id, HelpCategoriesFragment.newInstance())
+                .commit()
+        }
     }
 }

@@ -36,12 +36,14 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
     }
 }
 
 dependencies {
 
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -50,7 +52,12 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+    implementation(libs.material)
+    implementation(libs.bundles.android.views)
+
     implementation(libs.retrofit)
+
+    implementation(libs.bundles.android.navigation)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
