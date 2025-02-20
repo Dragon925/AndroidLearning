@@ -1,12 +1,18 @@
 package com.github.dragon925.androidlearning.profile.ui.fragments
 
+import android.app.Activity
+import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
+import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
+import androidx.activity.result.contract.ActivityResultContracts.TakePicturePreview
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import com.github.dragon925.androidlearning.R
@@ -36,7 +42,7 @@ class ProfileFragment : Fragment() {
 
     private val friendsAdapter = FriendsListAdapter()
 
-    private val permission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+    private val permission = registerForActivityResult(RequestPermission()) { granted ->
         when {
             granted -> camera.launch(null)
             else -> {
@@ -49,8 +55,27 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private val camera = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+    private val camera = registerForActivityResult(TakePicturePreview()) { bitmap ->
         bitmap?.let { binding.ivAvatar.setImageBitmap(it) }
+    }
+
+    private val pickMedia = registerForActivityResult(PickVisualMedia()) { uri ->
+        uri?.let { binding.ivAvatar.setImageURI(it) }
+    }
+
+    private val openGallery = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.data?.let { uri ->
+                try {
+                    requireContext().contentResolver.openInputStream(uri).use { inputStream ->
+                        val bitmap = inputStream?.let { BitmapFactory.decodeStream(it) }
+                        binding.ivAvatar.setImageBitmap(bitmap)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -103,7 +128,13 @@ class ProfileFragment : Fragment() {
     }
 
     private fun choosePhoto() {
-        Log.d("ProfileFragment", "choosePhoto")
+        if (PickVisualMedia.isPhotoPickerAvailable(requireContext())) {
+            pickMedia.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
+        } else {
+            openGallery.launch(Intent(Intent.ACTION_GET_CONTENT)
+                .apply { type = "image/*" }
+            )
+        }
     }
 
     private fun takePhoto() {

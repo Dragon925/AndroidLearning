@@ -52,12 +52,16 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+    implementation(libs.kotlinx.datetime)
+
     implementation(libs.material)
     implementation(libs.bundles.android.views)
 
     implementation(libs.retrofit)
+    implementation(libs.gson)
 
     implementation(libs.bundles.android.navigation)
+    implementation(libs.activity)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

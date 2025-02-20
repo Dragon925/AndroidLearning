@@ -8,6 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.github.dragon925.androidlearning.databinding.ActivityMainBinding
 import com.github.dragon925.androidlearning.help.ui.fragments.HelpCategoriesFragment
+import com.github.dragon925.androidlearning.news.ui.fragments.NewsFragment
 import com.github.dragon925.androidlearning.profile.ui.fragments.ProfileFragment
 import com.github.dragon925.androidlearning.search.ui.fragments.SearchFragment
 
@@ -44,6 +45,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.screen_search -> {
                     supportFragmentManager.beginTransaction()
                         .replace(binding.mainNavContainer.id, SearchFragment.newInstance())
+                        .commit()
+                    true
+                }
+                R.id.screen_news -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(binding.mainNavContainer.id, NewsFragment.newInstance())
                         .commit()
                     true
                 }
