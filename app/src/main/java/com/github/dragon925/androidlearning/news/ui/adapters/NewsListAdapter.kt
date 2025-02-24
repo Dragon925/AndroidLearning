@@ -36,7 +36,7 @@ class NewsListAdapter(
                 tvTitle.text = item.title
                 tvDescription.text = item.description
                 btnDate.text = item.date
-                btnDate.setOnClickListener { openDetails(item) }
+                root.setOnClickListener { openDetails(item) }
                 ivImage.visibility = if (item.image == null) View.GONE else View.VISIBLE
                 item.image?.let { ivImage.setImageDrawable(it) }
             }

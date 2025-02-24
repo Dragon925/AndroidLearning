@@ -10,6 +10,7 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.dragon925.androidlearning.R
+import com.github.dragon925.androidlearning.common.data.repository.CommonCategoryRepository
 import com.github.dragon925.androidlearning.databinding.FragmentNewsBinding
 import com.github.dragon925.androidlearning.news.data.repositories.EventRepository
 import com.github.dragon925.androidlearning.news.ui.activities.NewsDetailsActivity
@@ -42,7 +43,7 @@ class NewsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        EventRepository.getCategories(requireContext().assets).forEach { filters[it.id] = false }
+        CommonCategoryRepository.getCategories(requireContext().assets).forEach { filters[it.id] = false }
 
         val divider = MaterialDividerItemDecoration(
             requireContext(), LinearLayoutManager.VERTICAL

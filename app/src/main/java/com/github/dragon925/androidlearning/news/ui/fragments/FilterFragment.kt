@@ -8,8 +8,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import com.github.dragon925.androidlearning.R
+import com.github.dragon925.androidlearning.common.data.repository.CommonCategoryRepository
 import com.github.dragon925.androidlearning.databinding.FragmentFilterBinding
-import com.github.dragon925.androidlearning.news.data.repositories.EventRepository
 import com.github.dragon925.androidlearning.news.ui.adapters.FilterListAdapter
 import com.github.dragon925.androidlearning.news.ui.models.FilterItem
 
@@ -56,7 +56,7 @@ class FilterFragment : Fragment() {
 
         binding.rvFilters.adapter = filterListAdapter
 
-        val categories = EventRepository.getCategories(requireContext().assets)
+        val categories = CommonCategoryRepository.getCategories(requireContext().assets)
 
         categories.forEach { filters[it.id] = false }
         chosenFilters.forEach { filters[it] = true }

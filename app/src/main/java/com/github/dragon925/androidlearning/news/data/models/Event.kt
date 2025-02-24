@@ -8,17 +8,24 @@ data class Event(
     val name: String,
     val description: String,
     val organizer: String,
+
     @SerializedName(CATEGORY_IDS)
     val categoryIds: List<Int>,
+
     val address: String,
+
     @SerializedName(PHONE_NUMBERS)
     val phoneNumbers: List<String>,
+
     val email: String,
     val website: String,
+
     @SerializedName(START_DATE)
     val startDate: LocalDate,
+
     @SerializedName(END_DATE)
     val endDate: LocalDate,
+
     val photos: List<String>,
     val members: List<Member> = emptyList()
 ) {

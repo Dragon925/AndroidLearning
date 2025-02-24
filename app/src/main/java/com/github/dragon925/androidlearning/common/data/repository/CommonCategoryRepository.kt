@@ -1,11 +1,11 @@
-package com.github.dragon925.androidlearning.help.data
+package com.github.dragon925.androidlearning.common.data.repository
 
 import android.content.res.AssetManager
 import android.util.Log
 import com.github.dragon925.androidlearning.common.domain.Category
 import com.google.gson.Gson
 
-object HelpRepository {
+object CommonCategoryRepository {
 
     private const val CATEGORY_FILE = "categories.json"
 
@@ -17,7 +17,7 @@ object HelpRepository {
                 gson.fromJson(inputStream, Array<Category>::class.java).toList()
             }
         } catch (e: Exception) {
-            Log.e("HelpRepository-getCategories", e.message ?: "Exception")
+            Log.e("CommonCategoryRepository-getCategories", e.message ?: "Exception")
             emptyList()
         }.sortedBy { it.name }
     }
