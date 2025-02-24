@@ -20,9 +20,18 @@
             app:menu="@menu/menu_news_details"
             app:title="Спонсоры отремонтируют школу-интернат"/>
 
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/pi_loading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:trackColor="@color/light_olive_green"
+            app:indicatorColor="@color/macaroni_and_cheese"/>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nsv_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"

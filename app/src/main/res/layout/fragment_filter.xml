@@ -22,6 +22,14 @@
             app:menu="@menu/menu_news_filter"
             app:navigationIcon="@drawable/ic_back"/>
 
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/pi_loading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:trackColor="@color/light_olive_green"
+            app:indicatorColor="@color/macaroni_and_cheese"/>
+
         <TextView
             style="@style/TextStyle20"
             android:layout_width="match_parent"

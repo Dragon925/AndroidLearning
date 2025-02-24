@@ -2,8 +2,8 @@ package com.github.dragon925.androidlearning.news.ui.utils
 
 import android.content.Context
 import com.github.dragon925.androidlearning.R
-import com.github.dragon925.androidlearning.common.ui.getAssetDrawable
-import com.github.dragon925.androidlearning.news.data.models.Event
+import com.github.dragon925.androidlearning.common.domain.Event
+import com.github.dragon925.androidlearning.news.ui.models.NewsDetailItem
 import com.github.dragon925.androidlearning.news.ui.models.NewsItem
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
@@ -26,7 +26,21 @@ fun Event.toNewsItem(context: Context) = NewsItem(
     description = description,
     date = getDateString(context, startDate, endDate),
     categoryIds = categoryIds.toSet(),
-    image = context.getAssetDrawable(photos.first())
+    image = photos.first()
+)
+
+fun Event.toNewsDetailItem(context: Context) = NewsDetailItem(
+    id = id,
+    name = name,
+    description = description,
+    organizer = organizer,
+    address = address,
+    phoneNumbers = phoneNumbers,
+    email = email,
+    website = website,
+    date = getDateString(context, startDate, endDate),
+    photos = photos,
+    members = members
 )
 
 fun getDateString(context: Context, dayStart: LocalDate, dayEnd: LocalDate): String {
