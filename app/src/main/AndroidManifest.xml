@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
 
     <uses-feature android:name="android.hardware.camera" />
 
@@ -16,6 +18,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidLearning"
         tools:targetApi="31">
+        <service
+            android:name=".common.data.service.DataLoadingService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="dataSync">
+
+        </service>
+
         <activity
             android:name=".news.ui.activities.NewsDetailsActivity"
             android:exported="false" />

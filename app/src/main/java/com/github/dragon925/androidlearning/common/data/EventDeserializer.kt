@@ -1,7 +1,7 @@
-package com.github.dragon925.androidlearning.news.data.utils
+package com.github.dragon925.androidlearning.common.data
 
-import com.github.dragon925.androidlearning.news.data.models.Event
-import com.github.dragon925.androidlearning.news.data.models.Member
+import com.github.dragon925.androidlearning.common.domain.Event
+import com.github.dragon925.androidlearning.common.domain.Member
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
