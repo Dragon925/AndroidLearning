@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.switchmaterial.SwitchMaterial xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/TextStyle8"
+    android:id="@+id/sw_filter"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/spacing_l"
+    android:paddingEnd="@dimen/spacing_m"
+    android:paddingVertical="@dimen/spacing_l"
+    tools:text="Дети"
+    app:thumbTint="@color/turtle_green"
+    app:trackTint="@color/light_olive_green"/>

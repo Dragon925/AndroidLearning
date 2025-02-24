@@ -34,7 +34,7 @@ class HelpCategoryListAdapter : ListAdapter<HelpCategoryItem, HelpCategoryListAd
         fun bind(item: HelpCategoryItem) {
             with(binding) {
                 tvTitle.text = item.title
-                tvTitle.setCompoundDrawablesWithIntrinsicBounds(0, item.iconResId, 0, 0)
+                tvTitle.setCompoundDrawablesWithIntrinsicBounds(null, item.icon, null, null)
             }
         }
     }

@@ -1,0 +1,780 @@
+[
+  {
+    "id":1,
+    "name":"Спонсоры отремонтируют школу-интернат",
+    "description":"Дубовская школа-интернат для детей с ограниченными возможностями здоровья стала первой в области",
+    "organizer":"Благотворительный Фонд «Счастливый Мир»",
+    "category_ids":[
+      1
+    ],
+    "address":"Санкт-Петербург, Кирочная улица, д. 50А, каб. 208",
+    "phone_numbers":[
+      "+7 (937) 037 37-73",
+      "+7 (937) 016 16-16"
+    ],
+    "email":"",
+    "website":"",
+    "start_date":"2025-03-01",
+    "end_date":"2025-03-29",
+    "photos":[
+      "images/cardimage_1.png",
+      "images/cardimage_2.png",
+      "images/cardimage_3.png"
+    ],
+    "members":[
+      {
+        "id": 1,
+        "name": "",
+        "avatar": "images/photo_1.png"
+      },
+      {
+        "id": 2,
+        "name": "",
+        "avatar": "images/photo_2.png"
+      },
+      {
+        "id": 3,
+        "name": "",
+        "avatar": "images/photo_3.png"
+      },
+      {
+        "id": 4,
+        "name": "",
+        "avatar": "images/photo_4.png"
+      },
+      {
+        "id": 5,
+        "name": "",
+        "avatar": "images/photo_5.png"
+      },
+      {
+        "id": 6,
+        "name": "",
+        "avatar": "images/photo_1.png"
+      },
+      {
+        "id": 7,
+        "name": "",
+        "avatar": "images/photo_2.png"
+      },
+      {
+        "id": 8,
+        "name": "",
+        "avatar": "images/photo_3.png"
+      },
+      {
+        "id": 9,
+        "name": "",
+        "avatar": "images/photo_4.png"
+      },
+      {
+        "id": 10,
+        "name": "",
+        "avatar": "images/photo_5.png"
+      }
+    ]
+  },
+  {
+    "id":2,
+    "name":"Конкурс по вокальному пению в детском доме №6",
+    "description":"Дубовская школа-интернат для детей с ограниченными возможностями здоровья стала первой в области",
+    "organizer":"Благотворительный Фонд «Счастливый Мир»",
+    "category_ids":[
+      1,
+      5
+    ],
+    "address":"Санкт-Петербург, Кирочная улица, д. 50А, каб. 208",
+    "phone_numbers":[
+      "+7 (937) 037 37-73",
+      "+7 (937) 016 16-16"
+    ],
+    "email":"",
+    "website":"",
+    "start_date":"2025-03-01",
+    "end_date":"2025-03-01",
+    "photos":[
+      "images/img.png",
+      "images/cardimage_2.png",
+      "images/cardimage_3.png"
+    ],
+    "members":[
+      {
+        "id": 1,
+        "name": "",
+        "avatar": "images/photo_1.png"
+      },
+      {
+        "id": 2,
+        "name": "",
+        "avatar": "images/photo_2.png"
+      },
+      {
+        "id": 3,
+        "name": "",
+        "avatar": "images/photo_3.png"
+      },
+      {
+        "id": 4,
+        "name": "",
+        "avatar": "images/photo_4.png"
+      },
+      {
+        "id": 5,
+        "name": "",
+        "avatar": "images/photo_5.png"
+      }
+    ]
+  },
+
+  {
+    "id":3,
+    "name":"Благотворительный забег «Дети вместо цветов»",
+    "description":"Ежегодная акция, в рамках которой школьники и их родители жертвуют средства на помощь тяжелобольным детям вместо покупки букетов учителям. Участники забега получают памятные значки, а собранные средства направляются в фонды «Вера» и «Дом с маяком».",
+    "organizer":"Благотворительный фонд «Вера»",
+    "category_ids":[
+      1,
+      5
+    ],
+    "address":"Парк Горького, Москва, ул. Крымский Вал, 9",
+    "phone_numbers":[
+      "+7 (495) 123 45-67",
+      "+7 (916) 555 44-33"
+    ],
+    "email":"info@deti-cvety.ru",
+    "website":"https://deti-cvety.ru",
+    "start_date":"2025-04-01",
+    "end_date":"2025-04-01",
+    "photos":[
+      "images/cardimage_1.png",
+      "images/cardimage_2.png",
+      "images/cardimage_3.png"
+    ],
+    "members":[
+      {
+        "id": 1,
+        "name": "",
+        "avatar": "images/photo_1.png"
+      },
+      {
+        "id": 2,
+        "name": "",
+        "avatar": "images/photo_2.png"
+      },
+      {
+        "id": 3,
+        "name": "",
+        "avatar": "images/photo_3.png"
+      },
+      {
+        "id": 4,
+        "name": "",
+        "avatar": "images/photo_4.png"
+      }
+    ]
+  },
+  {
+    "id":4,
+    "name":"Ярмарка добра «Весенний марафон»",
+    "description":"Трехдневная ярмарка handmade-товаров, где местные мастера представляют свои работы. Все вырученные средства идут на поддержку пожилых людей и малоимущих семей. В программе: мастер-классы, концерты и лотерея.",
+    "organizer":"Казанский центр социальных инициатив",
+    "category_ids":[
+      2,
+      3,
+      5
+    ],
+    "address":"Казанский Кремль, Казань, ул. Кремлевская, 18",
+    "phone_numbers":[
+      "+7 (843) 555 12-34"
+    ],
+    "email":"marathon@kazan-charity.ru",
+    "website":"http://vesenniy-marathon.ru",
+    "start_date":"2025-04-15",
+    "end_date":"2025-04-17",
+    "photos":[
+      "images/cardimage_1.png",
+      "images/cardimage_2.png",
+      "images/cardimage_3.png"
+    ],
+    "members":[
+      {
+        "id": 1,
+        "name": "",
+        "avatar": "images/photo_1.png"
+      },
+      {
+        "id": 2,
+        "name": "",
+        "avatar": "images/photo_2.png"
+      },
+      {
+        "id": 3,
+        "name": "",
+        "avatar": "images/photo_3.png"
+      }
+    ]
+  },
+  {
+    "id":5,
+    "name":"Концерт «Рок против рака»",
+    "description":"Благотворительный рок-концерт с участием известных российских групп. Средства от продажи билетов направляются на покупку лекарств для онкобольных детей и поддержку их семей. После выступлений — аукцион артефактов от музыкантов.",
+    "organizer":"Фонд «Подари жизнь»",
+    "category_ids":[
+      1,
+      5
+    ],
+    "address":"Клуб «А2 Green Concert», Санкт-Петербург, пр. Медиков, 3",
+    "phone_numbers":[
+      "+7 (812) 456 78-90"
+    ],
+    "email":"rock@help-cancer.ru",
+    "website":"https://rock-protiv-raka.ru",
+    "start_date":"2025-05-10",
+    "end_date":"2025-05-10",
+    "photos":[
+      "images/cardimage_1.png",
+      "images/cardimage_2.png",
+      "images/cardimage_3.png"
+    ],
+    "members":[
+      {
+        "id": 1,
+        "name": "",
+        "avatar": "images/photo_1.png"
+      },
+      {
+        "id": 2,
+        "name": "",
+        "avatar": "images/photo_2.png"
+      },
+      {
+        "id": 3,
+        "name": "",
+        "avatar": "images/photo_3.png"
+      },
+      {
+        "id": 4,
+        "name": "",
+        "avatar": "images/photo_4.png"
+      },
+      {
+        "id": 5,
+        "name": "",
+        "avatar": "images/photo_5.png"
+      }
+    ]
+  },
+  {
+    "id":6,
+    "name":"Акция «Тепло в каждый дом»",
+    "description":"Зимний сбор теплых вещей, одеял и продуктов для бездомных и малоимущих. Волонтеры развозят собранное по социальным приютам и центрам помощи. Каждый участник акции получает горячий чай и фирменный шарф.",
+    "organizer":"Фонд «Милосердие» (Екатеринбург)",
+    "category_ids":[
+      2,
+      3
+    ],
+    "address":"Площадь Революции, Екатеринбург, ул. 8 Марта, 2",
+    "phone_numbers":[
+      "+7 (343) 222 33-44",
+      "+7 (922) 111 22-33"
+    ],
+    "email":"teplo@ekb-charity.ru",
+    "website":"http://teplo-dom.ru",
+    "start_date":"2025-12-01",
+    "end_date":"2025-12-31",
+    "photos":[
+      "images/cardimage_1.png",
+      "images/cardimage_2.png",
+      "images/cardimage_3.png"
+    ],
+    "members":[
+      {
+        "id": 1,
+        "name": "",
+        "avatar": "images/photo_1.png"
+      },
+      {
+        "id": 2,
+        "name": "",
+        "avatar": "images/photo_2.png"
+      }
+    ]
+  },
+  {
+    "id":7,
+    "name":"Фестиваль «Еда спасает»",
+    "description":"Кулинарный фестиваль с участием звездных шеф-поваров. Гости пробуют блюда из ресторанов-участников, участвуют в кулинарных баттлах. 50% выручки направляется в фонд продовольственной помощи «Русь».",
+    "organizer":"Фонд продовольствия «Русь»",
+    "category_ids":[
+      2,
+      5
+    ],
+    "address":"Центр «Дизайн-завод», Москва, ул. Нижняя Сыромятническая, 10",
+    "phone_numbers":[
+      "+7 (495) 789 01-23"
+    ],
+    "email":"fest@eda-spasaet.ru",
+    "website":"https://eda-spasaet.ru",
+    "start_date":"2025-06-20",
+    "end_date":"2025-06-21",
+    "photos":[
+      "images/cardimage_1.png",
+      "images/cardimage_2.png",
+      "images/cardimage_3.png"
+    ],
+    "members":[
+      {
+        "id": 1,
+        "name": "",
+        "avatar": "images/photo_1.png"
+      }
+    ]
+  },
+  {
+    "id":8,
+    "name":"Сбор книг «Подари знания»",
+    "description":"Акция по сбору учебников и художественной литературы для сельских школ Сибири. Книги можно принести в пункты сбора или заказать курьерскую доставку. Лучшие дарители получат экскурсии в крупные библиотеки.",
+    "organizer":"Новосибирская областная библиотека",
+    "category_ids":[
+      1,
+      5
+    ],
+    "address":"Библиотека им. Ленина, Новосибирск, ул. Советская, 6",
+    "phone_numbers":[
+      "+7 (383) 321 09-87"
+    ],
+    "email":"knigi@prosveschenie.ru",
+    "website":"http://podari-znaniya.ru",
+    "start_date":"2025-08-25",
+    "end_date":"2025-09-05",
+    "photos":[
+      "images/cardimage_1.png",
+      "images/cardimage_2.png",
+      "images/cardimage_3.png"
+    ],
+    "members":[
+    ]
+  },
+  {
+    "id":9,
+    "name":"Выставка-аукцион «Искусство помощи»",
+    "description":"Экспозиция картин и скульптур современных художников. Все работы будут проданы с аукциона, а выручка пойдет на поддержку молодых талантов из детских домов. В рамках выставки — лекции об искусстве.",
+    "organizer":"Галерея «Эрмитаж» + Фонд «Творческое будущее»",
+    "category_ids":[
+      1,
+      5
+    ],
+    "address":"Галерея «Эрмитаж», Москва, ул. Петровка, 25",
+    "phone_numbers":[
+      "+7 (495) 654 32-10"
+    ],
+    "email":"art@help-fund.ru",
+    "website":"https://iskusstvo-pomoshchi.ru",
+    "start_date":"2025-05-15",
+    "end_date":"2025-05-20",
+    "photos":[
+      "images/cardimage_1.png",
+      "images/cardimage_2.png",
+      "images/cardimage_3.png"
+    ],
+    "members":[
+      {
+        "id": 1,
+        "name": "",
+        "avatar": "images/photo_1.png"
+      },
+      {
+        "id": 2,
+        "name": "",
+        "avatar": "images/photo_2.png"
+      },
+      {
+        "id": 3,
+        "name": "",
+        "avatar": "images/photo_3.png"
+      },
+      {
+        "id": 4,
+        "name": "",
+        "avatar": "images/photo_4.png"
+      },
+      {
+        "id": 5,
+        "name": "",
+        "avatar": "images/photo_5.png"
+      }
+    ]
+  },
+  {
+    "id":10,
+    "name":"Марафон «Бежим за ветеранов»",
+    "description":"Спортивное мероприятие ко Дню Победы. Участники выбирают дистанцию (5 км, 10 км, полумарафон). Стартовый взнос направляется на улучшение условий жизни ветеранов. Финиш — у Монумента героическим защитникам Ленинграда.",
+    "organizer":"Администрация Санкт-Петербурга",
+    "category_ids":[
+      2,
+      3
+    ],
+    "address":"Набережная Невы, Санкт-Петербург, Дворцовая наб., 36",
+    "phone_numbers":[
+      "+7 (812) 333 44-55"
+    ],
+    "email":"veteran@run-spb.ru",
+    "website":"http://begim-za-veteranov.ru",
+    "start_date":"2025-05-09",
+    "end_date":"2025-05-09",
+    "photos":[
+      "images/cardimage_1.png",
+      "images/cardimage_2.png",
+      "images/cardimage_3.png"
+    ],
+    "members":[
+
+    ]
+  },
+  {
+    "id":11,
+    "name":"Экологический квест «Чистый город»",
+    "description":"Совместите заботу о природе с азартом! Участники очищают парк от мусора, разгадывают эко-загадки и получают призы от партнеров. Для детей — отдельная программа с ростовыми куклами и мастер-классами.",
+    "organizer":"Эко-движение «РазДельный Сбор»",
+    "category_ids":[
+      5
+    ],
+    "address":"Парк «Зарядье», Москва, ул. Варварка, 6",
+    "phone_numbers":[
+      "+7 (495) 987 65-43"
+    ],
+    "email":"eco@clean-city.ru",
+    "website":"https://chistiy-gorod.ru",
+    "start_date":"2025-09-05",
+    "end_date":"2025-09-05",
+    "photos":[
+      "images/cardimage_1.png",
+      "images/cardimage_2.png",
+      "images/cardimage_3.png"
+    ],
+    "members":[
+      {
+        "id": 1,
+        "name": "",
+        "avatar": "images/photo_1.png"
+      },
+      {
+        "id": 2,
+        "name": "",
+        "avatar": "images/photo_2.png"
+      },
+      {
+        "id": 3,
+        "name": "",
+        "avatar": "images/photo_3.png"
+      },
+      {
+        "id": 4,
+        "name": "",
+        "avatar": "images/photo_4.png"
+      },
+      {
+        "id": 5,
+        "name": "",
+        "avatar": "images/photo_5.png"
+      }
+    ]
+  },
+  {
+    "id":12,
+    "name":"Благотворительный спектакль «Свет в темноте»",
+    "description":"Трогательная постановка о дружбе слепого мальчика и собаки-поводыря. Все средства от продажи билетов направляются на обучение собак-помощников. После спектакля — встреча с актерами и подопечными фонда.",
+    "organizer":"Театр «Глобус» + Фонд «Собаки-помощники»",
+    "category_ids":[
+      1,
+      4
+    ],
+    "address":"Театр «Глобус», Новосибирск, ул. Романова, 19",
+    "phone_numbers":[
+      "+7 (383) 234 56-78"
+    ],
+    "email":"teatr@svet-temnota.ru",
+    "website":"http://svet-temnota.ru",
+    "start_date":"2025-10-12",
+    "end_date":"2025-10-14",
+    "photos":[
+      "images/cardimage_1.png",
+      "images/cardimage_2.png",
+      "images/cardimage_3.png"
+    ],
+    "members":[
+      {
+        "id": 1,
+        "name": "",
+        "avatar": "images/photo_1.png"
+      },
+      {
+        "id": 2,
+        "name": "",
+        "avatar": "images/photo_2.png"
+      },
+      {
+        "id": 3,
+        "name": "",
+        "avatar": "images/photo_3.png"
+      },
+      {
+        "id": 4,
+        "name": "",
+        "avatar": "images/photo_4.png"
+      },
+      {
+        "id": 5,
+        "name": "",
+        "avatar": "images/photo_5.png"
+      }
+    ]
+  },
+  {
+    "id":13,
+    "name":"Акция «Коробка храбрости» для онкобольных детей",
+    "description":"Сбор игрушек и канцтоваров для детей, проходящих химиотерапию. Подарки можно принести в больницы или волонтерские центры. Каждая «коробка храбрости» помогает ребенку справиться со страхом процедур.",
+    "organizer":"Фонд «Подари жизнь»",
+    "category_ids":[
+      1
+    ],
+    "address":"Детская больница №1, Москва, Ленинский пр-т, 117",
+    "phone_numbers":[
+      "+7 (495) 555 67-89",
+      "+7 (926) 444 55-66"
+    ],
+    "email":"korobka@help-kids.ru",
+    "website":"https://korobka-hrabrosti.ru",
+    "start_date":"2025-08-01",
+    "end_date":"2025-08-31",
+    "photos":[
+      "images/cardimage_1.png",
+      "images/cardimage_2.png",
+      "images/cardimage_3.png"
+    ],
+    "members":[
+      {
+        "id": 1,
+        "name": "",
+        "avatar": "images/photo_1.png"
+      },
+      {
+        "id": 2,
+        "name": "",
+        "avatar": "images/photo_2.png"
+      },
+      {
+        "id": 3,
+        "name": "",
+        "avatar": "images/photo_3.png"
+      },
+      {
+        "id": 4,
+        "name": "",
+        "avatar": "images/photo_4.png"
+      },
+      {
+        "id": 5,
+        "name": "",
+        "avatar": "images/photo_5.png"
+      }
+    ]
+  },
+  {
+    "id":14,
+    "name":"Фестиваль «Добрый Урал»",
+    "description":"Крупнейший региональный фестиваль с концертами, ярмаркой местных производителей и благотворительным аукционом. Гвоздь программы — «Парад добрых дел» с презентацией социальных проектов Урала.",
+    "organizer":"Администрация Екатеринбурга",
+    "category_ids":[
+      5
+    ],
+    "address":"Площадь 1905 года, Екатеринбург, ул. Ленина, 24",
+    "phone_numbers":[
+      "+7 (343) 777 88-99"
+    ],
+    "email":"ural@dobro-fest.ru",
+    "website":"http://dobriy-ural.ru",
+    "start_date":"2025-11-12",
+    "end_date":"2025-11-14",
+    "photos":[
+      "images/cardimage_1.png",
+      "images/cardimage_2.png",
+      "images/cardimage_3.png"
+    ],
+    "members":[
+      {
+        "id": 1,
+        "name": "",
+        "avatar": "images/photo_1.png"
+      },
+      {
+        "id": 2,
+        "name": "",
+        "avatar": "images/photo_2.png"
+      },
+      {
+        "id": 3,
+        "name": "",
+        "avatar": "images/photo_3.png"
+      },
+      {
+        "id": 4,
+        "name": "",
+        "avatar": "images/photo_4.png"
+      },
+      {
+        "id": 5,
+        "name": "",
+        "avatar": "images/photo_5.png"
+      }
+    ]
+  },
+  {
+    "id":15,
+    "name":"Сбор средств для приютов животных «Лапа дружбы»",
+    "description":"Помогите кошкам и собакам обрести дом! Акция включает сбор кормов, медикаментов и средств на стерилизацию. Волонтеры проведут экскурсии по приютам и помогут выбрать питомца.",
+    "organizer":"Фонд помощи животным «Рэй»",
+    "category_ids":[
+      4
+    ],
+    "address":"Парк «Сокольники», Москва, ул. Сокольнический Вал, 1",
+    "phone_numbers":[
+      "+7 (495) 222 33-44"
+    ],
+    "email":"animals@lapa-druzhby.ru",
+    "website":"https://lapa-druzhby.ru",
+    "start_date":"2025-08-20",
+    "end_date":"2025-08-20",
+    "photos":[
+      "images/cardimage_1.png",
+      "images/cardimage_2.png",
+      "images/cardimage_3.png"
+    ],
+    "members":[
+      {
+        "id": 1,
+        "name": "",
+        "avatar": "images/photo_1.png"
+      },
+      {
+        "id": 2,
+        "name": "",
+        "avatar": "images/photo_2.png"
+      },
+      {
+        "id": 3,
+        "name": "",
+        "avatar": "images/photo_3.png"
+      },
+      {
+        "id": 4,
+        "name": "",
+        "avatar": "images/photo_4.png"
+      },
+      {
+        "id": 5,
+        "name": "",
+        "avatar": "images/photo_5.png"
+      }
+    ]
+  },
+  {
+    "id":16,
+    "name":"Ярмарка мастеров «Руки добра»",
+    "description":"Handmade-ярмарка, где каждый мастер жертвует 30% выручки на образовательные проекты. Гости учатся создавать украшения, керамику и картины на мастер-классах. Для детей — анимация и квесты.",
+    "organizer":"Ремесленная гильдия Санкт-Петербурга",
+    "category_ids":[
+      5
+    ],
+    "address":"ЦУМ, Санкт-Петербург, ул. Большая Конюшенная, 3",
+    "phone_numbers":[
+      "+7 (812) 456 12-34"
+    ],
+    "email":"hands@craft-charity.ru",
+    "website":"http://ruki-dobra.ru",
+    "start_date":"2025-11-25",
+    "end_date":"2025-11-27",
+    "photos":[
+      "images/cardimage_1.png",
+      "images/cardimage_2.png",
+      "images/cardimage_3.png"
+    ],
+    "members":[
+      {
+        "id": 1,
+        "name": "",
+        "avatar": "images/photo_1.png"
+      },
+      {
+        "id": 2,
+        "name": "",
+        "avatar": "images/photo_2.png"
+      },
+      {
+        "id": 3,
+        "name": "",
+        "avatar": "images/photo_3.png"
+      },
+      {
+        "id": 4,
+        "name": "",
+        "avatar": "images/photo_4.png"
+      },
+      {
+        "id": 5,
+        "name": "",
+        "avatar": "images/photo_5.png"
+      }
+    ]
+  },
+  {
+    "id":17,
+    "name":"Новогодний марафон «Ёлка желаний»",
+    "description":"Исполните мечту ребенка из детдома! На специальной ёлке висят письма с желаниями детей — участники выбирают письмо, покупают подарок и лично вручают его. Финальный праздник с Дедом Морозом и фейерверком.",
+    "organizer":"Департамент социальной защиты Москвы",
+    "category_ids":[
+      1,
+      5
+    ],
+    "address":"Красная площадь, Москва",
+    "phone_numbers":[
+      "+7 (495) 333 44-55",
+      "+7 (800) 200 06-00"
+    ],
+    "email":"elka@newyear-charity.ru",
+    "website":"https://elka-zhelaniy.ru",
+    "start_date":"2025-12-20",
+    "end_date":"2025-12-31",
+    "photos":[
+      "images/cardimage_1.png",
+      "images/cardimage_2.png",
+      "images/cardimage_3.png"
+    ],
+    "members":[
+      {
+        "id": 1,
+        "name": "",
+        "avatar": "images/photo_1.png"
+      },
+      {
+        "id": 2,
+        "name": "",
+        "avatar": "images/photo_2.png"
+      },
+      {
+        "id": 3,
+        "name": "",
+        "avatar": "images/photo_3.png"
+      },
+      {
+        "id": 4,
+        "name": "",
+        "avatar": "images/photo_4.png"
+      },
+      {
+        "id": 5,
+        "name": "",
+        "avatar": "images/photo_5.png"
+      }
+    ]
+  }
+]

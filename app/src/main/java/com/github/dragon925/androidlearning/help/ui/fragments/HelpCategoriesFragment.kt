@@ -6,10 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import com.github.dragon925.androidlearning.R
+import com.github.dragon925.androidlearning.common.domain.Category
 import com.github.dragon925.androidlearning.databinding.FragmentHelpCategoriesBinding
+import com.github.dragon925.androidlearning.help.data.HelpRepository
 import com.github.dragon925.androidlearning.help.ui.adapters.HelpCategoryListAdapter
-import com.github.dragon925.androidlearning.help.ui.models.HelpCategoryItem
+import com.github.dragon925.androidlearning.help.ui.utils.toHelpCategoryItem
 
 
 class HelpCategoriesFragment : Fragment() {
@@ -22,6 +23,8 @@ class HelpCategoriesFragment : Fragment() {
     private var _binding: FragmentHelpCategoriesBinding? = null
     private val binding get() = _binding!!
 
+    private val categories = mutableListOf<Category>()
+
     private val helpCategoriesAdapter = HelpCategoryListAdapter()
 
     override fun onCreateView(
@@ -33,43 +36,17 @@ class HelpCategoriesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        HelpRepository.getCategories(requireContext().assets).forEach { categories.add(it) }
+
         with(binding.rvHelpCategories) {
             adapter = helpCategoriesAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
         }
-        helpCategoriesAdapter.submitList(generateSampleCategoriesData())
+        helpCategoriesAdapter.submitList(categories.map { it.toHelpCategoryItem(requireContext()) })
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
-    private fun generateSampleCategoriesData(): List<HelpCategoryItem> = listOf(
-        HelpCategoryItem(
-            1,
-            R.drawable.icon_kids,
-            resources.getString(R.string.help_category_kids),
-        ),
-        HelpCategoryItem(
-            2,
-            R.drawable.icon_adult,
-            resources.getString(R.string.help_category_adult),
-        ),
-        HelpCategoryItem(
-            3,
-            R.drawable.icon_elderly,
-            resources.getString(R.string.help_category_elderly),
-        ),
-        HelpCategoryItem(
-            4,
-            R.drawable.icon_animals,
-            resources.getString(R.string.help_category_animals),
-        ),
-        HelpCategoryItem(
-            5,
-            R.drawable.icon_event,
-            resources.getString(R.string.help_category_event),
-        )
-    )
 }

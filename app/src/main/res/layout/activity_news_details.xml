@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".news.ui.activities.NewsDetailsActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            style="@style/Widget.App.Toolbar"
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_back"
+            app:menu="@menu/menu_news_details"
+            app:title="Спонсоры отремонтируют школу-интернат"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_anchor="@id/bnv_help_types"
+        android:layout_gravity="top">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_title"
+                style="@style/TextStyle21"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/spacing_l"
+                android:breakStrategy="balanced"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Спонсоры отремонтируют школу-интернат" />
+
+            <TextView
+                android:id="@+id/tv_date"
+                style="@style/TextStyle18"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_s"
+                android:drawablePadding="@dimen/spacing_s"
+                android:gravity="center_vertical"
+                app:drawableStartCompat="@drawable/ic_calendar"
+                app:drawableTint="@color/grey"
+                app:layout_constraintEnd_toEndOf="@id/tv_title"
+                app:layout_constraintStart_toStartOf="@id/tv_title"
+                app:layout_constraintTop_toBottomOf="@id/tv_title"
+                tools:text="Осталось 13 дней (21.09 – 20.10)" />
+
+            <TextView
+                android:id="@+id/tv_organization"
+                style="@style/TextStyle9"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_s"
+                app:layout_constraintEnd_toEndOf="@id/tv_date"
+                app:layout_constraintStart_toStartOf="@id/tv_date"
+                app:layout_constraintTop_toBottomOf="@id/tv_date"
+                tools:text="Благотворительный Фонд «Счастливый Мир»" />
+
+            <View
+                android:id="@+id/iv_icon_nav"
+                android:layout_width="@dimen/icon_size_m"
+                android:layout_height="@dimen/icon_size_m"
+                android:layout_marginTop="@dimen/spacing_s"
+                android:background="@drawable/ic_nav"
+                app:layout_constraintStart_toStartOf="@id/tv_organization"
+                app:layout_constraintTop_toBottomOf="@id/tv_organization" />
+
+            <TextView
+                android:id="@+id/tv_location"
+                style="@style/TextStyle20"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_s"
+                android:layout_marginTop="@dimen/spacing_xxs"
+                android:breakStrategy="balanced"
+                app:layout_constraintEnd_toEndOf="@id/tv_organization"
+                app:layout_constraintStart_toEndOf="@id/iv_icon_nav"
+                app:layout_constraintTop_toTopOf="@id/iv_icon_nav"
+                tools:text="Санкт-Петербург, Кирочная улица,д. 50А, каб. 208" />
+
+            <View
+                android:id="@+id/iv_icon_phone"
+                android:layout_width="@dimen/icon_size_m"
+                android:layout_height="@dimen/icon_size_m"
+                android:layout_marginTop="@dimen/spacing_s"
+                android:background="@drawable/ic_phone"
+                app:layout_constraintStart_toStartOf="@id/iv_icon_nav"
+                app:layout_constraintTop_toBottomOf="@id/tv_location" />
+
+            <TextView
+                android:id="@+id/tv_phones"
+                style="@style/TextStyle20"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_s"
+                android:layout_marginTop="@dimen/spacing_xxs"
+                app:layout_constraintEnd_toEndOf="@id/tv_location"
+                app:layout_constraintStart_toEndOf="@id/iv_icon_phone"
+                app:layout_constraintTop_toTopOf="@id/iv_icon_phone"
+                tools:text="+7 (937) 037 37-73\n+7 (937) 016 16-16" />
+
+            <View
+                android:id="@+id/iv_icon_mail"
+                android:layout_width="@dimen/icon_size_m"
+                android:layout_height="@dimen/icon_size_m"
+                android:layout_marginTop="@dimen/spacing_s"
+                android:background="@drawable/ic_mail"
+                app:layout_constraintStart_toStartOf="@id/iv_icon_phone"
+                app:layout_constraintTop_toBottomOf="@id/tv_phones" />
+
+            <TextView
+                android:id="@+id/tv_has_questions_label"
+                style="@style/TextStyle20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_s"
+                android:layout_marginTop="@dimen/spacing_xxs"
+                android:text="@string/has_questions"
+                app:layout_constraintStart_toEndOf="@id/iv_icon_mail"
+                app:layout_constraintTop_toTopOf="@id/iv_icon_mail" />
+
+            <Button
+                android:id="@+id/btn_write_us"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/write_us"
+                android:textAppearance="@style/TextStyle7"
+                app:layout_constraintBottom_toBottomOf="@id/tv_has_questions_label"
+                app:layout_constraintStart_toEndOf="@id/tv_has_questions_label"
+                app:layout_constraintTop_toTopOf="@id/tv_has_questions_label" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.6"/>
+
+            <ImageView
+                android:id="@+id/iv_image1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_l"
+                android:minHeight="@dimen/event_photo_min_height_s"
+                android:scaleType="centerCrop"
+                android:src="@drawable/cardimage_1"
+                app:layout_constraintEnd_toEndOf="@id/guideline"
+                app:layout_constraintStart_toStartOf="@id/iv_icon_mail"
+                app:layout_constraintTop_toBottomOf="@id/tv_has_questions_label"
+                android:contentDescription="@string/description_event_photo"/>
+
+            <ImageView
+                android:id="@+id/iv_image2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/spacing_s"
+                android:layout_marginEnd="@dimen/spacing_l"
+                android:scaleType="centerCrop"
+                android:src="@drawable/cardimage_2"
+                app:layout_constraintBottom_toTopOf="@id/iv_image3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/guideline"
+                app:layout_constraintTop_toTopOf="@id/iv_image1"
+                app:layout_constraintVertical_chainStyle="spread_inside"
+                android:contentDescription="@string/description_event_photo"/>
+
+            <ImageView
+                android:id="@+id/iv_image3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/spacing_s"
+                android:layout_marginTop="@dimen/spacing_s"
+                android:layout_marginEnd="@dimen/spacing_l"
+                android:scaleType="centerCrop"
+                android:src="@drawable/cardimage_3"
+                app:layout_constraintBottom_toBottomOf="@id/iv_image1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/guideline"
+                app:layout_constraintTop_toBottomOf="@id/iv_image2"
+                android:contentDescription="@string/description_event_photo"/>
+
+            <TextView
+                android:id="@+id/tv_description"
+                style="@style/TextStyle20"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/spacing_l"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_image1"
+                tools:text="Участники и болельщики смогли весело и активно провести время на «Петербургском благотворительном марафоне» и при этом финансово поучаствовать в помощи детям.\n\nПри этом финансово поучаствовать в помощи детям. При этом финансово поучаствовать в помощи детям." />
+
+            <Button
+                android:id="@+id/btn_visit_site"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/spacing_l"
+                android:padding="0dp"
+                android:text="@string/visit_site"
+                android:textAppearance="@style/TextStyle7"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_description" />
+
+            <Space
+                android:id="@+id/spacer"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@id/v_avatars_background"
+                app:layout_constraintTop_toBottomOf="@id/btn_visit_site"
+                app:layout_constraintVertical_weight="1" />
+
+            <View
+                android:id="@+id/v_avatars_background"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/light_grey_two"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spacer" />
+
+            <ImageView
+                android:id="@+id/iv_avatar5"
+                android:layout_width="@dimen/avatar_size_s"
+                android:layout_height="@dimen/avatar_size_s"
+                android:layout_marginStart="@dimen/spacing_xxs_negative"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/iv_avatar4"
+                app:layout_constraintStart_toEndOf="@id/iv_avatar4"
+                app:layout_constraintTop_toTopOf="@id/iv_avatar4"
+                tools:src="@drawable/photo_5"
+                tools:visibility="visible"
+                android:contentDescription="@string/description_avatar"/>
+
+            <ImageView
+                android:id="@+id/iv_avatar4"
+                android:layout_width="@dimen/avatar_size_s"
+                android:layout_height="@dimen/avatar_size_s"
+                android:layout_marginStart="@dimen/spacing_xxs_negative"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/iv_avatar3"
+                app:layout_constraintStart_toEndOf="@id/iv_avatar3"
+                app:layout_constraintTop_toTopOf="@id/iv_avatar3"
+                tools:src="@drawable/photo_4"
+                tools:visibility="visible"
+                android:contentDescription="@string/description_avatar"/>
+
+            <ImageView
+                android:id="@+id/iv_avatar3"
+                android:layout_width="@dimen/avatar_size_s"
+                android:layout_height="@dimen/avatar_size_s"
+                android:layout_marginStart="@dimen/spacing_xxs_negative"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/iv_avatar2"
+                app:layout_constraintStart_toEndOf="@id/iv_avatar2"
+                app:layout_constraintTop_toTopOf="@id/iv_avatar2"
+                tools:src="@drawable/photo_3"
+                tools:visibility="visible"
+                android:contentDescription="@string/description_avatar"/>
+
+            <ImageView
+                android:id="@+id/iv_avatar2"
+                android:layout_width="@dimen/avatar_size_s"
+                android:layout_height="@dimen/avatar_size_s"
+                android:layout_marginStart="@dimen/spacing_xxs_negative"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/iv_avatar1"
+                app:layout_constraintStart_toEndOf="@id/iv_avatar1"
+                app:layout_constraintTop_toTopOf="@id/iv_avatar1"
+                tools:src="@drawable/photo_2"
+                tools:visibility="visible"
+                android:contentDescription="@string/description_avatar"/>
+
+            <ImageView
+                android:id="@+id/iv_avatar1"
+                android:layout_width="@dimen/avatar_size_s"
+                android:layout_height="@dimen/avatar_size_s"
+                android:layout_margin="@dimen/spacing_l"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/v_avatars_background"
+                tools:src="@drawable/photo_1"
+                tools:visibility="visible"
+                android:contentDescription="@string/description_avatar"/>
+
+            <TextView
+                android:id="@+id/tv_more_avatars"
+                style="@style/TextStyle3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_m"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/iv_avatar5"
+                app:layout_constraintStart_toEndOf="@id/iv_avatar5"
+                app:layout_constraintTop_toTopOf="@id/iv_avatar5"
+                tools:text="+102"
+                tools:visibility="visible" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/bnv_help_types"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:background="@color/off_white">
+
+        <Button
+            style="@style/Widget.Material3.Button.TextButton"
+            android:id="@+id/btn_help_things"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/help_things"
+            android:textAppearance="@style/TextStyle11"
+            android:textColor="@color/black_40"
+            app:icon="@drawable/ic_shirt"
+            app:iconGravity="top"/>
+        
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_separator"/>
+
+        <Button
+            style="@style/Widget.Material3.Button.TextButton"
+            android:id="@+id/btn_become_volunteer"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/become_volunteer"
+            android:textAppearance="@style/TextStyle11"
+            android:textColor="@color/black_40"
+            app:icon="@drawable/ic_hands"
+            app:iconGravity="top"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_separator"/>
+
+        <Button
+            style="@style/Widget.Material3.Button.TextButton"
+            android:id="@+id/btn_prof_help"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/prof_help"
+            android:textAppearance="@style/TextStyle11"
+            android:textColor="@color/black_40"
+            app:icon="@drawable/ic_hands"
+            app:iconGravity="top"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_separator"/>
+
+        <Button
+            style="@style/Widget.Material3.Button.TextButton"
+            android:id="@+id/btn_help_money"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/help_money"
+            android:textAppearance="@style/TextStyle11"
+            android:textColor="@color/black_40"
+            app:icon="@drawable/ic_hands"
+            app:iconGravity="top"/>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

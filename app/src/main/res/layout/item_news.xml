@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="0dp"
+    android:layout_marginBottom="@dimen/spacing_xs">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/iv_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_xxs"
+            android:minHeight="@dimen/event_photo_min_height_m"
+            tools:src="@drawable/img"
+            android:scaleType="centerCrop"
+            android:foreground="@drawable/bg_fade"
+            android:contentDescription="@string/description_event_photo"/>
+
+        <TextView
+            style="@style/TextStyle16"
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/spacing_xxl_2"
+            android:breakStrategy="balanced"
+            tools:text="Конкурс по вокальному пению в детском доме №6"/>
+
+        <TextView
+            style="@style/TextStyle10"
+            android:id="@+id/tv_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xs"
+            android:layout_marginHorizontal="@dimen/spacing_xl"
+            android:breakStrategy="balanced"
+            android:maxLines="3"
+            android:ellipsize="end"
+            app:drawableTopCompat="@drawable/bg_decor"
+            android:drawablePadding="@dimen/spacing_xs"
+            tools:text="Дубовская школа-интернат для детей с ограниченными возможностями здоровья стала первой в области …"/>
+
+        <Button
+            android:id="@+id/btn_date"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:padding="0dp"
+            android:textAppearance="@style/TextStyle19"
+            app:icon="@drawable/ic_calendar"
+            app:iconGravity="textStart"
+            app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.None"
+            tools:text="Октябрь 20, 2016" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
