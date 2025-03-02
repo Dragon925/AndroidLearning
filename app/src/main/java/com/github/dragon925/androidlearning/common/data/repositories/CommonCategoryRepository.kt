@@ -16,7 +16,7 @@ object CommonCategoryRepository {
             gson.fromJson(inputStream, Array<Category>::class.java).toList()
         }
     } catch (e: Exception) {
-        Log.e("CommonCategoryRepository-getCategories", e.message ?: "Exception")
+        Log.e("CommonCategoryRepository-getCategories", "get categories failed", e)
         emptyList()
     }.sortedBy { it.name }
 }

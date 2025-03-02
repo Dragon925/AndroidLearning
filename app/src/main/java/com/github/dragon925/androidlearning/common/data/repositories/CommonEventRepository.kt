@@ -19,7 +19,7 @@ object CommonEventRepository {
             gson.fromJson(inputStream, Array<Event>::class.java).toList()
         }
     } catch (e: Exception) {
-        Log.e("CommonEventRepository-getEvents", e.message ?: "Exception")
+        Log.e("CommonEventRepository-getEvents", "get events failed", e)
         emptyList()
     }.sortedWith(
         compareBy<Event> { it.startDate }

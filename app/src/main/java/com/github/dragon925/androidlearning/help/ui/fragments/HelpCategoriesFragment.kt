@@ -5,11 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.BundleCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import com.github.dragon925.androidlearning.common.data.repositories.CommonCategoryRepository
 import com.github.dragon925.androidlearning.common.data.service.DataLoadingServiceHelper
 import com.github.dragon925.androidlearning.common.domain.Category
-import com.github.dragon925.androidlearning.common.ui.readParcelableArrayList
 import com.github.dragon925.androidlearning.databinding.FragmentHelpCategoriesBinding
 import com.github.dragon925.androidlearning.help.ui.adapters.HelpCategoryListAdapter
 import com.github.dragon925.androidlearning.help.ui.utils.toHelpCategoryItem
@@ -32,8 +33,10 @@ class HelpCategoriesFragment : Fragment() {
     private val helpCategoriesAdapter = HelpCategoryListAdapter()
 
     private val serviceHelper = DataLoadingServiceHelper(
-        { _, categories -> handleLoadedData(categories) },
-        ::handleErrorLoadData,
+        clazz = Category::class.java,
+        onSuccess = { data -> handleLoadedData(data) },
+        onError = ::handleErrorLoadData,
+        loader = { CommonCategoryRepository.getCategories(requireContext().assets) }
     )
 
     override fun onCreateView(
@@ -68,9 +71,10 @@ class HelpCategoriesFragment : Fragment() {
         savedInstanceState?.let { state ->
             if (state.isEmpty) return
 
-            val savedCategories = state.readParcelableArrayList<Category>(SAVED_CATEGORIES)
-                ?.toList()
-                ?: emptyList()
+
+            val savedCategories = BundleCompat.getParcelableArrayList(
+                state, SAVED_CATEGORIES, Category::class.java
+            )?.toList() ?: emptyList()
             handleLoadedData(savedCategories)
         }
     }

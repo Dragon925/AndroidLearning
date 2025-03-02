@@ -6,15 +6,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.BundleCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.dragon925.androidlearning.R
+import com.github.dragon925.androidlearning.common.data.repositories.CommonEventRepository
 import com.github.dragon925.androidlearning.common.data.service.DataLoadingServiceHelper
-import com.github.dragon925.androidlearning.common.domain.Category
 import com.github.dragon925.androidlearning.common.domain.Event
-import com.github.dragon925.androidlearning.common.ui.readParcelableArrayList
 import com.github.dragon925.androidlearning.databinding.FragmentNewsBinding
 import com.github.dragon925.androidlearning.news.ui.activities.NewsDetailsActivity
 import com.github.dragon925.androidlearning.news.ui.adapters.NewsListAdapter
@@ -27,7 +27,6 @@ class NewsFragment : Fragment() {
     companion object {
         private const val SAVED_EVENTS = "savedEvents"
         private const val SAVED_FILTERS = "savedFilters"
-        private const val SAVED_CHOSEN_FILTERS = "savedChosenFilters"
 
         @JvmStatic
         fun newInstance() = NewsFragment()
@@ -37,13 +36,15 @@ class NewsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val newsAdapter = NewsListAdapter(::openNewsDetails)
-    private val filters = mutableMapOf<Int, Boolean>()
+    private val filters = mutableSetOf<Int>()
 
     private val events = mutableListOf<NewsItem>()
 
     private val serviceHelper = DataLoadingServiceHelper(
-        ::handleSuccessLoadData,
-        ::handleErrorLoadData
+        clazz = Event::class.java,
+        onSuccess = ::handleSuccessLoadData,
+        onError = ::handleErrorLoadData,
+        loader = { CommonEventRepository.getEvents(requireContext().assets) }
     )
 
     override fun onCreateView(
@@ -72,11 +73,10 @@ class NewsFragment : Fragment() {
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId) {
                 R.id.action_filter -> {
-                    val chosenFilters = filters.filter { it.value }.map { it.key }.toIntArray()
                     parentFragmentManager.commit {
                         add(
                             R.id.main_nav_container,
-                            FilterFragment.newInstance(chosenFilters),
+                            FilterFragment.newInstance(filters.toIntArray()),
                             FilterFragment.TAG
                         )
                         addToBackStack(FilterFragment.TAG)
@@ -90,9 +90,15 @@ class NewsFragment : Fragment() {
         }
 
         setFragmentResultListener(FilterFragment.REQUEST_KEY) { _, bundle ->
-            val result = bundle.getIntArray(FilterFragment.RESULT_KEY) ?: intArrayOf()
-            filters.keys.forEach { filters[it] = result.contains(it) }
-            updateNews()
+            if (bundle.getInt(FilterFragment.RESULT_CODE) == FilterFragment.RESULT_OK) {
+                val result = bundle.getIntArray(FilterFragment.RESULT_KEY)?.toList() ?: emptyList()
+                filters.clear()
+                filters.addAll(result)
+                updateNews()
+            }
+            if (!serviceHelper.isDone) {
+                serviceHelper.reload()
+            }
         }
     }
 
@@ -101,11 +107,7 @@ class NewsFragment : Fragment() {
         if (serviceHelper.isLoading) return
 
         outState.putParcelableArrayList(SAVED_EVENTS, ArrayList(events))
-        outState.putIntArray(SAVED_FILTERS, filters.keys.toIntArray())
-        outState.putIntArray(
-            SAVED_CHOSEN_FILTERS,
-            filters.filter { it.value }.map { it.key }.toIntArray()
-        )
+        outState.putIntArray(SAVED_FILTERS, filters.toIntArray())
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -113,37 +115,35 @@ class NewsFragment : Fragment() {
         savedInstanceState?.let { state ->
             if (state.isEmpty) return
 
-            val savedEvents = state.readParcelableArrayList<NewsItem>(SAVED_EVENTS)
-                ?.toList() ?: emptyList()
+            val savedEvents = BundleCompat.getParcelableArrayList(
+                state, SAVED_EVENTS, NewsItem::class.java
+            )?.toList() ?: emptyList()
 
-            val savedFilters = state.getIntArray(SAVED_FILTERS) ?: intArrayOf()
-            val savedChosenFilters = state.getIntArray(SAVED_CHOSEN_FILTERS)?.toSet() ?: emptySet()
+            val savedFilters = state.getIntArray(SAVED_FILTERS)?.toList() ?: emptyList()
 
             events.clear()
             events.addAll(savedEvents)
-            filters.clear()
-            savedFilters.forEach { filters[it] = savedChosenFilters.contains(it) }
 
-            binding.piLoading.visibility = View.GONE
-            binding.rvNews.visibility = View.VISIBLE
+            filters.clear()
+            filters.addAll(savedFilters)
+
+            updateUI(false)
             updateNews()
         }
     }
 
-    private fun handleSuccessLoadData(events: List<Event>, categories: List<Category>) {
-        handleLoadedData(events.map { it.toNewsItem(requireContext()) }, categories)
+    private fun handleSuccessLoadData(events: List<Event>) {
+        handleLoadedData(events.map { it.toNewsItem(requireContext()) })
     }
 
     private fun handleErrorLoadData() {
         Log.e("NewsFragment", "loadDataWithService-onError")
     }
 
-    private fun handleLoadedData(news: List<NewsItem>, categories: List<Category>) {
+    private fun handleLoadedData(news: List<NewsItem>) {
         requireActivity().runOnUiThread {
             events.clear()
             events.addAll(news)
-            filters.clear()
-            categories.forEach { filters[it.id] = false }
             updateNews()
             updateUI(false)
         }
@@ -165,9 +165,8 @@ class NewsFragment : Fragment() {
     }
 
     private fun updateNews() {
-        val chosenFilters = filters.filter { it.value }.map { it.key }
         newsAdapter.submitList(events.filter { item ->
-            chosenFilters.isEmpty() || item.categoryIds.any { chosenFilters.contains(it) }
+            filters.isEmpty() || item.categoryIds.any { filters.contains(it) }
         })
     }
 

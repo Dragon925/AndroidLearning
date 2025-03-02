@@ -2,28 +2,26 @@ package com.github.dragon925.androidlearning.common.data.service
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Parcelable
 import android.os.ResultReceiver
-import com.github.dragon925.androidlearning.common.domain.Category
-import com.github.dragon925.androidlearning.common.domain.Event
-import com.github.dragon925.androidlearning.common.ui.readParcelableArrayList
+import androidx.core.os.BundleCompat
 
-class DataResultReceiver(
+class DataResultReceiver<T : Parcelable>(
     handler: Handler,
-    private val onSuccess: OnSuccess,
+    private val clazz: Class<T>,
+    private val onSuccess: OnSuccess<T>,
     private val onError: OnError,
-    private val onCancel: OnCancel? = null
+    private val onCancel: OnCancel? = null,
+    val loader: () -> List<T>
 ) : ResultReceiver(handler) {
 
     override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
         when (resultCode) {
             DataLoadingService.RESULT_SUCCESS -> {
-                val events = resultData
-                    ?.readParcelableArrayList<Event>(DataLoadingService.EXTRA_EVENTS)
-                    ?: emptyList()
-                val categories = resultData
-                    ?.readParcelableArrayList<Category>(DataLoadingService.EXTRA_CATEGORY)
-                    ?: emptyList()
-                onSuccess(events, categories)
+                val data = resultData?.let {
+                    BundleCompat.getParcelableArrayList(it, DataLoadingService.RESULT_DATA, clazz)
+                } ?: emptyList()
+                onSuccess(data)
             }
             DataLoadingService.RESULT_ERROR -> onError()
             DataLoadingService.RESULT_CANCELED -> onCancel?.invoke()
@@ -31,17 +29,17 @@ class DataResultReceiver(
     }
 
 
-    sealed interface OnResultAction
+    sealed interface OnResultAction<out T : Parcelable>
 
-    fun interface OnSuccess : OnResultAction {
-        operator fun invoke(events: List<Event>, categories: List<Category>)
+    fun interface OnSuccess<T : Parcelable> : OnResultAction<T> {
+        operator fun invoke(data: List<T>)
     }
 
-    fun interface OnError : OnResultAction {
+    fun interface OnError : OnResultAction<Nothing> {
         operator fun invoke()
     }
 
-    fun interface OnCancel : OnResultAction {
+    fun interface OnCancel : OnResultAction<Nothing> {
         operator fun invoke()
     }
 }

@@ -5,12 +5,14 @@ import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.BundleCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.github.dragon925.androidlearning.R
+import com.github.dragon925.androidlearning.common.data.repositories.CommonEventRepository
 import com.github.dragon925.androidlearning.common.data.service.DataLoadingServiceHelper
+import com.github.dragon925.androidlearning.common.domain.Event
 import com.github.dragon925.androidlearning.common.ui.getAssetDrawable
-import com.github.dragon925.androidlearning.common.ui.readParcelable
 import com.github.dragon925.androidlearning.databinding.ActivityNewsDetailsBinding
 import com.github.dragon925.androidlearning.news.ui.models.NewsDetailItem
 import com.github.dragon925.androidlearning.news.ui.utils.toNewsDetailItem
@@ -32,10 +34,12 @@ class NewsDetailsActivity : AppCompatActivity() {
     private lateinit var details: NewsDetailItem
 
     private val serviceHelper = DataLoadingServiceHelper(
-        { events, _ ->
-            handleLoadedData(events.find { it.id == newsId }!!.toNewsDetailItem(this))
+        clazz = Event::class.java,
+        onSuccess ={ data ->
+            handleLoadedData(data.find { it.id == newsId }!!.toNewsDetailItem(this))
         },
-        ::handleErrorLoadData
+        onError = ::handleErrorLoadData,
+        loader = { CommonEventRepository.getEvents(assets) }
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +76,9 @@ class NewsDetailsActivity : AppCompatActivity() {
         super.onRestoreInstanceState(savedInstanceState)
         if (!savedInstanceState.containsKey(SAVED_DETAILS)) return
 
-        savedInstanceState.readParcelable<NewsDetailItem>(SAVED_DETAILS)?.let {
+        BundleCompat.getParcelable(
+            savedInstanceState, SAVED_DETAILS, NewsDetailItem::class.java
+        )?.let {
             handleLoadedData(it)
         }
     }

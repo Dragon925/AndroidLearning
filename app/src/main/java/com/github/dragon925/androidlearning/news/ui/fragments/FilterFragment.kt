@@ -5,13 +5,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import com.github.dragon925.androidlearning.R
+import com.github.dragon925.androidlearning.common.data.repositories.CommonCategoryRepository
 import com.github.dragon925.androidlearning.common.data.service.DataLoadingServiceHelper
 import com.github.dragon925.androidlearning.common.domain.Category
-import com.github.dragon925.androidlearning.common.ui.readParcelableArrayList
 import com.github.dragon925.androidlearning.databinding.FragmentFilterBinding
 import com.github.dragon925.androidlearning.news.ui.adapters.FilterListAdapter
 import com.github.dragon925.androidlearning.news.ui.models.FilterItem
@@ -22,9 +23,13 @@ class FilterFragment : Fragment() {
     companion object {
         const val TAG = "FilterFragment"
         const val REQUEST_KEY = "FilterFragment-Request"
+        const val RESULT_CODE = "FilterFragment-ResultCode"
         const val RESULT_KEY = "FilterFragment-Result"
         const val SAVED_CHOSEN_FILTERS = "FilterFragment-savedChosenFilters"
         const val SAVED_FILTERS = "FilterFragment-savedFilters"
+
+        const val RESULT_OK = 0
+        const val RESULT_CANCEL = -1
 
         @JvmStatic
         fun newInstance(chosenFilters: IntArray = intArrayOf()) =
@@ -44,7 +49,7 @@ class FilterFragment : Fragment() {
 
     private val filterListAdapter = FilterListAdapter(::updateFilter)
 
-    private lateinit var serviceHelper: DataLoadingServiceHelper
+    private lateinit var serviceHelper: DataLoadingServiceHelper<Category>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,8 +70,10 @@ class FilterFragment : Fragment() {
         binding.rvFilters.adapter = filterListAdapter
 
         serviceHelper = DataLoadingServiceHelper(
-            {_, categories -> handleLoadedData(categories, chosenFilters) },
-            ::handleErrorLoadData
+            clazz = Category::class.java,
+            onSuccess = {data -> handleLoadedData(data, chosenFilters) },
+            onError = ::handleErrorLoadData,
+            loader = { CommonCategoryRepository.getCategories(requireContext().assets) }
         )
 
         if (savedInstanceState == null || savedInstanceState.isEmpty) {
@@ -77,12 +84,13 @@ class FilterFragment : Fragment() {
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId) {
                 R.id.action_apply_filter -> {
-                    val chosenFilters = filters.entries.filter { it.value }
-                        .map { it.key }
-                        .toIntArray()
+                    val chosenFilters = filters.filter { it.value }.map { it.key }.toIntArray()
                     setFragmentResult(
                         REQUEST_KEY,
-                        bundleOf(RESULT_KEY to chosenFilters)
+                        bundleOf(
+                            RESULT_CODE to RESULT_OK,
+                            RESULT_KEY to chosenFilters
+                        )
                     )
                     parentFragmentManager.popBackStack()
                     true
@@ -91,6 +99,7 @@ class FilterFragment : Fragment() {
             }
         }
         binding.toolbar.setNavigationOnClickListener {
+            setFragmentResult(REQUEST_KEY, bundleOf(RESULT_CODE to RESULT_CANCEL))
             parentFragmentManager.popBackStack()
         }
     }
@@ -111,9 +120,9 @@ class FilterFragment : Fragment() {
         savedInstanceState?.let { state ->
             if (state.isEmpty) return
 
-            val savedCategories = state.readParcelableArrayList<Category>(SAVED_FILTERS)
-                ?.toList()
-                ?: emptyList()
+            val savedCategories = BundleCompat.getParcelableArrayList(
+                savedInstanceState, SAVED_FILTERS, Category::class.java
+            )?.toList() ?: emptyList()
             val savedChosenFilters = state.getIntArray(SAVED_CHOSEN_FILTERS) ?: intArrayOf()
             handleLoadedData(savedCategories, savedChosenFilters)
         }
@@ -138,6 +147,7 @@ class FilterFragment : Fragment() {
         with(binding) {
             piLoading.visibility = if (showLoading) View.VISIBLE else View.GONE
             rvFilters.visibility = if (showLoading) View.GONE else View.VISIBLE
+            toolbar.menu.findItem(R.id.action_apply_filter).isEnabled = !showLoading
         }
     }
 
