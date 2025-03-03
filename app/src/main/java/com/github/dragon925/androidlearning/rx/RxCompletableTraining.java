@@ -1,6 +1,6 @@
 package com.github.dragon925.androidlearning.rx;
 
-import com.github.dragon925.androidlearning.exceptions.NotImplementedException;
+import com.github.dragon925.androidlearning.exceptions.ExpectedException;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
@@ -19,18 +19,20 @@ public class RxCompletableTraining {
      * @return {@link Completable}, который вызывает {@link #havyMethod()}
      */
     public Completable callFunction() {
-        throw new NotImplementedException();
+        return Completable.fromRunnable(this::havyMethod);
     }
 
     /**
      * Завершить последовательность, если {@code checkSingle} эммитит {@code true} или эммитит
      * ошибку, если {@code checkSingle} эммитит {@code false}
      *
-     * @param checkSingle @{link Single} который эммитит {@code true} или {@code false}
+     * @param checkSingle {@link Single} который эммитит {@code true} или {@code false}
      * @return {@code Completable}
      */
     public Completable completeWhenTrue(Single<Boolean> checkSingle) {
-        throw new NotImplementedException();
+        return checkSingle.flatMapCompletable(complete ->
+                complete ? Completable.complete() : Completable.error(new ExpectedException())
+        );
     }
 
     /* Вспомогательные методы */

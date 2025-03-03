@@ -57,7 +57,7 @@ public class RxMaybeTrainingTest {
     @Test
     public void positiveOrEmpty_positiveSingle() {
         TestObserver<Integer> testObserver = mRxMaybeTraining
-                .positiveOrEmpty(Single.just(1).blockingGet())
+                .positiveOrEmpty(Single.just(1))
                 .test();
 
         testObserver.assertNoErrors();
@@ -68,7 +68,7 @@ public class RxMaybeTrainingTest {
     @Test
     public void positiveOrEmpty_negativeSingle() {
         TestObserver<Integer> testObserver = mRxMaybeTraining
-                .positiveOrEmpty(Single.just(-1).blockingGet())
+                .positiveOrEmpty(Single.just(-1))
                 .test();
 
         testObserver.assertNoValues();
@@ -90,7 +90,7 @@ public class RxMaybeTrainingTest {
     @Test
     public void calculateSumOfValues_noValues() {
         TestObserver<Integer> testObserver = mRxMaybeTraining
-                .calculateSumOfValues(Observable.<Integer>empty())
+                .calculateSumOfValues(Observable.empty())
                 .test();
 
         testObserver.assertNoValues();
@@ -112,7 +112,7 @@ public class RxMaybeTrainingTest {
     @Test
     public void leastOneElement_noValues() {
         TestObserver<Integer> testObserver = mRxMaybeTraining
-                .leastOneElement(Maybe.<Integer>empty(), 2)
+                .leastOneElement(Maybe.empty(), 2)
                 .test();
 
         testObserver.assertValues(2);

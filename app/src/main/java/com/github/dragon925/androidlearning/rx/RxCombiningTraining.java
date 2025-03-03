@@ -1,7 +1,6 @@
 package com.github.dragon925.androidlearning.rx;
 
 
-import com.github.dragon925.androidlearning.exceptions.NotImplementedException;
 import io.reactivex.rxjava3.core.Observable;
 import java.util.Collections;
 import java.util.List;
@@ -25,8 +24,9 @@ public class RxCombiningTraining {
      * входящих последовательностей сработает  {@code onComplete или  {@code onError} то и в
      * результирующей последовательности тоже сработает этот метод.
      */
-    public Observable<Integer> summation(Observable<Integer> integerObservable1, Observable<Integer> integerObservable2) {
-        throw new NotImplementedException();
+    public Observable<Integer> summation(Observable<Integer> integerObservable1,
+                                         Observable<Integer> integerObservable2) {
+        return Observable.zip(integerObservable1, integerObservable2, Integer::sum);
     }
 
     /**
@@ -41,7 +41,7 @@ public class RxCombiningTraining {
      */
     public Observable<List<String>> requestItems(Observable<String> searchObservable,
                                                  Observable<Integer> categoryObservable) {
-        throw new NotImplementedException();
+        return Observable.combineLatest(searchObservable, categoryObservable, this::searchItems);
     }
 
     /**
@@ -54,7 +54,7 @@ public class RxCombiningTraining {
      */
     public Observable<Integer> composition(Observable<Integer> intObservable1,
                                            Observable<Integer> intObservable2) {
-        throw new NotImplementedException();
+        return Observable.merge(intObservable1, intObservable2);
     }
 
     /**
@@ -66,7 +66,7 @@ public class RxCombiningTraining {
      * элементы последовательности {@code intObservable}
      */
     public Observable<Integer> additionalFirstItem(int firstItem, Observable<Integer> intObservable) {
-        throw new NotImplementedException();
+        return Observable.just(firstItem).concatWith(intObservable);
     }
 
     /* Вспомогательные методы */

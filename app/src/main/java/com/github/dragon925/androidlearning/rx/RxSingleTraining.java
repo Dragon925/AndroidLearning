@@ -1,7 +1,6 @@
 package com.github.dragon925.androidlearning.rx;
 
 
-import com.github.dragon925.androidlearning.exceptions.NotImplementedException;
 import com.github.dragon925.androidlearning.exceptions.ExpectedException;
 
 import java.util.List;
@@ -26,7 +25,7 @@ public class RxSingleTraining {
      * либо ошибку {@link ExpectedException} если оно отрицательное
      */
     public Single<Integer> onlyOneElement(Integer value) {
-        throw new NotImplementedException();
+        return value > 0 ? Single.just(value) : Single.error(new ExpectedException());
     }
 
     /**
@@ -38,7 +37,7 @@ public class RxSingleTraining {
      * последовательность пустая
      */
     public Single<Integer> onlyOneElementOfSequence(Observable<Integer> integerObservable) {
-        throw new NotImplementedException();
+        return integerObservable.firstOrError();
     }
 
     /**
@@ -49,7 +48,7 @@ public class RxSingleTraining {
      * пустая
      */
     public Single<Integer> calculateSumOfValues(Observable<Integer> integerObservable) {
-        throw new NotImplementedException();
+        return integerObservable.reduce(Integer::sum).defaultIfEmpty(0);
     }
 
     /**
@@ -60,7 +59,7 @@ public class RxSingleTraining {
      * {@code integerObservable}
      */
     public Single<List<Integer>> collectionOfValues(Observable<Integer> integerObservable) {
-        throw new NotImplementedException();
+        return integerObservable.toList();
     }
 
     /**
@@ -71,7 +70,7 @@ public class RxSingleTraining {
      * {@code integerSingle} положительны, {@code false} если есть отрицательные элементы
      */
     public Single<Boolean> allElementsIsPositive(Observable<Integer> integerSingle) {
-        throw new NotImplementedException();
+        return integerSingle.all(integer -> integer > 0);
     }
 
 }

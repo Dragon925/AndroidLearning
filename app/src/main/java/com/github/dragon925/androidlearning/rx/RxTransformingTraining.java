@@ -2,7 +2,6 @@ package com.github.dragon925.androidlearning.rx;
 
 
 import com.github.dragon925.androidlearning.entity.Entity;
-import com.github.dragon925.androidlearning.exceptions.NotImplementedException;
 
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class RxTransformingTraining {
      * преобразованные из чисел в {@code intObservable}
      */
     public Observable<String> transformIntToString(Observable<Integer> intObservable) {
-        throw new NotImplementedException();
+        return intObservable.map(String::valueOf);
     }
 
     /**
@@ -38,7 +37,7 @@ public class RxTransformingTraining {
      * {@code idObservable}
      */
     public Observable<Entity> requestEntityById(Observable<Integer> idObservable) {
-        throw new NotImplementedException();
+        return idObservable.flatMap(this::requestApiEntity);
     }
 
     /**
@@ -50,7 +49,7 @@ public class RxTransformingTraining {
      * поток имён объединённых первой буквой в имени
      */
     public Observable<GroupedObservable<Character, String>> distributeNamesByFirstLetter(Observable<String> namesObservable) {
-        throw new NotImplementedException();
+        return namesObservable.groupBy(name -> name.charAt(0));
     }
 
     /**
@@ -62,7 +61,7 @@ public class RxTransformingTraining {
      * @return {@code Observable} который эммитит списки чисел из {@code intObservable}
      */
     public Observable<List<Integer>> collectsIntsToLists(int listsSize, Observable<Integer> intObservable) {
-        throw new NotImplementedException();
+        return intObservable.buffer(listsSize);
     }
 
     /* Вспомогательные методы */

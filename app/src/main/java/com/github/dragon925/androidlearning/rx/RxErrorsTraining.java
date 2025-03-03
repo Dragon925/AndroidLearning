@@ -1,8 +1,6 @@
 package com.github.dragon925.androidlearning.rx;
 
 
-import com.github.dragon925.androidlearning.exceptions.NotImplementedException;
-
 import io.reactivex.rxjava3.core.Observable;
 
 /**
@@ -23,8 +21,9 @@ public class RxErrorsTraining {
      * @return {@link Observable} который эммитит значения из {@code intObservable}, либо
      * defaultValue
      */
-    public Observable<Integer> handleErrorsWithDefaultValue(Observable<Integer> intObservable, final Integer defaultValue) {
-        throw new NotImplementedException();
+    public Observable<Integer> handleErrorsWithDefaultValue(Observable<Integer> intObservable,
+                                                            final Integer defaultValue) {
+        return intObservable.onErrorReturn(throwable -> defaultValue);
     }
 
     /**
@@ -37,7 +36,8 @@ public class RxErrorsTraining {
      * @return {@link Observable} который эммитит значения из {@code intObservable}, либо
      * {@code fallbackObservable}
      */
-    public Observable<Integer> handleErrorsWithFallbackObservable(Observable<Integer> intObservable, Observable<Integer> fallbackObservable) {
-        throw new NotImplementedException();
+    public Observable<Integer> handleErrorsWithFallbackObservable(Observable<Integer> intObservable,
+                                                                  Observable<Integer> fallbackObservable) {
+        return intObservable.onErrorResumeNext(throwable -> fallbackObservable);
     }
 }

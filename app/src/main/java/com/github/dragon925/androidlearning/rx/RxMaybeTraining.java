@@ -1,8 +1,6 @@
 package com.github.dragon925.androidlearning.rx;
 
 
-import com.github.dragon925.androidlearning.exceptions.NotImplementedException;
-
 import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
@@ -23,7 +21,7 @@ public class RxMaybeTraining {
      * либо не эммитит ничего, если {@code value} отрицательное
      */
     public Maybe<Integer> positiveOrEmpty(Integer value) {
-        throw new NotImplementedException();
+        return Maybe.just(value).filter(x -> x > 0);
     }
 
     /**
@@ -33,8 +31,8 @@ public class RxMaybeTraining {
      * @return {@code Maybe} который эммитит значение из {@code valueSingle} если оно эммитит
      * положительное число, иначе не эммитит ничего
      */
-    Maybe<Integer> positiveOrEmpty(Single<Integer> valueSingle) {
-        throw new NotImplementedException();
+    public Maybe<Integer> positiveOrEmpty(Single<Integer> valueSingle) {
+        return valueSingle.filter(x -> x > 0);
     }
 
     /**
@@ -45,7 +43,7 @@ public class RxMaybeTraining {
      * последовательность пустая
      */
     public Maybe<Integer> calculateSumOfValues(Observable<Integer> integerObservable) {
-        throw new NotImplementedException();
+        return integerObservable.reduce(Integer::sum);
     }
 
     /**
@@ -56,7 +54,7 @@ public class RxMaybeTraining {
      * {@code defaultValue} если последовательность пустая
      */
     public Single<Integer> leastOneElement(Maybe<Integer> integerMaybe, int defaultValue) {
-        throw new NotImplementedException();
+        return integerMaybe.defaultIfEmpty(defaultValue);
     }
 
 }
