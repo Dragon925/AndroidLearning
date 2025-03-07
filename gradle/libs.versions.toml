@@ -22,6 +22,7 @@ viewpager2 = "1.1.0"
 datetime = "0.6.2"
 activityVersion = "1.10.0"
 gson = "2.10.1"
+parcelize = "2.1.20-RC"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -66,6 +67,7 @@ activity = { group = "androidx.activity", name = "activity", version.ref = "acti
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "parcelize" }
 
 [bundles]
 android-navigation = ["androidx-navigation-ui", "androidx-navigation-fragment", "androidx-navigation-compose"]

@@ -21,6 +21,14 @@
             app:layout_scrollFlags="enterAlways|scroll"
             app:layout_scrollEffect="compress"/>
 
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/pi_loading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:trackColor="@color/light_olive_green"
+            app:indicatorColor="@color/macaroni_and_cheese"/>
+
         <TextView
             style="@style/TextStyle5"
             android:layout_width="match_parent"

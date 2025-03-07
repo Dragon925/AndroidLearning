@@ -1,8 +1,13 @@
-package com.github.dragon925.androidlearning.news.data.models
+package com.github.dragon925.androidlearning.common.domain
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.datetime.LocalDate
+import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.TypeParceler
 
+@Parcelize
+@TypeParceler<LocalDate, LocalDateParceler>()
 data class Event(
     val id: Int,
     val name: String,
@@ -28,7 +33,8 @@ data class Event(
 
     val photos: List<String>,
     val members: List<Member> = emptyList()
-) {
+) : Parcelable {
+
     companion object {
         const val ID = "id"
         const val NAME = "name"

@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.github.dragon925.androidlearning.common.ui.getAssetDrawable
 import com.github.dragon925.androidlearning.databinding.ItemNewsBinding
 import com.github.dragon925.androidlearning.news.ui.models.NewsItem
 
@@ -38,7 +39,9 @@ class NewsListAdapter(
                 btnDate.text = item.date
                 root.setOnClickListener { openDetails(item) }
                 ivImage.visibility = if (item.image == null) View.GONE else View.VISIBLE
-                item.image?.let { ivImage.setImageDrawable(it) }
+                item.image?.let {
+                    ivImage.setImageDrawable(root.context.getAssetDrawable(it))
+                }
             }
         }
     }
