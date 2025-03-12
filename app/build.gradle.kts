@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
@@ -60,6 +61,7 @@ dependencies {
 
     implementation(libs.retrofit)
     implementation(libs.gson)
+    implementation(libs.bundles.rx)
 
     implementation(libs.bundles.android.navigation)
     implementation(libs.activity)

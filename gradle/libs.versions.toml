@@ -5,7 +5,7 @@ coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-lifecycleRuntimeKtx = "2.8.7"
+lifecycle = "2.8.7"
 activityCompose = "1.10.0"
 composeBom = "2025.01.00"
 appcompat = "1.7.0"
@@ -23,6 +23,9 @@ datetime = "0.6.2"
 activityVersion = "1.10.0"
 gson = "2.10.1"
 parcelize = "2.1.20-RC"
+rxjava = "3.1.10"
+rxandroid = "3.0.2"
+rxbinding = "4.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -47,7 +50,8 @@ androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragme
 androidx-navigation-ui = { module = "androidx.navigation:navigation-ui", version.ref = "navigation" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
 
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
+androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
@@ -62,6 +66,11 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activityVersion" }
+
+rx-java = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava" }
+rx-android = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroid" }
+rx-binding = { module = "com.jakewharton.rxbinding4:rxbinding", version.ref = "rxbinding" }
+rx-binding-material = { module = "com.jakewharton.rxbinding4:rxbinding-material", version.ref = "rxbinding" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -80,4 +89,5 @@ android-views = [
     "androidx-recyclerview",
     "androidx-viewpager2"
 ]
+rx = ["rx-java", "rx-android", "rx-binding", "rx-binding-material"]
 

@@ -1,26 +1,24 @@
 package com.github.dragon925.androidlearning.help.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.BundleCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.github.dragon925.androidlearning.common.data.repositories.CommonCategoryRepository
-import com.github.dragon925.androidlearning.common.data.service.DataLoadingServiceHelper
-import com.github.dragon925.androidlearning.common.domain.Category
+import com.github.dragon925.androidlearning.common.ui.UIState
 import com.github.dragon925.androidlearning.databinding.FragmentHelpCategoriesBinding
+import com.github.dragon925.androidlearning.help.ui.HelpCategoriesViewModel
 import com.github.dragon925.androidlearning.help.ui.adapters.HelpCategoryListAdapter
-import com.github.dragon925.androidlearning.help.ui.utils.toHelpCategoryItem
+import com.github.dragon925.androidlearning.help.ui.models.HelpCategoryUIState
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 
 
 class HelpCategoriesFragment : Fragment() {
 
     companion object {
-        private const val SAVED_CATEGORIES = "HelpCategoriesFragment-savedCategories"
-
         @JvmStatic
         fun newInstance() = HelpCategoriesFragment()
     }
@@ -28,16 +26,10 @@ class HelpCategoriesFragment : Fragment() {
     private var _binding: FragmentHelpCategoriesBinding? = null
     private val binding get() = _binding!!
 
-    private val categories = mutableListOf<Category>()
+    private val viewModel: HelpCategoriesViewModel by viewModels { HelpCategoriesViewModel.Factory }
+    private val compositeDisposable = CompositeDisposable()
 
     private val helpCategoriesAdapter = HelpCategoryListAdapter()
-
-    private val serviceHelper = DataLoadingServiceHelper(
-        clazz = Category::class.java,
-        onSuccess = { data -> handleLoadedData(data) },
-        onError = ::handleErrorLoadData,
-        loader = { CommonCategoryRepository.getCategories(requireContext().assets) }
-    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,59 +45,23 @@ class HelpCategoriesFragment : Fragment() {
             layoutManager = GridLayoutManager(requireContext(), 2)
         }
 
-        if (savedInstanceState == null || savedInstanceState.isEmpty) {
-            updateUI(true)
-            serviceHelper.bindService(requireContext())
-        }
+        viewModel.state.observeOn(AndroidSchedulers.mainThread())
+            .subscribe(::updateState)
+            .also { compositeDisposable.add(it) }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        if (serviceHelper.isLoading) return
-
-        outState.putParcelableArrayList(SAVED_CATEGORIES, ArrayList(categories))
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        savedInstanceState?.let { state ->
-            if (state.isEmpty) return
-
-
-            val savedCategories = BundleCompat.getParcelableArrayList(
-                state, SAVED_CATEGORIES, Category::class.java
-            )?.toList() ?: emptyList()
-            handleLoadedData(savedCategories)
-        }
-    }
-
-    private fun handleErrorLoadData() {
-        Log.d("HelpCategoriesFragment", "loadDataWithService-onError")
-    }
-
-    private fun handleLoadedData(data: List<Category>) {
-        requireActivity().runOnUiThread {
-            categories.clear()
-            categories.addAll(data)
-            updateCategories()
-            updateUI(false)
-        }
-    }
-
-    private fun updateUI(showLoading: Boolean) {
+    private fun updateState(state: UIState<HelpCategoryUIState, String>) {
         with(binding) {
-            piLoading.visibility = if (showLoading) View.VISIBLE else View.GONE
-            rvHelpCategories.visibility = if (showLoading) View.GONE else View.VISIBLE
+            piLoading.visibility = if (state.isLoading) View.VISIBLE else View.GONE
+            rvHelpCategories.visibility = if (state.isLoading) View.GONE else View.VISIBLE
         }
-    }
 
-    private fun updateCategories() {
-        helpCategoriesAdapter.submitList(categories.map { it.toHelpCategoryItem(requireContext()) })
+        state.data?.helpCategories?.let { helpCategoriesAdapter.submitList(it) }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        serviceHelper.unbindService(requireContext())
+        compositeDisposable.clear()
     }
 }

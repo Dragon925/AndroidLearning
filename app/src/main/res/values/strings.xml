@@ -20,10 +20,29 @@
     <string name="choose_help_category">Выберите категорию помощи</string>
     <string name="help_category">Категории помощи</string>
 
-    <string name="search_hint">Введите название организации</string>
+    <string name="search_hint_by_event">Введите название мероприятия</string>
+    <string name="search_hint_by_organization">Введите название организации</string>
     <string name="tab_by_event">По мероприятиям</string>
     <string name="tab_by_nko">По НКО</string>
     <string name="filter">Фильтр</string>
+    <string name="search_keywords">Ключевые слова: %1$s</string>
+    <plurals name="search_result_events">
+        <item quantity="one">Результаты поиска: %1$d мероприятие</item>
+        <item quantity="few">Результаты поиска: %1$d мероприятия</item>
+        <item quantity="many">Результаты поиска: %1$d мероприятий</item>
+        <item quantity="other">Результаты поиска: %1$d мероприятий</item>
+    </plurals>
+    <plurals name="search_result_organizations">
+        <item quantity="one">Результаты поиска: %1$d организация</item>
+        <item quantity="few">Результаты поиска: %1$d организации</item>
+        <item quantity="many">Результаты поиска: %1$d организаций</item>
+        <item quantity="other">Результаты поиска: %1$d организаций</item>
+    </plurals>
+    <string name="search_help_event">Напишите в строке поиска название мероприятия или ключевые слова.</string>
+    <string name="search_help_organization">Напишите в строке поиска название организации или ключевые слова.</string>
+    <string name="search_example">Например,</string>
+    <string name="search_example_event"><u>мастер-класс, помощь</u></string>
+    <string name="search_example_organization"><u>фонд, администрация</u></string>
 
     <plurals name="plurals_days">
         <item quantity="one">%1$d день</item>
@@ -59,4 +78,18 @@
     <string name="help_money">Помочь деньгами</string>
     <string name="description_event_photo">Фотографии события</string>
     <string name="more_count">+%1$d</string>
+
+    <string name="authorization">Авторизация</string>
+    <string name="external_auth_label">Для участия в мероприятиях войдите в приложение через социальные сети</string>
+    <string name="internal_auth_label">Или авторизуйтесь через приложение</string>
+    <string name="auth_email">E-mail</string>
+    <string name="auth_placeholder_email">Введите e-mail</string>
+    <string name="auth_password">Пароль</string>
+    <string name="auth_placeholder_password">Введите пароль</string>
+    <string name="auth_enter">ВОЙТИ</string>
+    <string name="forgot_password"><u>Забыли пароль?</u></string>
+    <string name="registration"><u>Регистрация</u></string>
+    <string name="description_auth_by_ok">Авторизация через Одноклассники</string>
+    <string name="description_auth_by_fb">Авторизация через Фейсбук</string>
+    <string name="description_auth_by_vk">Авторизация через Вконтакте</string>
 </resources>
