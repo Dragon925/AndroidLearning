@@ -5,6 +5,7 @@ import androidx.lifecycle.DEFAULT_ARGS_KEY
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.github.dragon925.androidlearning.common.domain.Event
@@ -15,25 +16,29 @@ import com.github.dragon925.androidlearning.search.ui.models.SearchResultItem
 import com.github.dragon925.androidlearning.search.ui.models.SearchUIState
 import com.github.dragon925.androidlearning.search.ui.models.toKeywords
 import com.github.dragon925.androidlearning.search.ui.models.toSearchResultItemBy
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.schedulers.Schedulers
-import io.reactivex.rxjava3.subjects.BehaviorSubject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
+@Suppress("OPT_IN_USAGE")
 class SearchViewModel(
-    private val loader: (keywords: List<String>) -> Observable<List<Event>>,
+    private val loader: (keywords: List<String>) -> Flow<List<Event>>,
     private val mapper: (List<Event>) -> List<SearchResultItem>
 ) : ViewModel() {
 
-    private val compositeDisposable = CompositeDisposable()
-    private val searchQuery = BehaviorSubject.createDefault("")
-    private val loading = BehaviorSubject.createDefault(false)
-    private val data = BehaviorSubject.create<SearchUIState>()
+    private val searchQuery = MutableStateFlow("")
+    private val loading = MutableStateFlow(false)
+    private val data = MutableStateFlow(SearchUIState())
 
-    val viewState: Observable<UIState<SearchUIState, String>> = Observable.combineLatest(
-        loading, data
-    ) { loading, data ->
+    val viewState: Flow<UIState<SearchUIState, String>> = loading.combine(data) { loading, data ->
         UIState(
             isLoading = loading,
             data = data.takeIf { it.keywords.isNotEmpty() },
@@ -41,30 +46,27 @@ class SearchViewModel(
     }
 
     init {
-        searchQuery.distinctUntilChanged()
-            .doOnNext { loading.onNext(true) }.switchMap { query ->
-                if (query.isEmpty()) return@switchMap Observable.just(SearchUIState())
+        viewModelScope.launch {
+            searchQuery.onEach { loading.value = true }
+                .flatMapLatest { query ->
+                    if (query.isEmpty()) return@flatMapLatest flowOf(SearchUIState())
 
-                val keywords = query.toKeywords()
-                return@switchMap loader(keywords)
-                    .map { events -> SearchUIState(keywords, mapper(events)) }
-
-            }.subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnNext { loading.onNext(false) }
-            .subscribe(
-                { data.onNext(it) },
-                { error -> Log.e("SearchViewModel", "Search error", error) }
-            ).also { compositeDisposable.add(it) }
+                    val keywords = query.toKeywords()
+                    return@flatMapLatest loader(keywords)
+                        .map { events ->
+                            SearchUIState(keywords, mapper(events))
+                        }
+                }.flowOn(Dispatchers.IO)
+                .onEach { loading.value = false }
+                .catch { error ->
+                    Log.e("SearchViewModel", "Search error", error)
+                }
+                .collect { data.value = it }
+        }
     }
 
     fun search(query: String) {
-        searchQuery.onNext(query)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.dispose()
+        searchQuery.value = query
     }
 
     companion object {

@@ -6,10 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.DEFAULT_ARGS_KEY
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.MutableCreationExtras
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.dragon925.androidlearning.R
@@ -20,8 +25,7 @@ import com.github.dragon925.androidlearning.search.ui.models.SearchUIState
 import com.github.dragon925.androidlearning.search.ui.viewmodels.SearchViewModel
 import com.github.dragon925.androidlearning.search.ui.viewmodels.SharedSearchViewModel
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
 
 private const val SEARCH_TYPE = "searchType"
 
@@ -56,8 +60,6 @@ class SearchByTypeFragment : Fragment() {
     )
 
     private lateinit var resultAdapter: SearchResultListAdapter
-
-    private val searchDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,22 +102,27 @@ class SearchByTypeFragment : Fragment() {
             )
         }
 
-        searchViewModel.viewState.observeOn(AndroidSchedulers.mainThread()).subscribe {
-            updateState(it)
-        }.also { searchDisposable.add(it) }
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                sharedViewModel.query.collect { searchViewModel.search(it) }
+            }
+        }
 
-        sharedViewModel.query.observeOn(AndroidSchedulers.mainThread()).subscribe {
-            searchViewModel.search(it)
-        }.also { searchDisposable.add(it) }
-
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                searchViewModel.viewState.collect(::updateState)
+            }
+        }
     }
 
     private fun updateState(state: UIState<SearchUIState, String>) {
-        binding.piLoading.visibility = if (state.isLoading) View.VISIBLE else View.INVISIBLE
+        with(binding) {
+            piLoading.isVisible = state.isLoading
+            groupResults.isGone = !state.isCorrect
+            groupPlug.isGone = state.isCorrect
+        }
         if (state.isCorrect) {
             state.data?.let { showResults(it) }
-        } else {
-            showPlug()
         }
     }
 
@@ -125,8 +132,6 @@ class SearchByTypeFragment : Fragment() {
             else -> R.plurals.search_result_events
         }
         with(binding) {
-            groupResults.visibility = View.VISIBLE
-            groupPlug.visibility = View.GONE
             tvSearchKeywords.text = getString(
                 R.string.search_keywords, data.keywords.joinToString()
             )
@@ -137,17 +142,9 @@ class SearchByTypeFragment : Fragment() {
         }
     }
 
-    private fun showPlug() {
-        with(binding) {
-            groupResults.visibility = View.GONE
-            groupPlug.visibility = View.VISIBLE
-        }
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        searchDisposable.clear()
         searchFragment = null
     }
 }

@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.lifecycle.DEFAULT_ARGS_KEY
 import androidx.lifecycle.viewmodel.MutableCreationExtras
 import com.github.dragon925.androidlearning.R
@@ -99,8 +101,8 @@ class NewsDetailsActivity : AppCompatActivity() {
 
     private fun updateState(state: UIState<NewsDetailItem, String>) {
         with(binding) {
-            piLoading.visibility = if (state.isLoading) View.VISIBLE else View.GONE
-            nsvContent.visibility = if (state.isLoading) View.GONE else View.VISIBLE
+            piLoading.isVisible = state.isLoading
+            nsvContent.isGone = state.isLoading
         }
 
         state.data?.let { initViews(it) }

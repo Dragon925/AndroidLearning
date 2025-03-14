@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
@@ -67,7 +69,7 @@ class NewsFragment : Fragment() {
                 val unread = data.newsList.count { it.id !in data.readIds }
                 unreadNewsViewModel.updateUnreadCount(unread)
             }
-        }.also { compositeDisposable.add(it) }
+        }.also(compositeDisposable::add)
 
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId) {
@@ -122,8 +124,8 @@ class NewsFragment : Fragment() {
 
     private fun updateState(state: UIState<NewsListUIState, String>) {
         with(binding) {
-            piLoading.visibility = if (state.isLoading) View.VISIBLE else View.GONE
-            rvNews.visibility = if (state.isLoading) View.GONE else View.VISIBLE
+            piLoading.isVisible = state.isLoading
+            rvNews.isGone = state.isLoading
         }
 
         state.data?.newsList?.let { news ->
