@@ -49,8 +49,10 @@ class NewsDetailsViewModel(
             .doOnEvent { _, _ -> loading.onNext(false) }
             .subscribe(
                 { details.onNext(it) },
-                { error -> Log.e("NewsDetailsViewModel", "Detils load error", error) }
-            ).also { compositeDisposable.add(it) }
+                { error ->
+                    Log.e("NewsDetailsViewModel", "Detils load error", error)
+                }
+            ).also(compositeDisposable::add)
     }
 
     override fun onCleared() {

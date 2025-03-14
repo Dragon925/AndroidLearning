@@ -15,7 +15,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.jakewharton.rxbinding4.widget.textChanges
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import java.util.concurrent.TimeUnit
 
 
 class SearchFragment : Fragment() {
@@ -76,16 +75,12 @@ class SearchFragment : Fragment() {
                 false
             }
 
-            searchView.editText.textChanges().map { it.toString().trim() }
-                .debounce(500, TimeUnit.MILLISECONDS)
-                .distinctUntilChanged()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { viewModel.search(it) }
-                .also { compositeDisposable.add(it) }
+            viewModel.observeQuery(searchView.editText.textChanges())
+                .also(compositeDisposable::add)
 
             viewModel.query.observeOn(AndroidSchedulers.mainThread())
                 .subscribe { searchBar.setText(it) }
-                .also { compositeDisposable.add(it) }
+                .also(compositeDisposable::add)
         }
     }
 

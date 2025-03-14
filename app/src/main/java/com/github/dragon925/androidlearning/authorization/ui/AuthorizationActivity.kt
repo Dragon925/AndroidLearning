@@ -16,15 +16,15 @@ import io.reactivex.rxjava3.disposables.Disposable
 
 class AuthorizationActivity : AppCompatActivity() {
 
+    companion object {
+        private fun validateLoginAndPassword(login: CharSequence, password: CharSequence): Boolean {
+            return login.trim().length >= 6 && password.trim().length >= 6
+        }
+    }
+
     private lateinit var binding: ActivityAuthorizationBinding
 
-    private val loginPasswordChecker: Disposable by lazy {
-        Observable.combineLatest(
-            binding.etEmail.textChanges(),
-            binding.etPassword.textChanges(),
-            ::validateLoginAndPassword
-        ).subscribe { binding.btnEnter.isEnabled = it }
-    }
+    private lateinit var loginPasswordChecker: Disposable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -42,7 +42,11 @@ class AuthorizationActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        loginPasswordChecker
+        loginPasswordChecker = Observable.combineLatest(
+            binding.etEmail.textChanges(),
+            binding.etPassword.textChanges(),
+            ::validateLoginAndPassword
+        ).subscribe { binding.btnEnter.isEnabled = it }
 
         binding.btnEnter.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
@@ -52,10 +56,6 @@ class AuthorizationActivity : AppCompatActivity() {
         }
 
         binding.toolbar.setNavigationOnClickListener { finish() }
-    }
-
-    private fun validateLoginAndPassword(login: CharSequence, password: CharSequence): Boolean {
-        return login.trim().length >= 6 && password.trim().length >= 6
     }
 
     override fun onDestroy() {

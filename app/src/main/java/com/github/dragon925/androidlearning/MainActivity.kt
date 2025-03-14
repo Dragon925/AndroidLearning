@@ -40,7 +40,8 @@ class MainActivity : AppCompatActivity() {
                     isVisible = unreadCount > 0
                     number = unreadCount
                 }
-            }.also { compositeDisposable.add(it) }
+            }
+            .also(compositeDisposable::add)
     }
 
     private fun initNavigation() {

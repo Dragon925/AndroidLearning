@@ -42,20 +42,25 @@ class SearchViewModel(
 
     init {
         searchQuery.distinctUntilChanged()
-            .doOnNext { loading.onNext(true) }.switchMap { query ->
+            .doOnNext { loading.onNext(true) }
+            .switchMap { query ->
                 if (query.isEmpty()) return@switchMap Observable.just(SearchUIState())
 
                 val keywords = query.toKeywords()
                 return@switchMap loader(keywords)
                     .map { events -> SearchUIState(keywords, mapper(events)) }
 
-            }.subscribeOn(Schedulers.io())
+            }
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnNext { loading.onNext(false) }
             .subscribe(
                 { data.onNext(it) },
-                { error -> Log.e("SearchViewModel", "Search error", error) }
-            ).also { compositeDisposable.add(it) }
+                { error ->
+                    Log.e("SearchViewModel", "Search error", error)
+                }
+            )
+            .also(compositeDisposable::add)
     }
 
     fun search(query: String) {
@@ -89,11 +94,15 @@ class SearchViewModel(
                     },
                     mapper = when (searchType) {
                         SearchByTypeFragment.SEARCH_BY_NKO -> {
-                            { events -> events.map { it.toSearchResultItemBy(Event::organizer) } }
+                            { events ->
+                                events.map { it.toSearchResultItemBy(Event::organizer) }
+                            }
                         }
 
                         else -> {
-                            { events -> events.map { it.toSearchResultItemBy(Event::name) } }
+                            { events ->
+                                events.map { it.toSearchResultItemBy(Event::name) }
+                            }
                         }
                     }
                 )

@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
@@ -68,7 +70,7 @@ class FilterFragment : Fragment() {
 
         filterViewModel.state.observeOn(AndroidSchedulers.mainThread())
             .subscribe(::updateState)
-            .also { compositeDisposable.add(it) }
+            .also(compositeDisposable::add)
 
         filterViewModel.checkCategory(*chosenFilters, isChecked = true)
 
@@ -97,8 +99,8 @@ class FilterFragment : Fragment() {
 
     private fun updateState(state: UIState<FilterUIState, String>) {
         with(binding) {
-            piLoading.visibility = if (state.isLoading) View.VISIBLE else View.GONE
-            rvFilters.visibility = if (state.isLoading) View.GONE else View.VISIBLE
+            piLoading.isVisible = state.isLoading
+            rvFilters.isGone = state.isLoading
             toolbar.menu.findItem(R.id.action_apply_filter).isEnabled = !state.isLoading
         }
 

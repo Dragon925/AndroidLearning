@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -100,22 +102,24 @@ class SearchByTypeFragment : Fragment() {
             )
         }
 
-        searchViewModel.viewState.observeOn(AndroidSchedulers.mainThread()).subscribe {
-            updateState(it)
-        }.also { searchDisposable.add(it) }
+        searchViewModel.viewState.observeOn(AndroidSchedulers.mainThread())
+            .subscribe { updateState(it) }
+            .also(searchDisposable::add)
 
-        sharedViewModel.query.observeOn(AndroidSchedulers.mainThread()).subscribe {
-            searchViewModel.search(it)
-        }.also { searchDisposable.add(it) }
+        sharedViewModel.query.observeOn(AndroidSchedulers.mainThread())
+            .subscribe { searchViewModel.search(it) }
+            .also(searchDisposable::add)
 
     }
 
     private fun updateState(state: UIState<SearchUIState, String>) {
-        binding.piLoading.visibility = if (state.isLoading) View.VISIBLE else View.INVISIBLE
+        with(binding) {
+            piLoading.isVisible = state.isLoading
+            groupResults.isGone = !state.isCorrect
+            groupPlug.isGone = state.isCorrect
+        }
         if (state.isCorrect) {
             state.data?.let { showResults(it) }
-        } else {
-            showPlug()
         }
     }
 
@@ -125,8 +129,6 @@ class SearchByTypeFragment : Fragment() {
             else -> R.plurals.search_result_events
         }
         with(binding) {
-            groupResults.visibility = View.VISIBLE
-            groupPlug.visibility = View.GONE
             tvSearchKeywords.text = getString(
                 R.string.search_keywords, data.keywords.joinToString()
             )
@@ -134,13 +136,6 @@ class SearchByTypeFragment : Fragment() {
                 resultPluralsId, data.results.size, data.results.size
             )
             resultAdapter.submitList(data.results)
-        }
-    }
-
-    private fun showPlug() {
-        with(binding) {
-            groupResults.visibility = View.GONE
-            groupPlug.visibility = View.VISIBLE
         }
     }
 
