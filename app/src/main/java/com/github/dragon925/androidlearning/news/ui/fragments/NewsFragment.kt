@@ -2,30 +2,34 @@ package com.github.dragon925.androidlearning.news.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.BundleCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.dragon925.androidlearning.R
-import com.github.dragon925.androidlearning.common.data.repositories.CommonEventRepository
-import com.github.dragon925.androidlearning.common.data.service.DataLoadingServiceHelper
-import com.github.dragon925.androidlearning.common.domain.Event
+import com.github.dragon925.androidlearning.common.ui.UIState
 import com.github.dragon925.androidlearning.databinding.FragmentNewsBinding
 import com.github.dragon925.androidlearning.news.ui.activities.NewsDetailsActivity
 import com.github.dragon925.androidlearning.news.ui.adapters.NewsListAdapter
 import com.github.dragon925.androidlearning.news.ui.models.NewsItem
+import com.github.dragon925.androidlearning.news.ui.models.NewsListUIState
 import com.github.dragon925.androidlearning.news.ui.utils.toNewsItem
+import com.github.dragon925.androidlearning.news.ui.viewmodels.NewsViewModel
+import com.github.dragon925.androidlearning.news.ui.viewmodels.UnreadNewsViewModel
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 
 class NewsFragment : Fragment() {
 
     companion object {
-        private const val SAVED_EVENTS = "savedEvents"
         private const val SAVED_FILTERS = "savedFilters"
 
         @JvmStatic
@@ -35,17 +39,11 @@ class NewsFragment : Fragment() {
     private var _binding: FragmentNewsBinding? = null
     private val binding get() = _binding!!
 
+    private val unreadNewsViewModel: UnreadNewsViewModel by activityViewModels()
+    private val newsViewModel: NewsViewModel by viewModels { NewsViewModel.Factory }
+    private val compositeDisposable = CompositeDisposable()
+
     private val newsAdapter = NewsListAdapter(::openNewsDetails)
-    private val filters = mutableSetOf<Int>()
-
-    private val events = mutableListOf<NewsItem>()
-
-    private val serviceHelper = DataLoadingServiceHelper(
-        clazz = Event::class.java,
-        onSuccess = ::handleSuccessLoadData,
-        onError = ::handleErrorLoadData,
-        loader = { CommonEventRepository.getEvents(requireContext().assets) }
-    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,10 +63,15 @@ class NewsFragment : Fragment() {
         binding.rvNews.adapter = newsAdapter
         binding.rvNews.addItemDecoration(divider)
 
-        if (savedInstanceState == null || savedInstanceState.isEmpty) {
-            updateUI(true)
-            serviceHelper.bindService(requireContext())
-        }
+        newsViewModel.state.observeOn(AndroidSchedulers.mainThread())
+            .subscribe { state ->
+                updateState(state)
+                state.data?.let { data ->
+                    val unread = data.newsList.count { it.id !in data.readIds }
+                    unreadNewsViewModel.updateUnreadCount(unread)
+                }
+            }
+            .also(compositeDisposable::add)
 
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId) {
@@ -76,7 +79,7 @@ class NewsFragment : Fragment() {
                     parentFragmentManager.commit {
                         add(
                             R.id.main_nav_container,
-                            FilterFragment.newInstance(filters.toIntArray()),
+                            FilterFragment.newInstance(newsViewModel.currentFilters.toIntArray()),
                             FilterFragment.TAG
                         )
                         addToBackStack(FilterFragment.TAG)
@@ -92,22 +95,14 @@ class NewsFragment : Fragment() {
         setFragmentResultListener(FilterFragment.REQUEST_KEY) { _, bundle ->
             if (bundle.getInt(FilterFragment.RESULT_CODE) == FilterFragment.RESULT_OK) {
                 val result = bundle.getIntArray(FilterFragment.RESULT_KEY)?.toList() ?: emptyList()
-                filters.clear()
-                filters.addAll(result)
-                updateNews()
-            }
-            if (!serviceHelper.isDone) {
-                serviceHelper.reload()
+                newsViewModel.setFilters(result)
             }
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        if (serviceHelper.isLoading) return
-
-        outState.putParcelableArrayList(SAVED_EVENTS, ArrayList(events))
-        outState.putIntArray(SAVED_FILTERS, filters.toIntArray())
+        outState.putIntArray(SAVED_FILTERS, newsViewModel.currentFilters.toIntArray())
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -115,37 +110,8 @@ class NewsFragment : Fragment() {
         savedInstanceState?.let { state ->
             if (state.isEmpty) return
 
-            val savedEvents = BundleCompat.getParcelableArrayList(
-                state, SAVED_EVENTS, NewsItem::class.java
-            )?.toList() ?: emptyList()
-
             val savedFilters = state.getIntArray(SAVED_FILTERS)?.toList() ?: emptyList()
-
-            events.clear()
-            events.addAll(savedEvents)
-
-            filters.clear()
-            filters.addAll(savedFilters)
-
-            updateUI(false)
-            updateNews()
-        }
-    }
-
-    private fun handleSuccessLoadData(events: List<Event>) {
-        handleLoadedData(events.map { it.toNewsItem(requireContext()) })
-    }
-
-    private fun handleErrorLoadData() {
-        Log.e("NewsFragment", "loadDataWithService-onError")
-    }
-
-    private fun handleLoadedData(news: List<NewsItem>) {
-        requireActivity().runOnUiThread {
-            events.clear()
-            events.addAll(news)
-            updateNews()
-            updateUI(false)
+            newsViewModel.setFilters(savedFilters)
         }
     }
 
@@ -154,25 +120,24 @@ class NewsFragment : Fragment() {
             putExtra(NewsDetailsActivity.EXTRA_NEWS_ID, newsItem.id)
             putExtra(NewsDetailsActivity.EXTRA_NEWS_TITLE, newsItem.title)
         }
+        newsViewModel.markAsRead(newsItem.id)
         startActivity(intent)
     }
 
-    private fun updateUI(showLoading: Boolean) {
+    private fun updateState(state: UIState<NewsListUIState, String>) {
         with(binding) {
-            piLoading.visibility = if (showLoading) View.VISIBLE else View.GONE
-            rvNews.visibility = if (showLoading) View.GONE else View.VISIBLE
+            piLoading.isVisible = state.isLoading
+            rvNews.isGone = state.isLoading
         }
-    }
 
-    private fun updateNews() {
-        newsAdapter.submitList(events.filter { item ->
-            filters.isEmpty() || item.categoryIds.any { filters.contains(it) }
-        })
+        state.data?.newsList?.let { news ->
+            newsAdapter.submitList(news.map { it.toNewsItem(requireContext()) })
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        serviceHelper.unbindService(requireContext())
+        compositeDisposable.clear()
     }
 }

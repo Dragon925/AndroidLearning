@@ -1,28 +1,31 @@
 package com.github.dragon925.androidlearning.news.ui.activities
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.BundleCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
+import androidx.lifecycle.DEFAULT_ARGS_KEY
+import androidx.lifecycle.viewmodel.MutableCreationExtras
 import com.github.dragon925.androidlearning.R
-import com.github.dragon925.androidlearning.common.data.repositories.CommonEventRepository
-import com.github.dragon925.androidlearning.common.data.service.DataLoadingServiceHelper
-import com.github.dragon925.androidlearning.common.domain.Event
+import com.github.dragon925.androidlearning.common.ui.UIState
 import com.github.dragon925.androidlearning.common.ui.getAssetDrawable
 import com.github.dragon925.androidlearning.databinding.ActivityNewsDetailsBinding
 import com.github.dragon925.androidlearning.news.ui.models.NewsDetailItem
-import com.github.dragon925.androidlearning.news.ui.utils.toNewsDetailItem
+import com.github.dragon925.androidlearning.news.ui.viewmodels.NewsDetailsViewModel
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 
 class NewsDetailsActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_NEWS_ID = "NewsDetailsID"
         const val EXTRA_NEWS_TITLE = "NewsDetailsTitle"
-        const val SAVED_DETAILS = "NewsDetailsActivity-savedNewsDetails"
         private const val DEFAULT_NEWS_ID = -1
     }
 
@@ -31,16 +34,17 @@ class NewsDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNewsDetailsBinding
 
-    private lateinit var details: NewsDetailItem
-
-    private val serviceHelper = DataLoadingServiceHelper(
-        clazz = Event::class.java,
-        onSuccess ={ data ->
-            handleLoadedData(data.find { it.id == newsId }!!.toNewsDetailItem(this))
+    private val viewModel: NewsDetailsViewModel by viewModels(
+        extrasProducer = {
+            MutableCreationExtras(defaultViewModelCreationExtras).apply {
+                this[DEFAULT_ARGS_KEY] = bundleOf(
+                    NewsDetailsViewModel.NEWS_DETAILS_ID to newsId,
+                )
+            }
         },
-        onError = ::handleErrorLoadData,
-        loader = { CommonEventRepository.getEvents(assets) }
+        factoryProducer = { NewsDetailsViewModel.Factory }
     )
+    private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,43 +63,12 @@ class NewsDetailsActivity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener { finish() }
         binding.toolbar.title = newsTitle
 
-        if (savedInstanceState == null || savedInstanceState.isEmpty) {
-            updateUI(true)
-            serviceHelper.bindService(this)
-        }
+        viewModel.state.observeOn(AndroidSchedulers.mainThread())
+            .subscribe(::updateState)
+            .also(compositeDisposable::add)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        if (::details.isInitialized) {
-            outState.putParcelable(SAVED_DETAILS, details)
-        }
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        if (!savedInstanceState.containsKey(SAVED_DETAILS)) return
-
-        BundleCompat.getParcelable(
-            savedInstanceState, SAVED_DETAILS, NewsDetailItem::class.java
-        )?.let {
-            handleLoadedData(it)
-        }
-    }
-
-    private fun handleErrorLoadData() {
-        Log.e("NewsDetailsActivity", "loadDataWithService-onError")
-    }
-
-    private fun handleLoadedData(newsDetails: NewsDetailItem) {
-        runOnUiThread {
-            details = newsDetails
-            initViews()
-            updateUI(false)
-        }
-    }
-
-    private fun initViews() {
+    private fun initViews(details: NewsDetailItem) {
         with(binding) {
             tvTitle.text = details.name
             tvDate.text = details.date
@@ -126,15 +99,17 @@ class NewsDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateUI(showLoading: Boolean) {
+    private fun updateState(state: UIState<NewsDetailItem, String>) {
         with(binding) {
-            piLoading.visibility = if (showLoading) View.VISIBLE else View.GONE
-            nsvContent.visibility = if (showLoading) View.GONE else View.VISIBLE
+            piLoading.isVisible = state.isLoading
+            nsvContent.isGone = state.isLoading
         }
+
+        state.data?.let { initViews(it) }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        serviceHelper.unbindService(this)
+        compositeDisposable.dispose()
     }
 }

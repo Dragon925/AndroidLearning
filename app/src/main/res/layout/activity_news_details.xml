@@ -38,7 +38,9 @@
         android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_anchor="@id/bnv_help_types"
-        android:layout_gravity="top">
+        android:layout_gravity="top"
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
