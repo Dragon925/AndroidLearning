@@ -65,7 +65,7 @@ class NewsDetailsActivity : AppCompatActivity() {
 
         viewModel.state.observeOn(AndroidSchedulers.mainThread())
             .subscribe(::updateState)
-            .also { compositeDisposable.add(it) }
+            .also(compositeDisposable::add)
     }
 
     private fun initViews(details: NewsDetailItem) {

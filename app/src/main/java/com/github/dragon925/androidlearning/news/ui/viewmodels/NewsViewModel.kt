@@ -61,9 +61,13 @@ class NewsViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .doOnEvent { _, _ -> loading.onNext(false) }
             .subscribe(
-                { events -> _news.onNext(events) },
-                { error -> Log.e("NewsViewModel", "Error loading news", error) }
-            ).also { compositeDisposable.add(it) }
+                { events ->
+                    _news.onNext(events)
+                },
+                { error ->
+                    Log.e("NewsViewModel", "Error loading news", error)
+                }
+            ).also(compositeDisposable::add)
     }
 
     override fun onCleared() {

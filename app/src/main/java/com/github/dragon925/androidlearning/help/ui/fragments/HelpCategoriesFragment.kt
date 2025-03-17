@@ -49,7 +49,7 @@ class HelpCategoriesFragment : Fragment() {
 
         viewModel.state.observeOn(AndroidSchedulers.mainThread())
             .subscribe(::updateState)
-            .also { compositeDisposable.add(it) }
+            .also(compositeDisposable::add)
     }
 
     private fun updateState(state: UIState<HelpCategoryUIState, String>) {

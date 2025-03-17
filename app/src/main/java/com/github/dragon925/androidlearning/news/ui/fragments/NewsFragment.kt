@@ -63,13 +63,15 @@ class NewsFragment : Fragment() {
         binding.rvNews.adapter = newsAdapter
         binding.rvNews.addItemDecoration(divider)
 
-        newsViewModel.state.observeOn(AndroidSchedulers.mainThread()).subscribe { state ->
-            updateState(state)
-            state.data?.let { data ->
-                val unread = data.newsList.count { it.id !in data.readIds }
-                unreadNewsViewModel.updateUnreadCount(unread)
+        newsViewModel.state.observeOn(AndroidSchedulers.mainThread())
+            .subscribe { state ->
+                updateState(state)
+                state.data?.let { data ->
+                    val unread = data.newsList.count { it.id !in data.readIds }
+                    unreadNewsViewModel.updateUnreadCount(unread)
+                }
             }
-        }.also(compositeDisposable::add)
+            .also(compositeDisposable::add)
 
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId) {

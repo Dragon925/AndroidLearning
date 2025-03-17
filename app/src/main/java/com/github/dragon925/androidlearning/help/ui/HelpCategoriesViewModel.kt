@@ -51,8 +51,11 @@ class HelpCategoriesViewModel(
             .doOnEvent { _, _ -> loading.onNext(false) }
             .subscribe(
                 { categories.onNext(it) },
-                { error -> Log.e("NewsViewModel", "Error loading news", error) }
-            ).also { compositeDisposable.add(it) }
+                { error ->
+                    Log.e("NewsViewModel", "Error loading news", error)
+                }
+            )
+            .also(compositeDisposable::add)
     }
 
     override fun onCleared() {

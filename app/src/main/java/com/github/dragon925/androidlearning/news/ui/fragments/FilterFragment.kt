@@ -70,7 +70,7 @@ class FilterFragment : Fragment() {
 
         filterViewModel.state.observeOn(AndroidSchedulers.mainThread())
             .subscribe(::updateState)
-            .also { compositeDisposable.add(it) }
+            .also(compositeDisposable::add)
 
         filterViewModel.checkCategory(*chosenFilters, isChecked = true)
 

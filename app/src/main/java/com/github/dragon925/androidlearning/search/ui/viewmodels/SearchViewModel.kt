@@ -91,11 +91,15 @@ class SearchViewModel(
                     },
                     mapper = when (searchType) {
                         SearchByTypeFragment.SEARCH_BY_NKO -> {
-                            { events -> events.map { it.toSearchResultItemBy(Event::organizer) } }
+                            { events ->
+                                events.map { it.toSearchResultItemBy(Event::organizer) }
+                            }
                         }
 
                         else -> {
-                            { events -> events.map { it.toSearchResultItemBy(Event::name) } }
+                            { events ->
+                                events.map { it.toSearchResultItemBy(Event::name) }
+                            }
                         }
                     }
                 )

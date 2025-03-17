@@ -52,9 +52,13 @@ class FilterViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .doOnEvent { _, _ -> loading.onNext(false) }
             .subscribe(
-                { results -> categories.onNext(results) },
-                { error -> Log.e("NewsViewModel", "Error loading categories", error) }
-            ).also { compositeDisposable.add(it) }
+                { results ->
+                    categories.onNext(results)
+                },
+                { error ->
+                    Log.e("NewsViewModel", "Error loading categories", error)
+                }
+            ).also(compositeDisposable::add)
     }
 
     fun checkCategory(vararg categoryIds: Int, isChecked: Boolean) {
