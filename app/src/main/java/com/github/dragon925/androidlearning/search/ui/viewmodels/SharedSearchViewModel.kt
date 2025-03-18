@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -16,11 +16,11 @@ import kotlinx.coroutines.launch
 
 class SharedSearchViewModel : ViewModel() {
 
-    private val _query = MutableStateFlow("")
-    val query: StateFlow<String> get() = _query.asStateFlow()
+    private val _query = MutableSharedFlow<String>(1)
+    val query: SharedFlow<String> get() = _query.asSharedFlow()
 
     fun search(query: String) {
-        _query.value = query
+        _query.tryEmit(query)
     }
 
     @FlowPreview
@@ -28,6 +28,6 @@ class SharedSearchViewModel : ViewModel() {
             query.map { it.trim() }
                 .debounce(500)
                 .distinctUntilChanged()
-                .collectLatest { _query.value = it }
+                .collectLatest { _query.emit(it) }
         }
 }
