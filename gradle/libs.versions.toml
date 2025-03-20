@@ -20,9 +20,9 @@ splashscreen = "1.0.1"
 recyclerview = "1.4.0"
 viewpager2 = "1.1.0"
 datetime = "0.6.2"
-activityVersion = "1.10.0"
 gson = "2.10.1"
 parcelize = "2.1.20-RC"
+coroutines = "1.9.0"
 rxjava = "3.1.10"
 rxandroid = "3.0.2"
 rxbinding = "4.0.0"
@@ -30,6 +30,9 @@ rxbinding = "4.0.0"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashscreen" }
+
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref= "coroutines" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref= "coroutines" }
 
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
 
@@ -65,7 +68,6 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
-activity = { group = "androidx.activity", name = "activity", version.ref = "activityVersion" }
 
 rx-java = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava" }
 rx-android = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroid" }
@@ -90,4 +92,5 @@ android-views = [
     "androidx-viewpager2"
 ]
 rx = ["rx-java", "rx-android", "rx-binding", "rx-binding-material"]
+coroutines = ["kotlinx-coroutines-core", "kotlinx-coroutines-android"]
 

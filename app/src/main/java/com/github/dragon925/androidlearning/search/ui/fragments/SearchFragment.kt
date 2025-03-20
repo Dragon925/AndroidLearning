@@ -6,17 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewpager2.widget.ViewPager2
 import com.github.dragon925.androidlearning.R
 import com.github.dragon925.androidlearning.databinding.FragmentSearchBinding
 import com.github.dragon925.androidlearning.search.ui.adapters.SearchViewPagerAdapter
+import com.github.dragon925.androidlearning.search.ui.utils.textChanges
 import com.github.dragon925.androidlearning.search.ui.viewmodels.SharedSearchViewModel
 import com.google.android.material.tabs.TabLayoutMediator
-import com.jakewharton.rxbinding4.widget.textChanges
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.CompositeDisposable
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 
+@OptIn(FlowPreview::class)
 class SearchFragment : Fragment() {
 
     companion object {
@@ -30,7 +35,7 @@ class SearchFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: SharedSearchViewModel by activityViewModels()
-    private val compositeDisposable = CompositeDisposable()
+    private var searchObserver: Job? = null
 
     private lateinit var searchViewPagerAdapter: SearchViewPagerAdapter
 
@@ -74,13 +79,13 @@ class SearchFragment : Fragment() {
                 searchView.hide()
                 false
             }
+            searchObserver = viewModel.observeQuery(searchView.textChanges())
 
-            viewModel.observeQuery(searchView.editText.textChanges())
-                .also(compositeDisposable::add)
-
-            viewModel.query.observeOn(AndroidSchedulers.mainThread())
-                .subscribe { searchBar.setText(it) }
-                .also(compositeDisposable::add)
+            lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.query.collect { searchBar.setText(it) }
+                }
+            }
         }
     }
 
@@ -96,6 +101,7 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        compositeDisposable.clear()
+        searchObserver?.cancel()
+        searchObserver = null
     }
 }

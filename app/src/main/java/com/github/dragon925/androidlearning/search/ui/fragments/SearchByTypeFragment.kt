@@ -12,6 +12,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.DEFAULT_ARGS_KEY
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.MutableCreationExtras
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.dragon925.androidlearning.R
@@ -22,8 +25,7 @@ import com.github.dragon925.androidlearning.search.ui.models.SearchUIState
 import com.github.dragon925.androidlearning.search.ui.viewmodels.SearchViewModel
 import com.github.dragon925.androidlearning.search.ui.viewmodels.SharedSearchViewModel
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
 
 private const val SEARCH_TYPE = "searchType"
 
@@ -58,8 +60,6 @@ class SearchByTypeFragment : Fragment() {
     )
 
     private lateinit var resultAdapter: SearchResultListAdapter
-
-    private val searchDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,14 +102,17 @@ class SearchByTypeFragment : Fragment() {
             )
         }
 
-        searchViewModel.viewState.observeOn(AndroidSchedulers.mainThread())
-            .subscribe { updateState(it) }
-            .also(searchDisposable::add)
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                sharedViewModel.query.collect { searchViewModel.search(it) }
+            }
+        }
 
-        sharedViewModel.query.observeOn(AndroidSchedulers.mainThread())
-            .subscribe { searchViewModel.search(it) }
-            .also(searchDisposable::add)
-
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                searchViewModel.viewState.collect(::updateState)
+            }
+        }
     }
 
     private fun updateState(state: UIState<SearchUIState, String>) {
@@ -142,7 +145,6 @@ class SearchByTypeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        searchDisposable.clear()
         searchFragment = null
     }
 }

@@ -1,16 +1,17 @@
 package com.github.dragon925.androidlearning.news.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.subjects.BehaviorSubject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class UnreadNewsViewModel : ViewModel() {
 
-    private val _unreadCount = BehaviorSubject.createDefault(0)
+    private val _unreadCount = MutableStateFlow(0)
 
-    val unreadCount: Observable<Int> = _unreadCount.distinctUntilChanged()
+    val unreadCount: StateFlow<Int> = _unreadCount.asStateFlow()
 
     fun updateUnreadCount(unreadCount: Int) {
-        _unreadCount.onNext(unreadCount)
+        _unreadCount.value = unreadCount
     }
 }

@@ -6,20 +6,21 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.github.dragon925.androidlearning.databinding.ActivityMainBinding
 import com.github.dragon925.androidlearning.help.ui.fragments.HelpCategoriesFragment
 import com.github.dragon925.androidlearning.news.ui.fragments.NewsFragment
 import com.github.dragon925.androidlearning.news.ui.viewmodels.UnreadNewsViewModel
 import com.github.dragon925.androidlearning.profile.ui.fragments.ProfileFragment
 import com.github.dragon925.androidlearning.search.ui.fragments.SearchFragment
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val unreadNewsViewModel: UnreadNewsViewModel by viewModels()
-    private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,14 +35,16 @@ class MainActivity : AppCompatActivity() {
 
         initNavigation()
 
-        unreadNewsViewModel.unreadCount.observeOn(AndroidSchedulers.mainThread())
-            .subscribe { unreadCount ->
-                binding.bottomNavBar.getOrCreateBadge(R.id.screen_news).apply {
-                    isVisible = unreadCount > 0
-                    number = unreadCount
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                unreadNewsViewModel.unreadCount.collect { unreadCount ->
+                    binding.bottomNavBar.getOrCreateBadge(R.id.screen_news).apply {
+                        isVisible = unreadCount > 0
+                        number = unreadCount
+                    }
                 }
             }
-            .also(compositeDisposable::add)
+        }
     }
 
     private fun initNavigation() {
