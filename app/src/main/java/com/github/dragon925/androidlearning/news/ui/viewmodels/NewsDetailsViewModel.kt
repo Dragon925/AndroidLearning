@@ -17,6 +17,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
+import kotlinx.coroutines.rx3.asObservable
 
 class NewsDetailsViewModel(
     private val loader: () -> Observable<Event>,
@@ -70,7 +71,7 @@ class NewsDetailsViewModel(
 
                 NewsDetailsViewModel(
                     loader = {
-                        CommonEventRepository.getEventById(id, context.assets)
+                        CommonEventRepository.getEventById(id, context.assets).asObservable()
                     },
                     mapper = { it.toNewsDetailItem(context) }
                 )

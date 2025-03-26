@@ -7,8 +7,14 @@ import com.github.dragon925.androidlearning.common.data.models.EventDto
 import com.github.dragon925.androidlearning.common.data.toDomain
 import com.github.dragon925.androidlearning.common.domain.Event
 import com.google.gson.Gson
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 object CommonEventRepository {
 
@@ -18,33 +24,37 @@ object CommonEventRepository {
 
     fun getEvents(
         assets: AssetManager
-    ): Observable<List<Event>> = AppClient.apiService.getEvents()
-        .onErrorResumeNext { getEventsFromAssets(assets) }
-        .map { events -> events.map(EventDto::toDomain)
-            .sortedWith(
-                compareBy<Event> { it.startDate }
-                    .thenBy { it.endDate }
-                    .thenBy { it.name }
-            )
+    ): Flow<List<Event>> = flow {
+        emit(AppClient.apiService.getEvents())
+    }
+        .catch { emit(getEventsFromAssets(assets)) }
+        .map { events ->
+            events.map(EventDto::toDomain)
+                .sortedWith(
+                    compareBy<Event> { it.startDate }
+                        .thenBy { it.endDate }
+                        .thenBy { it.name }
+                )
         }
-        .subscribeOn(Schedulers.io())
+        .flowOn(Dispatchers.IO)
 
     fun getEventById(
         eventId: String,
         assets: AssetManager
-    ): Observable<Event> = AppClient.apiService.getEvent(eventId)
-        .onErrorResumeNext {
-            getEventsFromAssets(assets).map { events ->
-                events.first { it.id == eventId }
-            }
+    ): Flow<Event> = flow {
+        emit(AppClient.apiService.getEvent(eventId))
+    }
+        .catch {
+            emit(getEventsFromAssets(assets).first { it.id == eventId })
         }
         .map(EventDto::toDomain)
-        .subscribeOn(Schedulers.io())
+        .flowOn(Dispatchers.IO)
 
-    private fun getEventsFromAssets(
-        assets: AssetManager
-    ): Observable<List<EventDto>> = Observable.fromCallable {
-        return@fromCallable try {
+    private suspend fun getEventsFromAssets(
+        assets: AssetManager,
+        dispatcher: CoroutineDispatcher = Dispatchers.IO
+    ): List<EventDto> = withContext(dispatcher) {
+        return@withContext try {
             assets.open(EVENT_FILE).bufferedReader().use { inputStream ->
                 gson.fromJson(inputStream, Array<EventDto>::class.java).toList()
             }

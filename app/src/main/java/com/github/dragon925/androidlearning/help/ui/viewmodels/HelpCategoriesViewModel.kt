@@ -17,6 +17,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
+import kotlinx.coroutines.rx3.asObservable
 
 class HelpCategoriesViewModel(
     private val loader: () -> Observable<List<Category>>,
@@ -49,7 +50,7 @@ class HelpCategoriesViewModel(
             .subscribe(
                 { categories.onNext(it) },
                 { error ->
-                    Log.e("NewsViewModel", "Error loading news", error)
+                    Log.e("HelpCategoriesViewModel", "Error loading categories", error)
                 }
             )
             .also(compositeDisposable::add)
@@ -68,7 +69,7 @@ class HelpCategoriesViewModel(
 
                 HelpCategoriesViewModel(
                     loader = {
-                        CommonCategoryRepository.getCategories(context.assets)
+                        CommonCategoryRepository.getCategories(context.assets).asObservable()
                     },
                     mapper = { categories ->
                         categories.map { category -> category.toHelpCategoryItem() }

@@ -16,6 +16,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
+import kotlinx.coroutines.rx3.asObservable
 
 class FilterViewModel(
     private val loader: () -> Observable<List<Category>>
@@ -78,7 +79,7 @@ class FilterViewModel(
 
                 FilterViewModel(
                     loader = {
-                        CommonCategoryRepository.getCategories(assets)
+                        CommonCategoryRepository.getCategories(assets).asObservable()
                     }
                 )
             }

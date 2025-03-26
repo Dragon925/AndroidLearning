@@ -15,6 +15,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
+import kotlinx.coroutines.rx3.asObservable
 
 class NewsViewModel(
     private val loader: () -> Observable<List<Event>>
@@ -79,7 +80,7 @@ class NewsViewModel(
                     ?: throw IllegalStateException("Application not found")
 
                 NewsViewModel(
-                    loader = { CommonEventRepository.getEvents(assets) }
+                    loader = { CommonEventRepository.getEvents(assets).asObservable() }
                 )
             }
         }
