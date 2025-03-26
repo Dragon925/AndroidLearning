@@ -26,7 +26,7 @@ fun Event.toNewsItem(context: Context) = NewsItem(
     description = description,
     date = getDateString(context, startDate, endDate),
     categoryIds = categoryIds.toSet(),
-    image = photos.first()
+    image = photos.firstOrNull()
 )
 
 fun Event.toNewsDetailItem(context: Context) = NewsDetailItem(

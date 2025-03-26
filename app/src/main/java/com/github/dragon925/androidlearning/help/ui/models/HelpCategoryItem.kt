@@ -1,10 +1,8 @@
 package com.github.dragon925.androidlearning.help.ui.models
 
-import android.graphics.drawable.Drawable
-
 
 data class HelpCategoryItem(
-    val id: Int,
+    val id: String,
     val title: String,
-    val icon: Drawable? = null
+    val icon: String = ""
 )

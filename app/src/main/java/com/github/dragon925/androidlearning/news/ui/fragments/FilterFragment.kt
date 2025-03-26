@@ -32,15 +32,15 @@ class FilterFragment : Fragment() {
         const val RESULT_CANCEL = -1
 
         @JvmStatic
-        fun newInstance(chosenFilters: IntArray = intArrayOf()) =
+        fun newInstance(chosenFilters: Array<String> = emptyArray()) =
             FilterFragment().apply {
                 arguments = Bundle().apply {
-                    putIntArray(CHOSEN_FILTERS, chosenFilters)
+                    putStringArray(CHOSEN_FILTERS, chosenFilters)
                 }
             }
     }
 
-    private var chosenFilters: IntArray = intArrayOf()
+    private var chosenFilters: Array<String> = emptyArray()
 
     private var _binding: FragmentFilterBinding? = null
     private val binding get() = _binding!!
@@ -53,7 +53,7 @@ class FilterFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            chosenFilters = it.getIntArray(CHOSEN_FILTERS) ?: intArrayOf()
+            chosenFilters = it.getStringArray(CHOSEN_FILTERS) ?: emptyArray()
         }
     }
 
@@ -77,7 +77,7 @@ class FilterFragment : Fragment() {
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId) {
                 R.id.action_apply_filter -> {
-                    val chosenFilters = filterViewModel.currentChosenCategories.toIntArray()
+                    val chosenFilters = filterViewModel.currentChosenCategories.toTypedArray()
                     setFragmentResult(
                         REQUEST_KEY,
                         bundleOf(
@@ -107,7 +107,7 @@ class FilterFragment : Fragment() {
         state.data?.filters?.let { filterListAdapter.submitList(it) }
     }
 
-    private fun updateFilter(id: Int, isChecked: Boolean) {
+    private fun updateFilter(id: String, isChecked: Boolean) {
         filterViewModel.checkCategory(id, isChecked = isChecked)
     }
 

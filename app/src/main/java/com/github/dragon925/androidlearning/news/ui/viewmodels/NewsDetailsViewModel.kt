@@ -14,14 +14,12 @@ import com.github.dragon925.androidlearning.news.ui.models.NewsDetailItem
 import com.github.dragon925.androidlearning.news.ui.utils.toNewsDetailItem
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
-import java.util.concurrent.TimeUnit
 
 class NewsDetailsViewModel(
-    private val loader: () -> Single<Event>,
+    private val loader: () -> Observable<Event>,
     private val mapper: (Event) -> NewsDetailItem
 ) : ViewModel() {
 
@@ -43,10 +41,9 @@ class NewsDetailsViewModel(
     private fun loadDetails() {
         loader().doOnSubscribe { loading.onNext(true) }
             .map(mapper)
-            .delay(5000, TimeUnit.MILLISECONDS) // fake loading delay
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnEvent { _, _ -> loading.onNext(false) }
+            .doFinally { loading.onNext(false) }
             .subscribe(
                 { details.onNext(it) },
                 { error ->
@@ -68,13 +65,12 @@ class NewsDetailsViewModel(
                 val context = this[APPLICATION_KEY]
                     ?: throw IllegalStateException("Application not found")
 
-                val id = this[DEFAULT_ARGS_KEY]?.getInt(NEWS_DETAILS_ID)
+                val id = this[DEFAULT_ARGS_KEY]?.getString(NEWS_DETAILS_ID)
                     ?: throw IllegalStateException("News Details Id not found")
 
                 NewsDetailsViewModel(
                     loader = {
-                        Single.fromCallable { CommonEventRepository.getEvents(context.assets) }
-                            .map { events -> events.first { it.id == id } }
+                        CommonEventRepository.getEventById(id, context.assets)
                     },
                     mapper = { it.toNewsDetailItem(context) }
                 )

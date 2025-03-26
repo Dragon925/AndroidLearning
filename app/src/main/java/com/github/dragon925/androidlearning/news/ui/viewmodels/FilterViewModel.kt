@@ -13,19 +13,17 @@ import com.github.dragon925.androidlearning.news.ui.models.FilterItem
 import com.github.dragon925.androidlearning.news.ui.models.FilterUIState
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
-import java.util.concurrent.TimeUnit
 
 class FilterViewModel(
-    private val loader: () -> Single<List<Category>>
+    private val loader: () -> Observable<List<Category>>
 ) : ViewModel() {
 
     private val loading = BehaviorSubject.createDefault(false)
     private val categories = BehaviorSubject.createDefault(emptyList<Category>())
-    private val chosenCategories = BehaviorSubject.createDefault(emptySet<Int>())
+    private val chosenCategories = BehaviorSubject.createDefault(emptySet<String>())
     private val compositeDisposable = CompositeDisposable()
 
     val state: Observable<UIState<FilterUIState, String>> = Observable.combineLatest(
@@ -47,10 +45,9 @@ class FilterViewModel(
 
     private fun loadCategories() {
         loader().doOnSubscribe { loading.onNext(true) }
-            .delay(5000, TimeUnit.MILLISECONDS) // fake loading delay
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnEvent { _, _ -> loading.onNext(false) }
+            .doFinally { loading.onNext(false) }
             .subscribe(
                 { results ->
                     categories.onNext(results)
@@ -61,7 +58,7 @@ class FilterViewModel(
             ).also(compositeDisposable::add)
     }
 
-    fun checkCategory(vararg categoryIds: Int, isChecked: Boolean) {
+    fun checkCategory(vararg categoryIds: String, isChecked: Boolean) {
         val oldChosen = chosenCategories.value ?: emptySet()
         chosenCategories.onNext(
             if (isChecked) oldChosen + categoryIds.toSet() else oldChosen - categoryIds.toSet()
@@ -81,7 +78,7 @@ class FilterViewModel(
 
                 FilterViewModel(
                     loader = {
-                        Single.fromCallable { CommonCategoryRepository.getCategories(assets) }
+                        CommonCategoryRepository.getCategories(assets)
                     }
                 )
             }

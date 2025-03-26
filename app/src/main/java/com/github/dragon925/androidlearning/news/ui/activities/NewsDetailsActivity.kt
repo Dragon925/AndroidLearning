@@ -1,7 +1,6 @@
 package com.github.dragon925.androidlearning.news.ui.activities
 
 import android.os.Bundle
-import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -12,9 +11,11 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.DEFAULT_ARGS_KEY
 import androidx.lifecycle.viewmodel.MutableCreationExtras
+import coil3.load
+import coil3.request.error
+import coil3.request.placeholder
 import com.github.dragon925.androidlearning.R
 import com.github.dragon925.androidlearning.common.ui.UIState
-import com.github.dragon925.androidlearning.common.ui.getAssetDrawable
 import com.github.dragon925.androidlearning.databinding.ActivityNewsDetailsBinding
 import com.github.dragon925.androidlearning.news.ui.models.NewsDetailItem
 import com.github.dragon925.androidlearning.news.ui.viewmodels.NewsDetailsViewModel
@@ -26,10 +27,10 @@ class NewsDetailsActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_NEWS_ID = "NewsDetailsID"
         const val EXTRA_NEWS_TITLE = "NewsDetailsTitle"
-        private const val DEFAULT_NEWS_ID = -1
+        private const val DEFAULT_NEWS_ID = ""
     }
 
-    private var newsId: Int = DEFAULT_NEWS_ID
+    private var newsId: String = DEFAULT_NEWS_ID
     private var newsTitle: String = ""
 
     private lateinit var binding: ActivityNewsDetailsBinding
@@ -57,7 +58,7 @@ class NewsDetailsActivity : AppCompatActivity() {
             insets
         }
 
-        newsId = intent.extras?.getInt(EXTRA_NEWS_ID) ?: DEFAULT_NEWS_ID
+        newsId = intent.extras?.getString(EXTRA_NEWS_ID) ?: DEFAULT_NEWS_ID
         newsTitle = intent.extras?.getString(EXTRA_NEWS_TITLE) ?: ""
 
         binding.toolbar.setNavigationOnClickListener { finish() }
@@ -76,24 +77,28 @@ class NewsDetailsActivity : AppCompatActivity() {
             tvLocation.text = details.address
             tvPhones.text = details.phoneNumbers.joinToString("\n")
             for ((i, image) in listOf(ivImage1, ivImage2, ivImage3).withIndex()) {
-                details.photos.getOrNull(i)?.let { path ->
-                    image.setImageDrawable(
-                        this@NewsDetailsActivity.getAssetDrawable(path)
-                    )
+                val photo = details.photos.getOrNull(i)
+                image.isGone = photo.isNullOrBlank()
+                photo?.let { path ->
+                    image.load(path) {
+                        placeholder(R.drawable.img_placeholder)
+                        error(R.drawable.img_placeholder)
+                    }
                 }
             }
             tvDescription.text = details.description
 
             val firstFiveAvatars = listOf(ivAvatar1, ivAvatar2, ivAvatar3, ivAvatar4, ivAvatar5)
             details.members.take(5).forEachIndexed { index, member ->
-                firstFiveAvatars[index].visibility = View.VISIBLE
-                firstFiveAvatars[index].setImageDrawable(
-                    this@NewsDetailsActivity.getAssetDrawable(member.avatar)
-                )
+                firstFiveAvatars[index].isVisible = true
+                firstFiveAvatars[index].load(member.avatar) {
+                    placeholder(R.drawable.img_placeholder)
+                    error(R.drawable.img_placeholder)
+                }
             }
             val otherMembers = details.members.drop(5).size
             if (otherMembers > 0) {
-                tvMoreAvatars.visibility = View.VISIBLE
+                tvMoreAvatars.isVisible = true
                 tvMoreAvatars.text = resources.getString(R.string.more_count, otherMembers)
             }
         }

@@ -9,7 +9,7 @@ import com.github.dragon925.androidlearning.databinding.ItemNewsFilterBinding
 import com.github.dragon925.androidlearning.news.ui.models.FilterItem
 
 class FilterListAdapter(
-    private val checkFilter: (Int, Boolean) -> Unit
+    private val checkFilter: (String, Boolean) -> Unit
 ) : ListAdapter<FilterItem, FilterListAdapter.FilterItemViewHolder>(
     ItemDiffCallback()
 ) {

@@ -21,4 +21,7 @@
     <dimen name="event_photo_min_height_m">222dp</dimen>
     <dimen name="event_photo_min_height_s">158dp</dimen>
 
+    <dimen name="category_image_width">120dp</dimen>
+    <dimen name="category_image_height">80dp</dimen>
+
 </resources>

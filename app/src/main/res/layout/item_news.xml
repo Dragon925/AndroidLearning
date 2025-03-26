@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/spacing_xxs"
             android:minHeight="@dimen/event_photo_min_height_m"
-            tools:src="@drawable/img"
+            tools:src="@drawable/img_placeholder"
             android:scaleType="centerCrop"
             android:foreground="@drawable/bg_fade"
             android:contentDescription="@string/description_event_photo"/>

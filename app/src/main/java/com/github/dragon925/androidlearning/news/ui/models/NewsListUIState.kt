@@ -4,5 +4,5 @@ import com.github.dragon925.androidlearning.common.domain.Event
 
 data class NewsListUIState(
     val newsList: List<Event> = emptyList(),
-    val readIds: Set<Int> = emptySet(),
+    val readIds: Set<String> = emptySet(),
 )

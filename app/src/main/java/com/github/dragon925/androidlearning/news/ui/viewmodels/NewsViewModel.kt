@@ -12,19 +12,17 @@ import com.github.dragon925.androidlearning.common.ui.UIState
 import com.github.dragon925.androidlearning.news.ui.models.NewsListUIState
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
-import java.util.concurrent.TimeUnit
 
 class NewsViewModel(
-    private val loader: () -> Single<List<Event>>
+    private val loader: () -> Observable<List<Event>>
 ) : ViewModel() {
 
     private val loading = BehaviorSubject.createDefault(false)
-    private val readIds = BehaviorSubject.createDefault(emptySet<Int>())
-    private val filters = BehaviorSubject.createDefault(emptySet<Int>())
+    private val readIds = BehaviorSubject.createDefault(emptySet<String>())
+    private val filters = BehaviorSubject.createDefault(emptySet<String>())
     private val _news = BehaviorSubject.createDefault(emptyList<Event>())
     private val compositeDisposable = CompositeDisposable()
 
@@ -39,27 +37,26 @@ class NewsViewModel(
         )
     }
 
-    val currentFilters: Set<Int> get() = filters.value ?: emptySet()
+    val currentFilters: Set<String> get() = filters.value ?: emptySet()
 
     init {
         loadNews()
     }
 
-    fun setFilters(categories: List<Int>) {
+    fun setFilters(categories: List<String>) {
         filters.onNext(categories.toSet())
     }
 
-    fun markAsRead(vararg ids: Int) {
+    fun markAsRead(vararg ids: String) {
         val oldIds = readIds.value ?: emptySet()
         readIds.onNext(oldIds + ids.toSet())
     }
 
     private fun loadNews() {
         loader().doOnSubscribe { loading.onNext(true) }
-            .delay(5000, TimeUnit.MILLISECONDS) // fake loading delay
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnEvent { _, _ -> loading.onNext(false) }
+            .doFinally { loading.onNext(false) }
             .subscribe(
                 { events ->
                     _news.onNext(events)
@@ -82,7 +79,7 @@ class NewsViewModel(
                     ?: throw IllegalStateException("Application not found")
 
                 NewsViewModel(
-                    loader = { Single.fromCallable { CommonEventRepository.getEvents(assets) } }
+                    loader = { CommonEventRepository.getEvents(assets) }
                 )
             }
         }
