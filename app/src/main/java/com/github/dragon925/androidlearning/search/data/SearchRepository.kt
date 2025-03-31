@@ -1,6 +1,6 @@
 package com.github.dragon925.androidlearning.search.data
 
-import android.content.res.AssetManager
+import com.github.dragon925.androidlearning.common.data.datasorces.local.AppDatabase
 import com.github.dragon925.androidlearning.common.data.repositories.CommonEventRepository
 import kotlinx.coroutines.flow.map
 
@@ -8,8 +8,8 @@ object SearchRepository {
 
     fun searchEvents(
         keywords: List<String>,
-        assets: AssetManager
-    ) = CommonEventRepository.getEvents(assets)
+        db: AppDatabase
+    ) = CommonEventRepository.getEvents(db)
         .map { events ->
             events.filter { event ->
                 keywords.any { event.name.contains(it, true) }
@@ -18,8 +18,8 @@ object SearchRepository {
 
     fun searchOrganizers(
         keywords: List<String>,
-        assets: AssetManager
-    ) = CommonEventRepository.getEvents(assets)
+        db: AppDatabase
+    ) = CommonEventRepository.getEvents(db)
         .map { events ->
             events.filter { event ->
                 keywords.any { event.organizer.contains(it, true) }

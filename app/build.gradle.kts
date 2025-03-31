@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -34,6 +35,10 @@ android {
         }
 
         buildConfigField("String", "API_URL", apiUrl)
+
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
     }
 
     buildTypes {
@@ -84,6 +89,9 @@ dependencies {
     implementation(libs.bundles.rx)
 
     implementation(libs.bundles.coil)
+
+    implementation(libs.bundles.room)
+    ksp(libs.room.compiler)
 
     implementation(libs.bundles.android.navigation)
 

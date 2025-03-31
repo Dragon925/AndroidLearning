@@ -1,50 +1,41 @@
 package com.github.dragon925.androidlearning.common.data.repositories
 
-import android.content.res.AssetManager
 import android.util.Log
+import com.github.dragon925.androidlearning.common.data.datasorces.local.AppDatabase
+import com.github.dragon925.androidlearning.common.data.datasorces.local.entities.CategoryEntity
 import com.github.dragon925.androidlearning.common.data.datasorces.remote.AppClient
-import com.github.dragon925.androidlearning.common.data.models.CategoryDto
 import com.github.dragon925.androidlearning.common.data.toDomain
 import com.github.dragon925.androidlearning.common.domain.Category
-import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.onStart
 
 object CommonCategoryRepository {
 
-    private const val CATEGORY_FILE = "categories.json"
+    @Volatile
+    private var isLoaded = false
 
-    private val gson = Gson()
+    suspend fun preloadCategories(db: AppDatabase) {
+        if (isLoaded) return
 
-    fun getCategories(
-        assets: AssetManager
-    ): Flow<List<Category>> = flow {
-        emit(AppClient.apiService.getCategories())
+        try {
+            val categories = AppClient.apiService.getCategories()
+            db.categoryDao().saveCategories(categories)
+            isLoaded = true
+        } catch (e: Exception) {
+            Log.e("CategoryRepository", "load categories failed", e)
+        }
     }
-        .catch { emit(getCategoriesFromFile(assets)) }
+
+    fun getCategories(db: AppDatabase): Flow<List<Category>> = db.categoryDao().loadCategories()
+        .onStart {
+            preloadCategories(db)
+        }
         .map { categories ->
-            categories.map(CategoryDto::toDomain)
+            categories.map(CategoryEntity::toDomain)
                 .sortedBy { it.name }
         }
         .flowOn(Dispatchers.IO)
-
-    private suspend fun getCategoriesFromFile(
-        assets: AssetManager,
-        dispatcher: CoroutineDispatcher = Dispatchers.IO
-    ): List<CategoryDto> = withContext(dispatcher) {
-        return@withContext try {
-            assets.open(CATEGORY_FILE).bufferedReader().use { inputStream ->
-                gson.fromJson(inputStream, Array<CategoryDto>::class.java).toList()
-            }
-        } catch (e: Exception) {
-            Log.e("CommonCategoryRepository-getCategories", "get categories failed", e)
-            emptyList()
-        }
-    }
 }

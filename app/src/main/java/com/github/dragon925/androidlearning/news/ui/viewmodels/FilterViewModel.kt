@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.github.dragon925.androidlearning.App
 import com.github.dragon925.androidlearning.common.data.repositories.CommonCategoryRepository
 import com.github.dragon925.androidlearning.common.domain.Category
 import com.github.dragon925.androidlearning.common.ui.UIState
@@ -48,7 +49,7 @@ class FilterViewModel(
         loader().doOnSubscribe { loading.onNext(true) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doFinally { loading.onNext(false) }
+            .doAfterNext { loading.onNext(false) }
             .subscribe(
                 { results ->
                     categories.onNext(results)
@@ -74,12 +75,12 @@ class FilterViewModel(
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val assets = this[APPLICATION_KEY]?.assets
+                val app = this[APPLICATION_KEY] as? App
                     ?: throw IllegalStateException("Application not found")
 
                 FilterViewModel(
                     loader = {
-                        CommonCategoryRepository.getCategories(assets).asObservable()
+                        CommonCategoryRepository.getCategories(app.database).asObservable()
                     }
                 )
             }

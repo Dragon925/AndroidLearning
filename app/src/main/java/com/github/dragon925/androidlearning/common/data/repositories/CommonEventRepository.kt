@@ -1,35 +1,37 @@
 package com.github.dragon925.androidlearning.common.data.repositories
 
-import android.content.res.AssetManager
 import android.util.Log
+import com.github.dragon925.androidlearning.common.data.datasorces.local.AppDatabase
 import com.github.dragon925.androidlearning.common.data.datasorces.remote.AppClient
-import com.github.dragon925.androidlearning.common.data.models.EventDto
+import com.github.dragon925.androidlearning.common.data.models.EventData
 import com.github.dragon925.androidlearning.common.data.toDomain
 import com.github.dragon925.androidlearning.common.domain.Event
-import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.onStart
 
 object CommonEventRepository {
 
-    private const val EVENT_FILE = "events.json"
+    @Volatile
+    private var isLoaded = false
 
-    private val gson = Gson()
+    fun getEvents(db: AppDatabase): Flow<List<Event>> = db.eventDao().loadEvents()
+        .onStart {
+            if (isLoaded) return@onStart
 
-    fun getEvents(
-        assets: AssetManager
-    ): Flow<List<Event>> = flow {
-        emit(AppClient.apiService.getEvents())
-    }
-        .catch { emit(getEventsFromAssets(assets)) }
+            CommonCategoryRepository.preloadCategories(db)
+            try {
+                val events = AppClient.apiService.getEvents()
+                db.eventDao().saveEvents(events)
+                isLoaded = true
+            } catch (e: Exception) {
+                Log.d("EventRepository", "loading events failed", e)
+            }
+        }
         .map { events ->
-            events.map(EventDto::toDomain)
+            events.map(EventData::toDomain)
                 .sortedWith(
                     compareBy<Event> { it.startDate }
                         .thenBy { it.endDate }
@@ -40,27 +42,15 @@ object CommonEventRepository {
 
     fun getEventById(
         eventId: String,
-        assets: AssetManager
-    ): Flow<Event> = flow {
-        emit(AppClient.apiService.getEvent(eventId))
-    }
-        .catch {
-            emit(getEventsFromAssets(assets).first { it.id == eventId })
-        }
-        .map(EventDto::toDomain)
+        db: AppDatabase
+    ): Flow<Event> = db.eventDao().loadEvent(eventId)
+        .map(EventData::toDomain)
         .flowOn(Dispatchers.IO)
 
-    private suspend fun getEventsFromAssets(
-        assets: AssetManager,
-        dispatcher: CoroutineDispatcher = Dispatchers.IO
-    ): List<EventDto> = withContext(dispatcher) {
-        return@withContext try {
-            assets.open(EVENT_FILE).bufferedReader().use { inputStream ->
-                gson.fromJson(inputStream, Array<EventDto>::class.java).toList()
-            }
-        } catch (e: Exception) {
-            Log.e("CommonEventRepository-getEvents", "get events failed", e)
-            emptyList()
-        }
+    suspend fun readEvents(db: AppDatabase, vararg eventIds: String) {
+        db.eventDao().readEvents(*eventIds)
     }
+
+    fun getReadEventIds(db: AppDatabase): Flow<Set<String>> = db.eventDao().loadReadEventIds()
+        .map { it.toSet() }
 }

@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.github.dragon925.androidlearning.App
 import com.github.dragon925.androidlearning.common.domain.Event
 import com.github.dragon925.androidlearning.common.ui.UIState
 import com.github.dragon925.androidlearning.search.data.SearchRepository
@@ -74,7 +75,7 @@ class SearchViewModel(
 
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val assets = this[APPLICATION_KEY]?.assets
+                val app = this[APPLICATION_KEY] as? App
                     ?: throw IllegalStateException("Application not found")
                 val searchType = this[DEFAULT_ARGS_KEY]?.getInt(SEARCH_TYPE)
                     ?: SearchByTypeFragment.SEARCH_BY_EVENT
@@ -82,11 +83,11 @@ class SearchViewModel(
                 SearchViewModel(
                     loader = when (searchType) {
                         SearchByTypeFragment.SEARCH_BY_NKO -> {
-                            { keywords -> SearchRepository.searchOrganizers(keywords, assets) }
+                            { keywords -> SearchRepository.searchOrganizers(keywords, app.database) }
                         }
 
                         else -> {
-                            { keywords -> SearchRepository.searchEvents(keywords, assets) }
+                            { keywords -> SearchRepository.searchEvents(keywords, app.database) }
                         }
                     },
                     mapper = when (searchType) {

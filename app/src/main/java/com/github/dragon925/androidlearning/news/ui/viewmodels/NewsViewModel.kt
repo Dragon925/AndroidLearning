@@ -4,21 +4,23 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.github.dragon925.androidlearning.common.data.repositories.CommonEventRepository
+import com.github.dragon925.androidlearning.App
 import com.github.dragon925.androidlearning.common.domain.Event
 import com.github.dragon925.androidlearning.common.ui.UIState
+import com.github.dragon925.androidlearning.news.data.repositories.NewsRepository
 import com.github.dragon925.androidlearning.news.ui.models.NewsListUIState
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
-import kotlinx.coroutines.rx3.asObservable
+import kotlinx.coroutines.launch
 
 class NewsViewModel(
-    private val loader: () -> Observable<List<Event>>
+    private val repository: NewsRepository
 ) : ViewModel() {
 
     private val loading = BehaviorSubject.createDefault(false)
@@ -49,15 +51,16 @@ class NewsViewModel(
     }
 
     fun markAsRead(vararg ids: String) {
-        val oldIds = readIds.value ?: emptySet()
-        readIds.onNext(oldIds + ids.toSet())
+        viewModelScope.launch {
+            repository.readNews(*ids)
+        }
     }
 
     private fun loadNews() {
-        loader().doOnSubscribe { loading.onNext(true) }
+        repository.getNews().doOnSubscribe { loading.onNext(true) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doFinally { loading.onNext(false) }
+            .doAfterNext { loading.onNext(false) }
             .subscribe(
                 { events ->
                     _news.onNext(events)
@@ -66,6 +69,12 @@ class NewsViewModel(
                     Log.e("NewsViewModel", "Error loading news", error)
                 }
             ).also(compositeDisposable::add)
+
+        repository.getReadNewsIds()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(readIds::onNext)
+            .also(compositeDisposable::add)
     }
 
     override fun onCleared() {
@@ -76,11 +85,11 @@ class NewsViewModel(
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val assets = this[APPLICATION_KEY]?.assets
+                val app = this[APPLICATION_KEY] as? App
                     ?: throw IllegalStateException("Application not found")
 
                 NewsViewModel(
-                    loader = { CommonEventRepository.getEvents(assets).asObservable() }
+                    repository = NewsRepository(database = app.database)
                 )
             }
         }
