@@ -2,7 +2,7 @@ package com.github.dragon925.androidlearning.search.data
 
 import android.content.res.AssetManager
 import com.github.dragon925.androidlearning.common.data.repositories.CommonEventRepository
-import kotlinx.coroutines.rx3.asFlow
+import kotlinx.coroutines.flow.map
 
 object SearchRepository {
 
@@ -14,7 +14,7 @@ object SearchRepository {
             events.filter { event ->
                 keywords.any { event.name.contains(it, true) }
             }
-        }.asFlow()
+        }
 
     fun searchOrganizers(
         keywords: List<String>,
@@ -25,5 +25,5 @@ object SearchRepository {
                 keywords.any { event.organizer.contains(it, true) }
             }
             .distinctBy { it.organizer }
-        }.asFlow()
+        }
 }

@@ -1,59 +1,50 @@
 package com.github.dragon925.androidlearning.common.data.repositories
 
 import android.content.res.AssetManager
-import android.util.Log
 import com.github.dragon925.androidlearning.common.data.datasorces.remote.AppClient
 import com.github.dragon925.androidlearning.common.data.models.EventDto
 import com.github.dragon925.androidlearning.common.data.toDomain
 import com.github.dragon925.androidlearning.common.domain.Event
-import com.google.gson.Gson
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 
 object CommonEventRepository {
 
     private const val EVENT_FILE = "events.json"
 
-    private val gson = Gson()
+    private val helper = LoadHelper(
+        fileName = EVENT_FILE,
+        jsonClass = Array<EventDto>::class.java
+    )
 
     fun getEvents(
         assets: AssetManager
-    ): Observable<List<Event>> = AppClient.apiService.getEvents()
-        .onErrorResumeNext { 
-            getEventsFromAssets(assets) 
-        }
-        .map { events -> 
-            events.map(EventDto::toDomain)
-                .sortedWith(
-                    compareBy(Event::startDate)
-                        .thenBy(Event::endDate)
-                        .thenBy(Event::name)
-                )
-        }
-        .subscribeOn(Schedulers.io())
+    ): Flow<List<Event>> = helper.loadData(
+        assets = assets,
+        loader = AppClient.apiService::getEvents
+    ) { events ->
+        events.map(EventDto::toDomain)
+            .sortedWith(
+                compareBy(Event::startDate)
+                    .thenBy(Event::endDate)
+                    .thenBy(Event::name)
+            )
+    }
+        .flowOn(Dispatchers.IO)
 
     fun getEventById(
         eventId: String,
         assets: AssetManager
-    ): Observable<Event> = AppClient.apiService.getEvent(eventId)
-        .onErrorResumeNext {
-            getEventsFromAssets(assets).map { events ->
-                events.first { it.id == eventId }
-            }
+    ): Flow<Event> = helper.loadFirstData(
+        assets = assets,
+        loader = {
+            AppClient.apiService.getEvent(eventId)
+        },
+        mapper = EventDto::toDomain,
+        predicate = { event ->
+            event.id == eventId
         }
-        .map(EventDto::toDomain)
-        .subscribeOn(Schedulers.io())
-
-    private fun getEventsFromAssets(
-        assets: AssetManager
-    ): Observable<List<EventDto>> = Observable.fromCallable {
-        return@fromCallable try {
-            assets.open(EVENT_FILE).bufferedReader().use { inputStream ->
-                gson.fromJson(inputStream, Array<EventDto>::class.java).toList()
-            }
-        } catch (e: Exception) {
-            Log.e("CommonEventRepository-getEvents", "get events failed", e)
-            emptyList()
-        }
-    }
+    )
+        .flowOn(Dispatchers.IO)
 }
