@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil3.load
 import com.github.dragon925.androidlearning.databinding.ItemHelpCategoryBinding
 import com.github.dragon925.androidlearning.help.ui.models.HelpCategoryItem
 
@@ -34,7 +35,7 @@ class HelpCategoryListAdapter : ListAdapter<HelpCategoryItem, HelpCategoryListAd
         fun bind(item: HelpCategoryItem) {
             with(binding) {
                 tvTitle.text = item.title
-                tvTitle.setCompoundDrawablesWithIntrinsicBounds(null, item.icon, null, null)
+                ivAvatar.load(item.icon)
             }
         }
     }

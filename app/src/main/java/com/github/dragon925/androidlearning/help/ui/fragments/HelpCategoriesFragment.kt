@@ -11,7 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.github.dragon925.androidlearning.common.ui.UIState
 import com.github.dragon925.androidlearning.databinding.FragmentHelpCategoriesBinding
-import com.github.dragon925.androidlearning.help.ui.HelpCategoriesViewModel
+import com.github.dragon925.androidlearning.help.ui.viewmodels.HelpCategoriesViewModel
 import com.github.dragon925.androidlearning.help.ui.adapters.HelpCategoryListAdapter
 import com.github.dragon925.androidlearning.help.ui.models.HelpCategoryUIState
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers

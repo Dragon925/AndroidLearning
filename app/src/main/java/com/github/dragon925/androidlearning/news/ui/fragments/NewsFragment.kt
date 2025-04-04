@@ -79,7 +79,7 @@ class NewsFragment : Fragment() {
                     parentFragmentManager.commit {
                         add(
                             R.id.main_nav_container,
-                            FilterFragment.newInstance(newsViewModel.currentFilters.toIntArray()),
+                            FilterFragment.newInstance(newsViewModel.currentFilters.toTypedArray()),
                             FilterFragment.TAG
                         )
                         addToBackStack(FilterFragment.TAG)
@@ -94,7 +94,7 @@ class NewsFragment : Fragment() {
 
         setFragmentResultListener(FilterFragment.REQUEST_KEY) { _, bundle ->
             if (bundle.getInt(FilterFragment.RESULT_CODE) == FilterFragment.RESULT_OK) {
-                val result = bundle.getIntArray(FilterFragment.RESULT_KEY)?.toList() ?: emptyList()
+                val result = bundle.getStringArray(FilterFragment.RESULT_KEY)?.toList() ?: emptyList()
                 newsViewModel.setFilters(result)
             }
         }
@@ -102,7 +102,7 @@ class NewsFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putIntArray(SAVED_FILTERS, newsViewModel.currentFilters.toIntArray())
+        outState.putStringArray(SAVED_FILTERS, newsViewModel.currentFilters.toTypedArray())
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -110,7 +110,7 @@ class NewsFragment : Fragment() {
         savedInstanceState?.let { state ->
             if (state.isEmpty) return
 
-            val savedFilters = state.getIntArray(SAVED_FILTERS)?.toList() ?: emptyList()
+            val savedFilters = state.getStringArray(SAVED_FILTERS)?.toList() ?: emptyList()
             newsViewModel.setFilters(savedFilters)
         }
     }

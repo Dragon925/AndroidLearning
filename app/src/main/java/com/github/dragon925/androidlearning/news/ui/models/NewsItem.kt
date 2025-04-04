@@ -5,10 +5,10 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class NewsItem(
-    val id: Int,
+    val id: String,
     val title: String,
     val description: String,
     val date: String,
-    val categoryIds: Set<Int> = emptySet(),
+    val categoryIds: Set<String> = emptySet(),
     val image: String? = null
 ) : Parcelable

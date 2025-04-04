@@ -1,4 +1,4 @@
-package com.github.dragon925.androidlearning.help.ui
+package com.github.dragon925.androidlearning.help.ui.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -14,14 +14,12 @@ import com.github.dragon925.androidlearning.help.ui.models.HelpCategoryUIState
 import com.github.dragon925.androidlearning.help.ui.utils.toHelpCategoryItem
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
-import java.util.concurrent.TimeUnit
 
 class HelpCategoriesViewModel(
-    private val loader: () -> Single<List<Category>>,
+    private val loader: () -> Observable<List<Category>>,
     private val mapper: (List<Category>) -> List<HelpCategoryItem>
 ) : ViewModel() {
 
@@ -45,10 +43,9 @@ class HelpCategoriesViewModel(
     private fun loadCategories() {
         loader().doOnSubscribe { loading.onNext(true) }
             .map { HelpCategoryUIState(mapper(it)) }
-            .delay(5000, TimeUnit.MILLISECONDS) // fake loading delay
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnEvent { _, _ -> loading.onNext(false) }
+            .doFinally { loading.onNext(false) }
             .subscribe(
                 { categories.onNext(it) },
                 { error ->
@@ -71,10 +68,10 @@ class HelpCategoriesViewModel(
 
                 HelpCategoriesViewModel(
                     loader = {
-                        Single.fromCallable { CommonCategoryRepository.getCategories(context.assets) }
+                        CommonCategoryRepository.getCategories(context.assets)
                     },
                     mapper = { categories ->
-                        categories.map { category -> category.toHelpCategoryItem(context) }
+                        categories.map { category -> category.toHelpCategoryItem() }
                     }
                 )
             }

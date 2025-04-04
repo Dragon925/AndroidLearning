@@ -15,10 +15,11 @@ import androidx.activity.result.contract.ActivityResultContracts.RequestPermissi
 import androidx.activity.result.contract.ActivityResultContracts.TakePicturePreview
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import coil3.load
 import com.github.dragon925.androidlearning.R
+import com.github.dragon925.androidlearning.common.ui.SimpleItemDecoration
 import com.github.dragon925.androidlearning.databinding.FragmentProfileBinding
 import com.github.dragon925.androidlearning.profile.ui.adapters.FriendsListAdapter
-import com.github.dragon925.androidlearning.common.ui.SimpleItemDecoration
 import com.github.dragon925.androidlearning.profile.ui.models.FriendItem
 
 private const val USER_ID = "userId"
@@ -147,15 +148,15 @@ class ProfileFragment : Fragment() {
 
     private fun initSampleData() {
         with(binding) {
-            ivAvatar.setImageResource(R.drawable.image_man)
+            ivAvatar.load("file:///android_asset/images/image_man.png")
             tvName.text = "Константинов Денис"
             tvBirthday.text = "01 февраля 1980"
             tvFieldOfActivity.text = "Хирургия, травматология"
             friendsAdapter.submitList(
                 listOf(
-                    FriendItem(1, R.drawable.avatar_1, "Дмитрий Валерьевич"),
-                    FriendItem(2, R.drawable.avatar_2, "Евгений Александров"),
-                    FriendItem(3, R.drawable.avatar_3, "Виктор Кузнецов"),
+                    FriendItem(1, "file:///android_asset/images/avatar_1.png", "Дмитрий Валерьевич"),
+                    FriendItem(2, "file:///android_asset/images/avatar_2.png", "Евгений Александров"),
+                    FriendItem(3, "file:///android_asset/images/avatar_3.png", "Виктор Кузнецов"),
                 ),
             )
         }

@@ -1,27 +1,32 @@
 [
   {
-    "id":1,
-    "name":"Дети",
-    "url":"images/icon_kids.png"
+    "id": "1",
+    "image": "https://drive.google.com/uc?export=download&id=1Rb68Ynj3ShFSxoU7mdf0jKz6hVSQLH1a",
+    "name": "Дети",
+    "name_en": "Kids"
   },
   {
-    "id":2,
-    "name":"Взрослые",
-    "url":"images/icon_adult.png"
+    "id": "2",
+    "image": "https://drive.google.com/uc?export=download&id=1uhe6jGibq07ZVJK8lQJOHEZfNr3_6Cka",
+    "name": "Взрослые",
+    "name_en": "Adult"
   },
   {
-    "id":3,
-    "name":"Пожилые",
-    "url":"images/icon_elderly.png"
+    "id": "3",
+    "image": "https://drive.google.com/uc?export=download&id=1m3q1H_LHoPZYl9xj68NqnrH86Fyd6zdj",
+    "name": "Пожилые",
+    "name_en": "Elderly"
   },
   {
-    "id":4,
-    "name":"Животные",
-    "url":"images/icon_animals.png"
+    "id": "4",
+    "image": "https://drive.google.com/uc?export=download&id=1SCnrxeTNOx8Q9BK69NHDtdS8F7h7NZLF",
+    "name": "Животные",
+    "name_en": "Animals"
   },
   {
-    "id":5,
-    "name":"Мероприятия",
-    "url":"images/icon_event.png"
+    "id": "5",
+    "image": "https://drive.google.com/uc?export=download&id=12wQj-7LfN0G1GRMEm4cD6CFaJo8UEsRP",
+    "name": "Мероприятия",
+    "name_en": "Event"
   }
 ]
