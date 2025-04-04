@@ -12,8 +12,6 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.DEFAULT_ARGS_KEY
 import androidx.lifecycle.viewmodel.MutableCreationExtras
 import coil3.load
-import coil3.request.error
-import coil3.request.placeholder
 import com.github.dragon925.androidlearning.R
 import com.github.dragon925.androidlearning.common.ui.UIState
 import com.github.dragon925.androidlearning.databinding.ActivityNewsDetailsBinding
@@ -80,10 +78,7 @@ class NewsDetailsActivity : AppCompatActivity() {
                 val photo = details.photos.getOrNull(i)
                 image.isGone = photo.isNullOrBlank()
                 photo?.let { path ->
-                    image.load(path) {
-                        placeholder(R.drawable.img_placeholder)
-                        error(R.drawable.img_placeholder)
-                    }
+                    image.load(path)
                 }
             }
             tvDescription.text = details.description
@@ -91,10 +86,7 @@ class NewsDetailsActivity : AppCompatActivity() {
             val firstFiveAvatars = listOf(ivAvatar1, ivAvatar2, ivAvatar3, ivAvatar4, ivAvatar5)
             details.members.take(5).forEachIndexed { index, member ->
                 firstFiveAvatars[index].isVisible = true
-                firstFiveAvatars[index].load(member.avatar) {
-                    placeholder(R.drawable.img_placeholder)
-                    error(R.drawable.img_placeholder)
-                }
+                firstFiveAvatars[index].load(member.avatar)
             }
             val otherMembers = details.members.drop(5).size
             if (otherMembers > 0) {

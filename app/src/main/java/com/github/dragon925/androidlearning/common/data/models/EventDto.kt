@@ -1,5 +1,7 @@
 package com.github.dragon925.androidlearning.common.data.models
 
+import com.google.gson.annotations.SerializedName
+
 data class EventDto(
     val id: String,
     val name: String,
@@ -8,9 +10,14 @@ data class EventDto(
     val description: String,
     val status: Long,
     val photos: List<String>,
-    val category: List<String>,
+
+    @SerializedName("category")
+    val categories: List<String>,
+
     val createAt: Long,
     val phone: String,
     val address: String,
-    val organisation: String
+
+    @SerializedName("organisation")
+    val organization: String
 )

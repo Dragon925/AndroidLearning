@@ -7,9 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil3.load
-import coil3.request.error
-import coil3.request.placeholder
-import com.github.dragon925.androidlearning.R
 import com.github.dragon925.androidlearning.databinding.ItemNewsBinding
 import com.github.dragon925.androidlearning.news.ui.models.NewsItem
 
@@ -43,10 +40,7 @@ class NewsListAdapter(
                 root.setOnClickListener { openDetails(item) }
                 ivImage.isGone = item.image.isNullOrBlank()
                 item.image?.let {
-                    ivImage.load(it) {
-                        placeholder(R.drawable.img_placeholder)
-                        error(R.drawable.img_placeholder)
-                    }
+                    ivImage.load(it)
                 }
             }
         }
