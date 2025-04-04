@@ -19,10 +19,12 @@ object CommonCategoryRepository {
     fun getCategories(
         assets: AssetManager
     ): Observable<List<Category>> = AppClient.apiService.getCategories()
-        .onErrorResumeNext { getCategoriesFromFile(assets) }
+        .onErrorResumeNext {
+            getCategoriesFromFile(assets)
+        }
         .map { categories ->
             categories.map(CategoryDto::toDomain)
-                .sortedBy { it.name }
+                .sortedBy(Category::name)
         }
         .subscribeOn(Schedulers.io())
 

@@ -19,13 +19,16 @@ object CommonEventRepository {
     fun getEvents(
         assets: AssetManager
     ): Observable<List<Event>> = AppClient.apiService.getEvents()
-        .onErrorResumeNext { getEventsFromAssets(assets) }
-        .map { events -> events.map(EventDto::toDomain)
-            .sortedWith(
-                compareBy<Event> { it.startDate }
-                    .thenBy { it.endDate }
-                    .thenBy { it.name }
-            )
+        .onErrorResumeNext { 
+            getEventsFromAssets(assets) 
+        }
+        .map { events -> 
+            events.map(EventDto::toDomain)
+                .sortedWith(
+                    compareBy(Event::startDate)
+                        .thenBy(Event::endDate)
+                        .thenBy(Event::name)
+                )
         }
         .subscribeOn(Schedulers.io())
 

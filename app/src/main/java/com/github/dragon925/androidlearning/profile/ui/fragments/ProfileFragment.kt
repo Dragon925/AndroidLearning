@@ -16,12 +16,10 @@ import androidx.activity.result.contract.ActivityResultContracts.TakePicturePrev
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import coil3.load
-import coil3.request.error
-import coil3.request.placeholder
 import com.github.dragon925.androidlearning.R
+import com.github.dragon925.androidlearning.common.ui.SimpleItemDecoration
 import com.github.dragon925.androidlearning.databinding.FragmentProfileBinding
 import com.github.dragon925.androidlearning.profile.ui.adapters.FriendsListAdapter
-import com.github.dragon925.androidlearning.common.ui.SimpleItemDecoration
 import com.github.dragon925.androidlearning.profile.ui.models.FriendItem
 
 private const val USER_ID = "userId"
@@ -150,10 +148,7 @@ class ProfileFragment : Fragment() {
 
     private fun initSampleData() {
         with(binding) {
-            ivAvatar.load("file:///android_asset/images/image_man.png") {
-                placeholder(R.drawable.img_placeholder)
-                error(R.drawable.img_placeholder)
-            }
+            ivAvatar.load("file:///android_asset/images/image_man.png")
             tvName.text = "Константинов Денис"
             tvBirthday.text = "01 февраля 1980"
             tvFieldOfActivity.text = "Хирургия, травматология"
