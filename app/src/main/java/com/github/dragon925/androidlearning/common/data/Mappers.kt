@@ -34,7 +34,7 @@ fun EventData.toDomain(): Event {
         id = event.id,
         name = event.name,
         description = event.description,
-        organizer = event.organisation,
+        organizer = event.organization,
         categoryIds = category,
         address = event.address,
         phoneNumbers = event.phone.split("\n"),
@@ -58,12 +58,12 @@ fun EventDto.toEntities(): Triple<EventEntity, List<EventPhotoEntity>, List<Even
             createAt = createAt,
             phone = phone,
             address = address,
-            organisation = organisation
+            organization = organization
         ),
         second = photos.filterNot { it.isBlank() }.map { url ->
             EventPhotoEntity(eventId = id, photo = url)
         },
-        third = category.filterNot { it.isBlank() }.map { categoryId ->
+        third = categories.filterNot { it.isBlank() }.map { categoryId ->
             EventCrossCategory(eventId = id, categoryId = categoryId)
         }
     )

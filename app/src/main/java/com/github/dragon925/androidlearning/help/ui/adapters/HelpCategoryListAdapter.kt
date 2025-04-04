@@ -6,9 +6,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil3.load
-import coil3.request.placeholder
-import coil3.request.error
-import com.github.dragon925.androidlearning.R
 import com.github.dragon925.androidlearning.databinding.ItemHelpCategoryBinding
 import com.github.dragon925.androidlearning.help.ui.models.HelpCategoryItem
 
@@ -38,10 +35,7 @@ class HelpCategoryListAdapter : ListAdapter<HelpCategoryItem, HelpCategoryListAd
         fun bind(item: HelpCategoryItem) {
             with(binding) {
                 tvTitle.text = item.title
-                ivAvatar.load(item.icon) {
-                    placeholder(R.drawable.img_placeholder)
-                    error(R.drawable.img_placeholder)
-                }
+                ivAvatar.load(item.icon)
             }
         }
     }

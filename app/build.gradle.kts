@@ -23,15 +23,15 @@ android {
 
         val localProperties = Properties().apply {
             val file = rootProject.file("local.properties")
-            if(file.exists()) {
+            if (file.exists()) {
                 load(file.inputStream())
             }
         }
 
-        val apiUrl = if(localProperties.containsKey("api.url")) {
+        val apiUrl = if (localProperties.containsKey("api.url")) {
             localProperties.getProperty("api.url")
         } else {
-            throw  GradleException("Api url not found")
+            throw GradleException("Api url not found")
         }
 
         buildConfigField("String", "API_URL", apiUrl)

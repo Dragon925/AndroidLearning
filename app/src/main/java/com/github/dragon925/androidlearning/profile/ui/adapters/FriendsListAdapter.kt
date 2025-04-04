@@ -6,11 +6,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil3.load
-import coil3.request.error
-import coil3.request.placeholder
-import com.github.dragon925.androidlearning.R
-import com.github.dragon925.androidlearning.profile.ui.models.FriendItem
 import com.github.dragon925.androidlearning.databinding.ItemFriendBinding
+import com.github.dragon925.androidlearning.profile.ui.models.FriendItem
 
 class FriendsListAdapter : ListAdapter<FriendItem, FriendsListAdapter.FriendViewHolder>(
         ItemDiffCallback(),
@@ -37,10 +34,7 @@ class FriendsListAdapter : ListAdapter<FriendItem, FriendsListAdapter.FriendView
         private val binding: ItemFriendBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: FriendItem) {
-            binding.ivAvatar.load(item.avatar) {
-                placeholder(R.drawable.img_placeholder)
-                error(R.drawable.img_placeholder)
-            }
+            binding.ivAvatar.load(item.avatar)
             binding.tvName.text = item.name
         }
     }

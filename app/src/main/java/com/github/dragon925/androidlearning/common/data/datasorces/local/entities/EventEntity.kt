@@ -18,7 +18,7 @@ data class EventEntity(
     val createAt: Long,
     val phone: String,
     val address: String,
-    val organisation: String,
+    val organization: String,
     val read: Boolean = false
 ) {
     companion object {
