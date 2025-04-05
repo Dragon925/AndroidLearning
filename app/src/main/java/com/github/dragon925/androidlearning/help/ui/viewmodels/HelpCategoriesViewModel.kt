@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.github.dragon925.androidlearning.App
 import com.github.dragon925.androidlearning.common.data.repositories.CommonCategoryRepository
 import com.github.dragon925.androidlearning.common.domain.Category
 import com.github.dragon925.androidlearning.common.ui.UIState
@@ -46,7 +47,7 @@ class HelpCategoriesViewModel(
             .map { HelpCategoryUIState(mapper(it)) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doFinally { loading.onNext(false) }
+            .doAfterNext { loading.onNext(false) }
             .subscribe(
                 { categories.onNext(it) },
                 { error ->
@@ -64,12 +65,12 @@ class HelpCategoriesViewModel(
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val context = this[APPLICATION_KEY]
+                val app = this[APPLICATION_KEY] as? App
                     ?: throw IllegalStateException("Application not found")
 
                 HelpCategoriesViewModel(
                     loader = {
-                        CommonCategoryRepository.getCategories(context.assets).asObservable()
+                        CommonCategoryRepository.getCategories(app.database).asObservable()
                     },
                     mapper = { categories ->
                         categories.map { category -> category.toHelpCategoryItem() }

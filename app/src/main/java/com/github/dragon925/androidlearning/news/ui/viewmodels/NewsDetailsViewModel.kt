@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.github.dragon925.androidlearning.App
 import com.github.dragon925.androidlearning.common.data.repositories.CommonEventRepository
 import com.github.dragon925.androidlearning.common.domain.Event
 import com.github.dragon925.androidlearning.common.ui.UIState
@@ -44,7 +45,7 @@ class NewsDetailsViewModel(
             .map(mapper)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doFinally { loading.onNext(false) }
+            .doAfterNext { loading.onNext(false) }
             .subscribe(
                 { details.onNext(it) },
                 { error ->
@@ -63,7 +64,7 @@ class NewsDetailsViewModel(
 
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val context = this[APPLICATION_KEY]
+                val app = this[APPLICATION_KEY] as? App
                     ?: throw IllegalStateException("Application not found")
 
                 val id = this[DEFAULT_ARGS_KEY]?.getString(NEWS_DETAILS_ID)
@@ -71,9 +72,9 @@ class NewsDetailsViewModel(
 
                 NewsDetailsViewModel(
                     loader = {
-                        CommonEventRepository.getEventById(id, context.assets).asObservable()
+                        CommonEventRepository.getEventById(id, app.database).asObservable()
                     },
-                    mapper = { it.toNewsDetailItem(context) }
+                    mapper = { it.toNewsDetailItem(app) }
                 )
             }
         }
