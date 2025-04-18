@@ -4,21 +4,22 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import androidx.lifecycle.DEFAULT_ARGS_KEY
-import androidx.lifecycle.viewmodel.MutableCreationExtras
 import coil3.load
 import com.github.dragon925.androidlearning.R
+import com.github.dragon925.androidlearning.common.ui.ComponentViewModel
 import com.github.dragon925.androidlearning.common.ui.UIState
+import com.github.dragon925.androidlearning.common.ui.createFactoryByViewModel
 import com.github.dragon925.androidlearning.databinding.ActivityNewsDetailsBinding
+import com.github.dragon925.androidlearning.news.di.components.NewsDetailsComponent
 import com.github.dragon925.androidlearning.news.ui.models.NewsDetailItem
 import com.github.dragon925.androidlearning.news.ui.viewmodels.NewsDetailsViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import jakarta.inject.Inject
 
 class NewsDetailsActivity : AppCompatActivity() {
 
@@ -33,16 +34,17 @@ class NewsDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNewsDetailsBinding
 
-    private val viewModel: NewsDetailsViewModel by viewModels(
-        extrasProducer = {
-            MutableCreationExtras(defaultViewModelCreationExtras).apply {
-                this[DEFAULT_ARGS_KEY] = bundleOf(
-                    NewsDetailsViewModel.NEWS_DETAILS_ID to newsId,
-                )
-            }
-        },
-        factoryProducer = { NewsDetailsViewModel.Factory }
-    )
+    @Inject
+    lateinit var viewModelFactory: NewsDetailsViewModel.Factory
+
+    private val detailsComponentViewModel: ComponentViewModel<NewsDetailsComponent> by viewModels {
+        ComponentViewModel.createBy { newsDetailsComponent().newsId(newsId).build() }
+    }
+    private val viewModel: NewsDetailsViewModel by viewModels {
+        createFactoryByViewModel {
+            viewModelFactory.create(newsId)
+        }
+    }
     private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,6 +63,8 @@ class NewsDetailsActivity : AppCompatActivity() {
 
         binding.toolbar.setNavigationOnClickListener { finish() }
         binding.toolbar.title = newsTitle
+
+        detailsComponentViewModel.component.inject(this)
 
         viewModel.state.observeOn(AndroidSchedulers.mainThread())
             .subscribe(::updateState)

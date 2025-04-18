@@ -93,6 +93,9 @@ dependencies {
     implementation(libs.bundles.room)
     ksp(libs.room.compiler)
 
+    implementation(libs.dagger)
+    ksp(libs.dagger.compiler)
+
     implementation(libs.bundles.android.navigation)
 
     testImplementation(libs.junit)

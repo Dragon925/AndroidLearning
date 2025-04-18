@@ -2,31 +2,31 @@ package com.github.dragon925.androidlearning.news.ui.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.github.dragon925.androidlearning.App
-import com.github.dragon925.androidlearning.common.domain.Event
+import com.github.dragon925.androidlearning.common.contract.Mapper
+import com.github.dragon925.androidlearning.common.domain.models.Event
+import com.github.dragon925.androidlearning.common.domain.repositories.EventRepository
 import com.github.dragon925.androidlearning.common.ui.UIState
-import com.github.dragon925.androidlearning.news.data.repositories.NewsRepository
+import com.github.dragon925.androidlearning.news.ui.models.NewsItem
 import com.github.dragon925.androidlearning.news.ui.models.NewsListUIState
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
+import jakarta.inject.Inject
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx3.asObservable
 
-class NewsViewModel(
-    private val repository: NewsRepository
+class NewsViewModel @Inject constructor(
+    private val repository: EventRepository,
+    private val mapper: Mapper<Event, NewsItem>
 ) : ViewModel() {
 
     private val loading = BehaviorSubject.createDefault(false)
     private val readIds = BehaviorSubject.createDefault(emptySet<String>())
     private val filters = BehaviorSubject.createDefault(emptySet<String>())
-    private val _news = BehaviorSubject.createDefault(emptyList<Event>())
+    private val _news = BehaviorSubject.createDefault(emptyList<NewsItem>())
     private val compositeDisposable = CompositeDisposable()
 
     val state: Observable<UIState<NewsListUIState, String>> = Observable.combineLatest(
@@ -52,12 +52,15 @@ class NewsViewModel(
 
     fun markAsRead(vararg ids: String) {
         viewModelScope.launch {
-            repository.readNews(*ids)
+            repository.readEvents(*ids)
         }
     }
 
     private fun loadNews() {
-        repository.getNews().doOnSubscribe { loading.onNext(true) }
+        repository.getEvents().asObservable().doOnSubscribe { loading.onNext(true) }
+            .map {
+                it.map(mapper::invoke)
+            }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doAfterNext { loading.onNext(false) }
@@ -70,7 +73,7 @@ class NewsViewModel(
                 }
             ).also(compositeDisposable::add)
 
-        repository.getReadNewsIds()
+        repository.getReadEventIds().asObservable()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(readIds::onNext)
@@ -80,18 +83,5 @@ class NewsViewModel(
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.dispose()
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val app = this[APPLICATION_KEY] as? App
-                    ?: throw IllegalStateException("Application not found")
-
-                NewsViewModel(
-                    repository = NewsRepository(database = app.database)
-                )
-            }
-        }
     }
 }

@@ -11,7 +11,6 @@ import com.github.dragon925.androidlearning.databinding.DialogEditAvatarBinding
 class EditAvatarDialogFragment : DialogFragment() {
 
     companion object {
-        const val TAG = "EditAvatarDialogFragment"
         const val REQUEST_KEY = "EditAvatarDialogFragment_Request"
         const val RESULT_TYPE = "EditAvatarDialogFragment_Result"
 

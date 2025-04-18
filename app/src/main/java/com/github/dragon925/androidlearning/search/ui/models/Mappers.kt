@@ -1,6 +1,6 @@
 package com.github.dragon925.androidlearning.search.ui.models
 
-import com.github.dragon925.androidlearning.common.domain.Event
+import com.github.dragon925.androidlearning.common.domain.models.Event
 
 fun Event.toSearchResultItemBy(text: (Event) -> String) = SearchResultItem(
     id = id,

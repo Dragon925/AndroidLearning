@@ -9,12 +9,13 @@
     android:clipChildren="false">
 
     <androidx.fragment.app.FragmentContainerView
-        android:name="com.github.dragon925.androidlearning.help.ui.fragments.HelpCategoriesFragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:id="@+id/main_nav_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        tools:layout="@layout/fragment_help_categories"/>
+        app:navGraph="@navigation/app_nav"
+        tools:layout="@layout/fragment_authorization"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav_bar"
@@ -25,7 +26,9 @@
         android:background="@color/white_three"
         android:clipChildren="false"
         android:clipToPadding="false"
-        app:itemActiveIndicatorStyle="@android:color/transparent">
+        app:itemActiveIndicatorStyle="@android:color/transparent"
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <ImageButton
             android:id="@+id/btn_help"
@@ -36,7 +39,9 @@
             android:layout_marginBottom="@dimen/spacing_xl"
             android:background="@drawable/bg_nav_button"
             app:tint="@color/white"
-            android:contentDescription="@string/help"/>
+            android:contentDescription="@string/help"
+            android:visibility="gone"
+            tools:visibility="visible"/>
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 

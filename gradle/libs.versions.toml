@@ -30,6 +30,7 @@ rxandroid = "3.0.2"
 rxbinding = "4.0.0"
 coil = "3.1.0"
 room = "2.6.1"
+dagger = "2.56.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -88,6 +89,9 @@ rx-java = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava" }
 rx-android = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroid" }
 rx-binding = { module = "com.jakewharton.rxbinding4:rxbinding", version.ref = "rxbinding" }
 rx-binding-material = { module = "com.jakewharton.rxbinding4:rxbinding-material", version.ref = "rxbinding" }
+
+dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
+dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

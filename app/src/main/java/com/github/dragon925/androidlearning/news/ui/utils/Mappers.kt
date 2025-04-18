@@ -2,7 +2,7 @@ package com.github.dragon925.androidlearning.news.ui.utils
 
 import android.content.Context
 import com.github.dragon925.androidlearning.R
-import com.github.dragon925.androidlearning.common.domain.Event
+import com.github.dragon925.androidlearning.common.domain.models.Event
 import com.github.dragon925.androidlearning.news.ui.models.NewsDetailItem
 import com.github.dragon925.androidlearning.news.ui.models.NewsItem
 import kotlinx.datetime.Clock

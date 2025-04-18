@@ -2,7 +2,7 @@ package com.github.dragon925.androidlearning.news.ui.models
 
 
 import android.os.Parcelable
-import com.github.dragon925.androidlearning.common.domain.Member
+import com.github.dragon925.androidlearning.common.domain.models.Member
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
