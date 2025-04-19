@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.github.dragon925.androidlearning.authorization.domain.models.AuthState
 import com.github.dragon925.androidlearning.authorization.ui.viewmodels.AuthViewModel
 import com.github.dragon925.androidlearning.databinding.FragmentAuthorizationBinding
 import com.jakewharton.rxbinding4.widget.textChanges
@@ -46,11 +47,11 @@ class AuthorizationFragment : Fragment() {
         ).subscribe { binding.btnEnter.isEnabled = it }
 
         binding.btnEnter.setOnClickListener {
-            authViewModel.setSuccess(true)
+            authViewModel.setState(AuthState.AUTHORIZED)
         }
 
         binding.toolbar.setNavigationOnClickListener {
-            authViewModel.setSuccess(false)
+            authViewModel.setState(AuthState.CANCELED)
         }
     }
 
