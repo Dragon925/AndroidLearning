@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="search">Поиск</string>
+    <string name="search_hint_by_event">Введите название мероприятия</string>
+    <string name="search_hint_by_organization">Введите название организации</string>
+    <string name="tab_by_event">По мероприятиям</string>
+    <string name="tab_by_nko">По НКО</string>
+    <string name="search_keywords">Ключевые слова: %1$s</string>
+    <plurals name="search_result_events">
+        <item quantity="one">Результаты поиска: %1$d мероприятие</item>
+        <item quantity="few">Результаты поиска: %1$d мероприятия</item>
+        <item quantity="many">Результаты поиска: %1$d мероприятий</item>
+        <item quantity="other">Результаты поиска: %1$d мероприятий</item>
+    </plurals>
+    <plurals name="search_result_organizations">
+        <item quantity="one">Результаты поиска: %1$d организация</item>
+        <item quantity="few">Результаты поиска: %1$d организации</item>
+        <item quantity="many">Результаты поиска: %1$d организаций</item>
+        <item quantity="other">Результаты поиска: %1$d организаций</item>
+    </plurals>
+    <string name="search_help_event">Напишите в строке поиска название мероприятия или ключевые слова.</string>
+    <string name="search_help_organization">Напишите в строке поиска название организации или ключевые слова.</string>
+    <string name="search_example">Например,</string>
+    <string name="search_example_event"><u>мастер-класс, помощь</u></string>
+    <string name="search_example_organization"><u>фонд, администрация</u></string>
+
+</resources>

@@ -7,20 +7,25 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isVisible
+import androidx.core.view.isGone
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.github.dragon925.androidlearning.authorization.ui.domain.models.AuthState
 import com.github.dragon925.androidlearning.authorization.ui.viewmodels.AuthViewModel
 import com.github.dragon925.androidlearning.databinding.ActivityMainBinding
+import com.github.dragon925.androidlearning.help.R as HelpR
+import com.github.dragon925.androidlearning.authorization.R as AuthR
 import com.github.dragon925.androidlearning.news.ui.viewmodels.UnreadNewsViewModel
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
 
     private val unreadNewsViewModel: UnreadNewsViewModel by viewModels()
     private val authViewModel: AuthViewModel by viewModels()
@@ -37,19 +42,17 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val navController = initNavigation()
+        initNavigation()
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.success.collect { isSuccess ->
-                    if (isSuccess) {
-                        navController.navigate(R.id.action_screen_authorization_to_screen_help)
-                        binding.bottomNavBar.isVisible = true
-                        binding.btnHelp.isVisible = true
-                    } else {
-                        finish()
-                    }
-                }
+                authViewModel.state.collect(::updateAuth)
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                authViewModel.isAuthorized.collect(::updateUI)
             }
         }
 
@@ -65,20 +68,46 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun initNavigation(): NavController {
+    private fun initNavigation() {
         with(binding) {
             val navHostFragment =
                 supportFragmentManager.findFragmentById(mainNavContainer.id) as NavHostFragment
-            val navController = navHostFragment.navController
+            navController = navHostFragment.navController
 
             bottomNavBar.setupWithNavController(navController)
 
             btnHelp.setOnClickListener {
                 bottomNavBar.selectedItemId = R.id.screen_help
-                navController.navigate(R.id.screen_help)
             }
-
-            return navController
         }
+    }
+
+    private fun updateAuth(state: AuthState) {
+        when (state) {
+            AuthState.AUTHORIZED -> {
+                navController.navigate(
+                    HelpR.id.screen_help,
+                    null,
+                    NavOptions.Builder()
+                        .setPopUpTo(HelpR.id.screen_help, false)
+                        .build()
+                )
+            }
+            AuthState.CANCELED -> finish()
+            AuthState.UNAUTHORIZED -> {
+                navController.navigate(
+                    AuthR.id.screen_auth,
+                    null,
+                    NavOptions.Builder()
+                        .setPopUpTo(AuthR.id.screen_auth, true)
+                        .build()
+                )
+            }
+        }
+    }
+
+    private fun updateUI(isAuthorized: Boolean) {
+        binding.btnHelp.isGone = !isAuthorized
+        binding.bottomNavBar.isGone = !isAuthorized
     }
 }

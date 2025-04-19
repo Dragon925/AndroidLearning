@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="birthday_month_names">
+        <item>Января</item>
+        <item>Февраля</item>
+        <item>Марта</item>
+        <item>Апреля</item>
+        <item>Мая</item>
+        <item>Июня</item>
+        <item>Июля</item>
+        <item>Августа</item>
+        <item>Сентября</item>
+        <item>Октября</item>
+        <item>Ноября</item>
+        <item>Декабря</item>
+    </string-array>
+
+    <string name="profile">Профиль</string>
+    <string name="birthday">Дата рождения</string>
+    <string name="field_of_activity">Сфера деятельности</string>
+    <string name="receive_notification">Получать push-уведомления</string>
+    <string name="logout">Выйти из аккаунта</string>
+    <string name="friends">Ваши друзья</string>
+    <string name="description_avatar">Аватар</string>
+    <string name="choose_photo">Выбрать фото</string>
+    <string name="take_photo">Сделать снимок</string>
+    <string name="delete">Удалить</string>
+    <string name="camera_permission_denied">Нет доступа к камере</string>
+    <string name="action_edit">Редактировать</string>
+</resources>

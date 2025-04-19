@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/screen_help"
+    app:startDestination="@id/helpCategoriesFragment">
+
+    <fragment
+        android:id="@+id/helpCategoriesFragment"
+        android:name="com.github.dragon925.androidlearning.help.ui.fragments.HelpCategoriesFragment"
+        android:label="@string/help"
+        tools:layout="@layout/fragment_help_categories"/>
+</navigation>

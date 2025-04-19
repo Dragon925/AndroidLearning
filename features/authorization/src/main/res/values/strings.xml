@@ -1,0 +1,15 @@
+<resources>
+    <string name="authorization">Авторизация</string>
+    <string name="external_auth_label">Для участия в мероприятиях войдите в приложение через социальные сети</string>
+    <string name="internal_auth_label">Или авторизуйтесь через приложение</string>
+    <string name="auth_email">E-mail</string>
+    <string name="auth_placeholder_email">Введите e-mail</string>
+    <string name="auth_password">Пароль</string>
+    <string name="auth_placeholder_password">Введите пароль</string>
+    <string name="auth_enter">ВОЙТИ</string>
+    <string name="forgot_password"><u>Забыли пароль?</u></string>
+    <string name="registration"><u>Регистрация</u></string>
+    <string name="description_auth_by_ok">Авторизация через Одноклассники</string>
+    <string name="description_auth_by_fb">Авторизация через Фейсбук</string>
+    <string name="description_auth_by_vk">Авторизация через Вконтакте</string>
+</resources>

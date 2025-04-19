@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/screen_profile"
+    app:startDestination="@id/profileFragment">
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.github.dragon925.androidlearning.profile.ui.fragments.ProfileFragment"
+        android:label="ProfileFragment" >
+        <action
+            android:id="@+id/action_profileFragment_to_editAvatarDialogFragment"
+            app:destination="@id/editAvatarDialogFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/editAvatarDialogFragment"
+        android:name="com.github.dragon925.androidlearning.profile.ui.fragments.EditAvatarDialogFragment"
+        android:label="EditAvatarDialogFragment" />
+</navigation>

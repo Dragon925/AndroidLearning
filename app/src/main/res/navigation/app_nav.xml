@@ -1,78 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/app_nav"
-    app:startDestination="@id/screen_authorization">
+    app:startDestination="@id/screen_help">
 
-    <fragment
-        android:id="@+id/screen_help"
-        android:name="com.github.dragon925.androidlearning.help.ui.fragments.HelpCategoriesFragment"
-        android:label="@string/help"
-        tools:layout="@layout/fragment_help_categories" />
-    <fragment
-        android:id="@+id/screen_news"
-        android:name="com.github.dragon925.androidlearning.news.ui.fragments.NewsFragment"
-        android:label="@string/news"
-        tools:layout="@layout/fragment_news" >
-        <action
-            android:id="@+id/action_screen_news_to_filterFragment"
-            app:destination="@id/filterFragment" />
-        <action
-            android:id="@+id/action_screen_news_to_newsDetailsActivity"
-            app:destination="@id/newsDetailsActivity" />
-    </fragment>
-    <fragment
-        android:id="@+id/screen_search"
-        android:name="com.github.dragon925.androidlearning.search.ui.fragments.SearchFragment"
-        android:label="@string/search"
-        tools:layout="@layout/fragment_search" />
-    <fragment
-        android:id="@+id/screen_profile"
-        android:name="com.github.dragon925.androidlearning.profile.ui.fragments.ProfileFragment"
-        android:label="@string/profile"
-        tools:layout="@layout/fragment_profile" >
-        <action
-            android:id="@+id/action_screen_profile_to_editAvatarDialogFragment"
-            app:destination="@id/editAvatarDialogFragment" />
-    </fragment>
-
-    <dialog
-        android:id="@+id/editAvatarDialogFragment"
-        android:name="com.github.dragon925.androidlearning.profile.ui.fragments.EditAvatarDialogFragment"
-        android:label="EditAvatarDialogFragment" />
-    <fragment
-        android:id="@+id/filterFragment"
-        android:name="com.github.dragon925.androidlearning.news.ui.fragments.FilterFragment"
-        android:label="fragment_filter"
-        tools:layout="@layout/fragment_filter" >
-        <argument
-            android:name="chosenFilters"
-            app:argType="string[]"
-            app:nullable="true"
-            android:defaultValue="@null" />
-    </fragment>
-    <fragment
-        android:id="@+id/screen_authorization"
-        android:name="com.github.dragon925.androidlearning.authorization.ui.fragments.AuthorizationFragment"
-        android:label="fragment_authorization"
-        tools:layout="@layout/fragment_authorization" >
-        <action
-            android:id="@+id/action_screen_authorization_to_screen_help"
-            app:destination="@id/screen_help"
-            app:popUpTo="@id/screen_authorization"
-            app:popUpToInclusive="true" />
-    </fragment>
-    <activity
-        android:id="@+id/newsDetailsActivity"
-        android:name="com.github.dragon925.androidlearning.news.ui.activities.NewsDetailsActivity"
-        android:label="activity_news_details"
-        tools:layout="@layout/activity_news_details" >
-        <argument
-            android:name="NewsDetailsID"
-            app:argType="string" />
-        <argument
-            android:name="NewsDetailsTitle"
-            app:argType="string" />
-    </activity>
+    <include app:graph="@navigation/auth_nav"/>
+    <include app:graph="@navigation/help_nav" />
+    <include app:graph="@navigation/profile_nav" />
+    <include app:graph="@navigation/news_nav" />
+    <include app:graph="@navigation/search_nav" />
 </navigation>

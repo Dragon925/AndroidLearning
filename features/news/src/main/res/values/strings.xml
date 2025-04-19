@@ -1,0 +1,44 @@
+<resources>
+
+    <string name="news">Новости</string>
+    <plurals name="plurals_days">
+        <item quantity="one">%1$d день</item>
+        <item quantity="few">%1$d дня</item>
+        <item quantity="many">%1$d дней</item>
+        <item quantity="other">%1$d дней</item>
+    </plurals>
+
+    <string-array name="months_full_names">
+        <item>Январь</item>
+        <item>Февраль</item>
+        <item>Март</item>
+        <item>Апрель</item>
+        <item>Май</item>
+        <item>Июнь</item>
+        <item>Июль</item>
+        <item>Август</item>
+        <item>Сентябрь</item>
+        <item>Октябрь</item>
+        <item>Ноябрь</item>
+        <item>Декабрь</item>
+    </string-array>
+    <string name="left_before">Осталось</string>
+    <string name="apply">Применить</string>
+    <string name="share">Поделиться</string>
+    <string name="has_questions">У вас есть вопросы?</string>
+    <string name="write_us"><u>Напишите нам</u></string>
+    <string name="visit_site"><u>Перейти на сайт организации</u></string>
+
+    <string name="description_event_photo">Фотографии события</string>
+
+    <string name="help_things">Помочь вещами</string>
+    <string name="become_volunteer">Стать волонтером</string>
+    <string name="prof_help">Проф. помощь</string>
+    <string name="help_money">Помочь деньгами</string>
+
+    <string name="filter">Фильтр</string>
+    <string name="help_category">Категории помощи</string>
+    <string name="more_count">+%1$d</string>
+
+
+</resources>
