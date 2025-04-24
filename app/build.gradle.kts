@@ -1,44 +1,22 @@
-import org.jetbrains.kotlin.konan.properties.Properties
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "com.github.dragon925.androidlearning"
-    compileSdk = 35
+    compileSdk = libs.versions.sdk.compile.get().toInt()
 
     defaultConfig {
         applicationId = "com.github.dragon925.androidlearning"
-        minSdk = 26
-        targetSdk = 35
+        minSdk = libs.versions.sdk.min.get().toInt()
+        targetSdk = libs.versions.sdk.target.get().toInt()
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        val localProperties = Properties().apply {
-            val file = rootProject.file("local.properties")
-            if (file.exists()) {
-                load(file.inputStream())
-            }
-        }
-
-        val apiUrl = if (localProperties.containsKey("api.url")) {
-            localProperties.getProperty("api.url")
-        } else {
-            throw GradleException("Api url not found")
-        }
-
-        buildConfigField("String", "API_URL", apiUrl)
-
-        ksp {
-            arg("room.schemaLocation", "$projectDir/schemas")
-        }
     }
 
     buildTypes {
@@ -79,24 +57,24 @@ dependencies {
 
     implementation(libs.bundles.coroutines)
 
-    implementation(libs.kotlinx.datetime)
-
     implementation(libs.material)
-    implementation(libs.bundles.android.views)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.appcompat)
 
-    implementation(libs.bundles.network)
-    implementation(libs.gson)
-    implementation(libs.bundles.rx)
-
-    implementation(libs.bundles.coil)
-
-    implementation(libs.bundles.room)
-    ksp(libs.room.compiler)
+    implementation(libs.coil)
 
     implementation(libs.dagger)
     ksp(libs.dagger.compiler)
 
     implementation(libs.bundles.android.navigation)
+
+    implementation(projects.base.core)
+    implementation(projects.features.authorization)
+    implementation(projects.features.help)
+    implementation(projects.features.profile)
+    implementation(projects.features.search)
+    implementation(projects.features.news)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

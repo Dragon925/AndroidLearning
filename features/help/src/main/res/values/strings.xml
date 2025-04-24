@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="help">Помощь</string>
+    <string name="help_category">Категории помощи</string>
+    <string name="choose_help_category">Выберите категорию помощи</string>
+
+</resources>

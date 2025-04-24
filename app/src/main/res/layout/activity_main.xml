@@ -15,7 +15,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         app:navGraph="@navigation/app_nav"
-        tools:layout="@layout/fragment_authorization"/>
+        tools:layout="@layout/fragment_help_categories" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav_bar"
@@ -26,9 +26,7 @@
         android:background="@color/white_three"
         android:clipChildren="false"
         android:clipToPadding="false"
-        app:itemActiveIndicatorStyle="@android:color/transparent"
-        android:visibility="gone"
-        tools:visibility="visible">
+        app:itemActiveIndicatorStyle="@android:color/transparent">
 
         <ImageButton
             android:id="@+id/btn_help"
@@ -39,9 +37,7 @@
             android:layout_marginBottom="@dimen/spacing_xl"
             android:background="@drawable/bg_nav_button"
             app:tint="@color/white"
-            android:contentDescription="@string/help"
-            android:visibility="gone"
-            tools:visibility="visible"/>
+            android:contentDescription="@string/help"/>
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 

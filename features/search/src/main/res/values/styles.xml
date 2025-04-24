@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.App.TabLayout" parent="Widget.Material3.TabLayout">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="tabTextColor">@color/white_70</item>
+        <item name="tabSelectedTextColor">?attr/colorOnPrimary</item>
+        <item name="tabIndicatorColor">@color/macaroni_and_cheese</item>
+    </style>
+    
+</resources>

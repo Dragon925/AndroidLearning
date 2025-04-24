@@ -3,6 +3,9 @@ agp = "8.9.1"
 kotlin = "2.1.20"
 ksp = "2.1.20-1.0.32"
 coreKtx = "1.15.0"
+sdk-min = "26"
+sdk-compile = "35"
+sdk-target = "35"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -31,6 +34,8 @@ rxbinding = "4.0.0"
 coil = "3.1.0"
 room = "2.6.1"
 dagger = "2.56.1"
+jetbrainsKotlinJvm = "2.1.20"
+activityVersion = "1.10.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -92,6 +97,7 @@ rx-binding-material = { module = "com.jakewharton.rxbinding4:rxbinding-material"
 
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
+activity = { group = "androidx.activity", name = "activity", version.ref = "activityVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -99,6 +105,8 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "parcelize" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
 [bundles]
 android-navigation = ["androidx-navigation-ui", "androidx-navigation-fragment", "androidx-navigation-compose"]
@@ -111,7 +119,6 @@ android-views = [
     "androidx-recyclerview",
     "androidx-viewpager2"
 ]
-rx = ["rx-java", "rx-android", "rx-binding", "rx-binding-material"]
 coroutines = ["kotlinx-coroutines-core", "kotlinx-coroutines-android", "kotlinx-coroutines-rx"]
 network = [
     "retrofit",

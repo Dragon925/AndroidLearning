@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.App.InputTextLayout" parent="Widget.Material3.TextInputLayout.FilledBox">
+        <item name="hintTextAppearance">@style/TextStyle13</item>
+        <item name="placeholderTextAppearance">@style/TextStylePopupPlaceholder</item>
+        <item name="expandedHintEnabled">false</item>
+        <item name="boxBackgroundColor">@color/light_grey_two</item>
+    </style>
+
+</resources>

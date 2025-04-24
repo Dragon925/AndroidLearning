@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="event_photo_min_height_m">222dp</dimen>
+    <dimen name="event_photo_min_height_s">158dp</dimen>
+
+    <dimen name="icon_size_m">24dp</dimen>
+    <dimen name="avatar_size_s">40dp</dimen>
+
+    <dimen name="spacing_xxs_negative">-4dp</dimen>
+    <string name="description_avatar">Аватар</string>
+
+
+</resources>

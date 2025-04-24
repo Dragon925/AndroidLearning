@@ -18,6 +18,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.github.dragon925.androidlearning.authorization.domain.models.AuthState
 import com.github.dragon925.androidlearning.authorization.ui.viewmodels.AuthViewModel
 import com.github.dragon925.androidlearning.databinding.ActivityMainBinding
+import com.github.dragon925.androidlearning.help.R as HelpR
+import com.github.dragon925.androidlearning.authorization.R as AuthR
 import com.github.dragon925.androidlearning.news.ui.viewmodels.UnreadNewsViewModel
 import kotlinx.coroutines.launch
 
@@ -83,15 +85,21 @@ class MainActivity : AppCompatActivity() {
     private fun updateAuth(state: AuthState) {
         when (state) {
             AuthState.AUTHORIZED -> {
-                navController.navigate(R.id.action_screen_authorization_to_screen_help)
+                navController.navigate(
+                    HelpR.id.screen_help,
+                    null,
+                    NavOptions.Builder()
+                        .setPopUpTo(HelpR.id.screen_help, false)
+                        .build()
+                )
             }
             AuthState.CANCELED -> finish()
             AuthState.UNAUTHORIZED -> {
                 navController.navigate(
-                    R.id.screen_authorization,
+                    AuthR.id.screen_auth,
                     null,
                     NavOptions.Builder()
-                        .setPopUpTo(R.id.screen_authorization, false)
+                        .setPopUpTo(AuthR.id.screen_auth, true)
                         .build()
                 )
             }
