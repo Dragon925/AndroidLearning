@@ -2,7 +2,7 @@ package com.github.dragon925.androidlearning.authorization.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.dragon925.androidlearning.authorization.ui.domain.models.AuthState
+import com.github.dragon925.androidlearning.authorization.domain.models.AuthState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow

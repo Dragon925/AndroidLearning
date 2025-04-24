@@ -10,7 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.github.dragon925.androidlearning.authorization.databinding.FragmentAuthorizationBinding
-import com.github.dragon925.androidlearning.authorization.ui.domain.models.AuthState
+import com.github.dragon925.androidlearning.authorization.domain.models.AuthState
 import com.github.dragon925.androidlearning.authorization.ui.textChanges
 import com.github.dragon925.androidlearning.authorization.ui.viewmodels.AuthViewModel
 import kotlinx.coroutines.flow.combine
