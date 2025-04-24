@@ -12,4 +12,6 @@
     <string name="description_auth_by_ok">Авторизация через Одноклассники</string>
     <string name="description_auth_by_fb">Авторизация через Фейсбук</string>
     <string name="description_auth_by_vk">Авторизация через Вконтакте</string>
+    <string name="show_password">Показать пароль</string>
+    <string name="hide_password">Скрыть пароль</string>
 </resources>

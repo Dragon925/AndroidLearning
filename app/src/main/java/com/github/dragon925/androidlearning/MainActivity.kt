@@ -15,7 +15,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.github.dragon925.androidlearning.authorization.ui.domain.models.AuthState
+import com.github.dragon925.androidlearning.authorization.domain.models.AuthState
 import com.github.dragon925.androidlearning.authorization.ui.viewmodels.AuthViewModel
 import com.github.dragon925.androidlearning.databinding.ActivityMainBinding
 import com.github.dragon925.androidlearning.help.R as HelpR
