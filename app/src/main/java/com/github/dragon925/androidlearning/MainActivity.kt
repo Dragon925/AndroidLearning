@@ -110,4 +110,5 @@ class MainActivity : AppCompatActivity() {
         binding.btnHelp.isGone = !isAuthorized
         binding.bottomNavBar.isGone = !isAuthorized
     }
+
 }
