@@ -1,22 +1,15 @@
 package com.github.dragon925.androidlearning.search.ui.viewmodels
 
 import android.util.Log
-import androidx.lifecycle.DEFAULT_ARGS_KEY
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.github.dragon925.androidlearning.App
-import com.github.dragon925.androidlearning.common.domain.Event
+import com.github.dragon925.androidlearning.common.contract.Mapper
+import com.github.dragon925.androidlearning.common.domain.models.Event
 import com.github.dragon925.androidlearning.common.ui.UIState
-import com.github.dragon925.androidlearning.search.data.SearchRepository
-import com.github.dragon925.androidlearning.search.ui.fragments.SearchByTypeFragment
+import com.github.dragon925.androidlearning.search.domain.usecases.SearchUseCase
 import com.github.dragon925.androidlearning.search.ui.models.SearchResultItem
 import com.github.dragon925.androidlearning.search.ui.models.SearchUIState
 import com.github.dragon925.androidlearning.search.ui.models.toKeywords
-import com.github.dragon925.androidlearning.search.ui.models.toSearchResultItemBy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,8 +24,8 @@ import kotlinx.coroutines.launch
 
 @Suppress("OPT_IN_USAGE")
 class SearchViewModel(
-    private val loader: (keywords: List<String>) -> Flow<List<Event>>,
-    private val mapper: (List<Event>) -> List<SearchResultItem>
+    private val searchUseCase: SearchUseCase,
+    private val mapper: Mapper<Event, SearchResultItem>
 ) : ViewModel() {
 
     private val searchQuery = MutableStateFlow("")
@@ -53,9 +46,9 @@ class SearchViewModel(
                     if (query.isEmpty()) return@flatMapLatest flowOf(SearchUIState())
 
                     val keywords = query.toKeywords()
-                    return@flatMapLatest loader(keywords)
+                    return@flatMapLatest searchUseCase.search(keywords)
                         .map { events ->
-                            SearchUIState(keywords, mapper(events))
+                            SearchUIState(keywords, events.map(mapper::invoke))
                         }
                 }.flowOn(Dispatchers.IO)
                 .onEach { loading.value = false }
@@ -68,43 +61,5 @@ class SearchViewModel(
 
     fun search(query: String) {
         searchQuery.value = query
-    }
-
-    companion object {
-        const val SEARCH_TYPE = "SearchViewModel-searchType"
-
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val app = this[APPLICATION_KEY] as? App
-                    ?: throw IllegalStateException("Application not found")
-                val searchType = this[DEFAULT_ARGS_KEY]?.getInt(SEARCH_TYPE)
-                    ?: SearchByTypeFragment.SEARCH_BY_EVENT
-
-                SearchViewModel(
-                    loader = when (searchType) {
-                        SearchByTypeFragment.SEARCH_BY_NKO -> {
-                            { keywords -> SearchRepository.searchOrganizers(keywords, app.database) }
-                        }
-
-                        else -> {
-                            { keywords -> SearchRepository.searchEvents(keywords, app.database) }
-                        }
-                    },
-                    mapper = when (searchType) {
-                        SearchByTypeFragment.SEARCH_BY_NKO -> {
-                            { events ->
-                                events.map { it.toSearchResultItemBy(Event::organizer) }
-                            }
-                        }
-
-                        else -> {
-                            { events ->
-                                events.map { it.toSearchResultItemBy(Event::name) }
-                            }
-                        }
-                    }
-                )
-            }
-        }
     }
 }

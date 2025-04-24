@@ -5,12 +5,12 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import com.github.dragon925.androidlearning.common.contract.EventContract
 import com.github.dragon925.androidlearning.common.data.datasorces.local.entities.EventCrossCategory
 import com.github.dragon925.androidlearning.common.data.datasorces.local.entities.EventEntity
 import com.github.dragon925.androidlearning.common.data.datasorces.local.entities.EventPhotoEntity
-import com.github.dragon925.androidlearning.common.data.models.EventData
-import com.github.dragon925.androidlearning.common.data.models.EventDto
-import com.github.dragon925.androidlearning.common.data.toEntities
+import com.github.dragon925.androidlearning.common.data.datasorces.local.toEntities
+import com.github.dragon925.androidlearning.common.data.datasorces.local.models.EventData
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -26,9 +26,9 @@ interface EventDao {
     suspend fun insertCategories(categorise: List<EventCrossCategory>)
 
     @Transaction
-    suspend fun saveEvents(events: List<EventDto>) {
+    suspend fun saveEvents(events: List<EventContract>) {
         clear()
-        for ((event, photos, categories) in events.map { it.toEntities() }) {
+        for ((event, photos, categories) in events.map(EventContract::toEntities)) {
             insertEvent(event)
             insertPhotos(photos)
             insertCategories(categories)

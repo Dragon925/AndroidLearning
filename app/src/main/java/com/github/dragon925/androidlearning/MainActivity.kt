@@ -4,25 +4,32 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isGone
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavController
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
+import com.github.dragon925.androidlearning.authorization.domain.models.AuthState
+import com.github.dragon925.androidlearning.authorization.ui.viewmodels.AuthViewModel
 import com.github.dragon925.androidlearning.databinding.ActivityMainBinding
-import com.github.dragon925.androidlearning.help.ui.fragments.HelpCategoriesFragment
-import com.github.dragon925.androidlearning.news.ui.fragments.NewsFragment
 import com.github.dragon925.androidlearning.news.ui.viewmodels.UnreadNewsViewModel
-import com.github.dragon925.androidlearning.profile.ui.fragments.ProfileFragment
-import com.github.dragon925.androidlearning.search.ui.fragments.SearchFragment
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
 
     private val unreadNewsViewModel: UnreadNewsViewModel by viewModels()
+    private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -34,6 +41,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         initNavigation()
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                authViewModel.state.collect(::updateAuth)
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                authViewModel.isAuthorized.collect(::updateUI)
+            }
+        }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -49,46 +68,39 @@ class MainActivity : AppCompatActivity() {
 
     private fun initNavigation() {
         with(binding) {
-            bottomNavBar.selectedItemId = R.id.screen_help
-            bottomNavBar.setOnItemSelectedListener { item ->
-                when (item.itemId) {
-                    R.id.screen_help -> {
-                        supportFragmentManager.beginTransaction()
-                            .replace(mainNavContainer.id, HelpCategoriesFragment.newInstance())
-                            .commit()
-                        true
-                    }
+            val navHostFragment =
+                supportFragmentManager.findFragmentById(mainNavContainer.id) as NavHostFragment
+            navController = navHostFragment.navController
 
-                    R.id.screen_profile -> {
-                        supportFragmentManager.beginTransaction()
-                            .replace(mainNavContainer.id, ProfileFragment.newInstance(0))
-                            .commit()
-                        true
-                    }
+            bottomNavBar.setupWithNavController(navController)
 
-                    R.id.screen_search -> {
-                        supportFragmentManager.beginTransaction()
-                            .replace(mainNavContainer.id, SearchFragment.newInstance())
-                            .commit()
-                        true
-                    }
-
-                    R.id.screen_news -> {
-                        supportFragmentManager.beginTransaction()
-                            .replace(mainNavContainer.id, NewsFragment.newInstance())
-                            .commit()
-                        true
-                    }
-
-                    else -> false
-                }
-            }
             btnHelp.setOnClickListener {
                 bottomNavBar.selectedItemId = R.id.screen_help
-                supportFragmentManager.beginTransaction()
-                    .replace(mainNavContainer.id, HelpCategoriesFragment.newInstance())
-                    .commit()
             }
         }
     }
+
+    private fun updateAuth(state: AuthState) {
+        when (state) {
+            AuthState.AUTHORIZED -> {
+                navController.navigate(R.id.action_screen_authorization_to_screen_help)
+            }
+            AuthState.CANCELED -> finish()
+            AuthState.UNAUTHORIZED -> {
+                navController.navigate(
+                    R.id.screen_authorization,
+                    null,
+                    NavOptions.Builder()
+                        .setPopUpTo(R.id.screen_authorization, false)
+                        .build()
+                )
+            }
+        }
+    }
+
+    private fun updateUI(isAuthorized: Boolean) {
+        binding.btnHelp.isGone = !isAuthorized
+        binding.bottomNavBar.isGone = !isAuthorized
+    }
+
 }

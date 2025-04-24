@@ -1,18 +1,15 @@
 package com.github.dragon925.androidlearning.news.ui.viewmodels
 
 import android.util.Log
-import androidx.lifecycle.DEFAULT_ARGS_KEY
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.github.dragon925.androidlearning.App
-import com.github.dragon925.androidlearning.common.data.repositories.CommonEventRepository
-import com.github.dragon925.androidlearning.common.domain.Event
+import com.github.dragon925.androidlearning.common.contract.Mapper
+import com.github.dragon925.androidlearning.common.domain.models.Event
+import com.github.dragon925.androidlearning.common.domain.repositories.EventRepository
 import com.github.dragon925.androidlearning.common.ui.UIState
 import com.github.dragon925.androidlearning.news.ui.models.NewsDetailItem
-import com.github.dragon925.androidlearning.news.ui.utils.toNewsDetailItem
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -20,9 +17,10 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import kotlinx.coroutines.rx3.asObservable
 
-class NewsDetailsViewModel(
-    private val loader: () -> Observable<Event>,
-    private val mapper: (Event) -> NewsDetailItem
+class NewsDetailsViewModel @AssistedInject constructor(
+    @Assisted("newsId") private val newsId: String,
+    private val repository: EventRepository,
+    private val mapper: Mapper<Event, NewsDetailItem>
 ) : ViewModel() {
 
     private val loading = BehaviorSubject.createDefault(false)
@@ -41,8 +39,8 @@ class NewsDetailsViewModel(
     }
 
     private fun loadDetails() {
-        loader().doOnSubscribe { loading.onNext(true) }
-            .map(mapper)
+        repository.getEventById(newsId).asObservable().doOnSubscribe { loading.onNext(true) }
+            .map(mapper::invoke)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doAfterNext { loading.onNext(false) }
@@ -59,24 +57,9 @@ class NewsDetailsViewModel(
         compositeDisposable.dispose()
     }
 
-    companion object {
-        const val NEWS_DETAILS_ID = "NewsDetailsViewModel-id"
+    @AssistedFactory
+    fun interface Factory {
 
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val app = this[APPLICATION_KEY] as? App
-                    ?: throw IllegalStateException("Application not found")
-
-                val id = this[DEFAULT_ARGS_KEY]?.getString(NEWS_DETAILS_ID)
-                    ?: throw IllegalStateException("News Details Id not found")
-
-                NewsDetailsViewModel(
-                    loader = {
-                        CommonEventRepository.getEventById(id, app.database).asObservable()
-                    },
-                    mapper = { it.toNewsDetailItem(app) }
-                )
-            }
-        }
+        fun create(@Assisted("newsId") newsId: String): NewsDetailsViewModel
     }
 }

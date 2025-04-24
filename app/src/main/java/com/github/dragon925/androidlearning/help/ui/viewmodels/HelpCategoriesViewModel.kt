@@ -2,15 +2,9 @@ package com.github.dragon925.androidlearning.help.ui.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.github.dragon925.androidlearning.App
-import com.github.dragon925.androidlearning.common.data.repositories.CommonCategoryRepository
-import com.github.dragon925.androidlearning.common.domain.Category
+import com.github.dragon925.androidlearning.common.domain.models.Category
+import com.github.dragon925.androidlearning.common.domain.repositories.CategoryRepository
 import com.github.dragon925.androidlearning.common.ui.UIState
-import com.github.dragon925.androidlearning.help.ui.models.HelpCategoryItem
 import com.github.dragon925.androidlearning.help.ui.models.HelpCategoryUIState
 import com.github.dragon925.androidlearning.help.ui.utils.toHelpCategoryItem
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -18,11 +12,11 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
+import jakarta.inject.Inject
 import kotlinx.coroutines.rx3.asObservable
 
-class HelpCategoriesViewModel(
-    private val loader: () -> Observable<List<Category>>,
-    private val mapper: (List<Category>) -> List<HelpCategoryItem>
+class HelpCategoriesViewModel @Inject constructor(
+    private val repository: CategoryRepository
 ) : ViewModel() {
 
     private val loading = BehaviorSubject.createDefault(false)
@@ -43,8 +37,13 @@ class HelpCategoriesViewModel(
     }
 
     private fun loadCategories() {
-        loader().doOnSubscribe { loading.onNext(true) }
-            .map { HelpCategoryUIState(mapper(it)) }
+        repository.getCategories().asObservable()
+            .doOnSubscribe { loading.onNext(true) }
+            .map {
+                HelpCategoryUIState(
+                    it.map(Category::toHelpCategoryItem)
+                )
+            }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doAfterNext { loading.onNext(false) }
@@ -60,23 +59,5 @@ class HelpCategoriesViewModel(
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.dispose()
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val app = this[APPLICATION_KEY] as? App
-                    ?: throw IllegalStateException("Application not found")
-
-                HelpCategoriesViewModel(
-                    loader = {
-                        CommonCategoryRepository.getCategories(app.database).asObservable()
-                    },
-                    mapper = { categories ->
-                        categories.map { category -> category.toHelpCategoryItem() }
-                    }
-                )
-            }
-        }
     }
 }

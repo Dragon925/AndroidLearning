@@ -1,5 +1,6 @@
 package com.github.dragon925.androidlearning.help.ui.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,13 +10,19 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import com.github.dragon925.androidlearning.common.ui.ComponentViewModel
+import com.github.dragon925.androidlearning.common.ui.MultiViewModelFactory
 import com.github.dragon925.androidlearning.common.ui.UIState
+import com.github.dragon925.androidlearning.common.ui.create
+import com.github.dragon925.androidlearning.common.ui.createFactoryByViewModel
 import com.github.dragon925.androidlearning.databinding.FragmentHelpCategoriesBinding
+import com.github.dragon925.androidlearning.help.di.HelpComponent
 import com.github.dragon925.androidlearning.help.ui.viewmodels.HelpCategoriesViewModel
 import com.github.dragon925.androidlearning.help.ui.adapters.HelpCategoryListAdapter
 import com.github.dragon925.androidlearning.help.ui.models.HelpCategoryUIState
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import jakarta.inject.Inject
 
 
 class HelpCategoriesFragment : Fragment() {
@@ -28,10 +35,23 @@ class HelpCategoriesFragment : Fragment() {
     private var _binding: FragmentHelpCategoriesBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: HelpCategoriesViewModel by viewModels { HelpCategoriesViewModel.Factory }
+    @Inject
+    lateinit var viewModelFactory: MultiViewModelFactory
+
+    private val helpComponentViewModel: ComponentViewModel<HelpComponent> by viewModels {
+        ComponentViewModel.createBy { helpComponent().build() }
+    }
+    private val viewModel: HelpCategoriesViewModel by viewModels {
+        createFactoryByViewModel { viewModelFactory.create<HelpCategoriesViewModel>() }
+    }
     private val compositeDisposable = CompositeDisposable()
 
     private val helpCategoriesAdapter = HelpCategoryListAdapter()
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        helpComponentViewModel.component.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

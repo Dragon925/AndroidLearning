@@ -34,7 +34,9 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: SharedSearchViewModel by activityViewModels()
+    private val viewModel: SharedSearchViewModel by activityViewModels {
+        SharedSearchViewModel.FACTORY
+    }
     private var searchObserver: Job? = null
 
     private lateinit var searchViewPagerAdapter: SearchViewPagerAdapter
@@ -92,7 +94,7 @@ class SearchFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        val query = binding.searchView.editText.text.toString().trim()
+        val query = _binding?.let { it.searchView.editText.text?.toString() } ?: ""
         if (query.isNotEmpty()) {
             outState.putString(SAVED_QUERY, query)
         }

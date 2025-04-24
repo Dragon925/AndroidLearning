@@ -1,6 +1,7 @@
 package com.github.dragon925.androidlearning.profile.ui.fragments
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -15,12 +16,25 @@ import androidx.activity.result.contract.ActivityResultContracts.RequestPermissi
 import androidx.activity.result.contract.ActivityResultContracts.TakePicturePreview
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import coil3.load
+import coil3.request.Disposable
 import com.github.dragon925.androidlearning.R
+import com.github.dragon925.androidlearning.common.ui.ComponentViewModel
 import com.github.dragon925.androidlearning.common.ui.SimpleItemDecoration
+import com.github.dragon925.androidlearning.common.ui.UIState
+import com.github.dragon925.androidlearning.common.ui.createFactoryByViewModel
 import com.github.dragon925.androidlearning.databinding.FragmentProfileBinding
+import com.github.dragon925.androidlearning.profile.di.ProfileComponent
 import com.github.dragon925.androidlearning.profile.ui.adapters.FriendsListAdapter
-import com.github.dragon925.androidlearning.profile.ui.models.FriendItem
+import com.github.dragon925.androidlearning.profile.ui.models.ProfileUIState
+import com.github.dragon925.androidlearning.profile.ui.viewmodels.ProfileViewModel
+import jakarta.inject.Inject
+import kotlinx.coroutines.launch
 
 private const val USER_ID = "userId"
 
@@ -29,17 +43,28 @@ class ProfileFragment : Fragment() {
     companion object {
 
         @JvmStatic
-        fun newInstance(userId: Int) = ProfileFragment().apply {
+        fun newInstance(userId: String) = ProfileFragment().apply {
             arguments = Bundle().apply {
-                putInt(USER_ID, userId)
+                putString(USER_ID, userId)
             }
         }
     }
 
-    private var userId: Int? = null
+    private var userId: String = ""
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
+
+    @Inject
+    lateinit var viewModelFactory: ProfileViewModel.Factory
+
+    private val componentViewModel: ComponentViewModel<ProfileComponent> by viewModels {
+        ComponentViewModel.createBy { profileComponent().build() }
+    }
+    private val viewModel: ProfileViewModel by viewModels {
+        createFactoryByViewModel { viewModelFactory.create(userId) }
+    }
+    private var hasCustomAvatar = false
 
     private val friendsAdapter = FriendsListAdapter()
 
@@ -57,11 +82,18 @@ class ProfileFragment : Fragment() {
     }
 
     private val camera = registerForActivityResult(TakePicturePreview()) { bitmap ->
-        bitmap?.let { binding.ivAvatar.setImageBitmap(it) }
+        bitmap?.let {
+            imageLoader?.dispose()
+            hasCustomAvatar = true
+            binding.ivAvatar.setImageBitmap(it)
+        }
     }
 
     private val pickMedia = registerForActivityResult(PickVisualMedia()) { uri ->
-        uri?.let { binding.ivAvatar.setImageURI(it) }
+        uri?.let {
+            hasCustomAvatar = true
+            binding.ivAvatar.setImageURI(it)
+        }
     }
 
     private val openGallery = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -79,11 +111,18 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    private var imageLoader: Disposable? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            userId = it.getInt(USER_ID)
+            userId = it.getString(USER_ID, "")
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        componentViewModel.component.inject(this)
     }
 
     override fun onCreateView(
@@ -107,8 +146,7 @@ class ProfileFragment : Fragment() {
             toolbar.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.action_edit -> {
-                        EditAvatarDialogFragment()
-                            .show(parentFragmentManager, EditAvatarDialogFragment.TAG)
+                        findNavController().navigate(R.id.action_screen_profile_to_editAvatarDialogFragment)
                         true
                     }
                     else -> false
@@ -116,7 +154,11 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        initSampleData()
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.state.collect(::updateState)
+            }
+        }
     }
 
     private fun handleEditAvatarDialogResult(resultCode: Int) {
@@ -146,19 +188,16 @@ class ProfileFragment : Fragment() {
         binding.ivAvatar.setImageResource(R.drawable.image_user)
     }
 
-    private fun initSampleData() {
-        with(binding) {
-            ivAvatar.load("file:///android_asset/images/image_man.png")
-            tvName.text = "Константинов Денис"
-            tvBirthday.text = "01 февраля 1980"
-            tvFieldOfActivity.text = "Хирургия, травматология"
-            friendsAdapter.submitList(
-                listOf(
-                    FriendItem(1, "file:///android_asset/images/avatar_1.png", "Дмитрий Валерьевич"),
-                    FriendItem(2, "file:///android_asset/images/avatar_2.png", "Евгений Александров"),
-                    FriendItem(3, "file:///android_asset/images/avatar_3.png", "Виктор Кузнецов"),
-                ),
-            )
+    private fun updateState(state: UIState<ProfileUIState, String>) {
+        state.data?.let { data ->
+            with(binding) {
+                imageLoader = data.avatar.takeIf { !hasCustomAvatar }
+                    ?.let { ivAvatar.load(it) }
+                tvName.text = data.name
+                tvBirthday.text = data.birthday
+                tvFieldOfActivity.text = data.fieldOfActivity
+                friendsAdapter.submitList(data.friends)
+            }
         }
     }
 
@@ -166,5 +205,6 @@ class ProfileFragment : Fragment() {
         super.onDestroyView()
         _binding = null
         parentFragmentManager.clearFragmentResultListener(EditAvatarDialogFragment.REQUEST_KEY)
+        imageLoader?.dispose()
     }
 }

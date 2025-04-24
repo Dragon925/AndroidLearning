@@ -2,13 +2,8 @@ package com.github.dragon925.androidlearning.news.ui.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.github.dragon925.androidlearning.App
-import com.github.dragon925.androidlearning.common.data.repositories.CommonCategoryRepository
-import com.github.dragon925.androidlearning.common.domain.Category
+import com.github.dragon925.androidlearning.common.domain.models.Category
+import com.github.dragon925.androidlearning.common.domain.repositories.CategoryRepository
 import com.github.dragon925.androidlearning.common.ui.UIState
 import com.github.dragon925.androidlearning.news.ui.models.FilterItem
 import com.github.dragon925.androidlearning.news.ui.models.FilterUIState
@@ -17,10 +12,11 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
+import jakarta.inject.Inject
 import kotlinx.coroutines.rx3.asObservable
 
-class FilterViewModel(
-    private val loader: () -> Observable<List<Category>>
+class FilterViewModel @Inject constructor(
+    private val repository: CategoryRepository
 ) : ViewModel() {
 
     private val loading = BehaviorSubject.createDefault(false)
@@ -46,7 +42,7 @@ class FilterViewModel(
     }
 
     private fun loadCategories() {
-        loader().doOnSubscribe { loading.onNext(true) }
+        repository.getCategories().asObservable().doOnSubscribe { loading.onNext(true) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doAfterNext { loading.onNext(false) }
@@ -70,20 +66,5 @@ class FilterViewModel(
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.dispose()
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val app = this[APPLICATION_KEY] as? App
-                    ?: throw IllegalStateException("Application not found")
-
-                FilterViewModel(
-                    loader = {
-                        CommonCategoryRepository.getCategories(app.database).asObservable()
-                    }
-                )
-            }
-        }
     }
 }

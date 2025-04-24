@@ -4,9 +4,9 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import com.github.dragon925.androidlearning.common.contract.CategoryContract
 import com.github.dragon925.androidlearning.common.data.datasorces.local.entities.CategoryEntity
-import com.github.dragon925.androidlearning.common.data.models.CategoryDto
-import com.github.dragon925.androidlearning.common.data.toEntity
+import com.github.dragon925.androidlearning.common.data.datasorces.local.toEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -19,9 +19,9 @@ interface CategoryDao {
     fun loadCategories(): Flow<List<CategoryEntity>>
 
     @Transaction
-    suspend fun saveCategories(categories: List<CategoryDto>) {
+    suspend fun saveCategories(categories: List<CategoryContract>) {
         clear()
-        insertCategories(categories.map { it.toEntity() })
+        insertCategories(categories.map(CategoryContract::toEntity))
     }
 
     @Query("DELETE FROM ${CategoryEntity.TABLE_NAME}")
