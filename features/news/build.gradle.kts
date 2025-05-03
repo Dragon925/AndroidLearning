@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -28,6 +29,10 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
 }
 
@@ -47,12 +52,17 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.bundles.compose.ui)
+
     implementation(libs.bundles.coroutines)
     implementation(libs.kotlinx.datetime)
+    implementation(libs.kotlinx.collections.immutable)
 
     implementation(libs.bundles.android.navigation)
 
     implementation(libs.bundles.coil)
+    implementation(libs.coil.compose)
 
     implementation(libs.dagger)
     implementation(libs.activity)

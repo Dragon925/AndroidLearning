@@ -5,6 +5,7 @@ import com.github.dragon925.androidlearning.core.api.domain.models.Event
 import com.github.dragon925.androidlearning.news.R
 import com.github.dragon925.androidlearning.news.ui.models.NewsDetailItem
 import com.github.dragon925.androidlearning.news.ui.models.NewsItem
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -25,7 +26,7 @@ internal fun Event.toNewsItem(context: Context) = NewsItem(
     title = name,
     description = description,
     date = getDateString(context, startDate, endDate),
-    categoryIds = categoryIds.toSet(),
+    categoryIds = categoryIds.toImmutableSet(),
     image = photos.firstOrNull()
 )
 
