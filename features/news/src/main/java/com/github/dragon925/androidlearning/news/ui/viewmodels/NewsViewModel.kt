@@ -10,6 +10,8 @@ import com.github.dragon925.androidlearning.core.api.ui.UIState
 import com.github.dragon925.androidlearning.news.ui.models.NewsItem
 import com.github.dragon925.androidlearning.news.ui.models.NewsListUIState
 import jakarta.inject.Inject
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,9 +39,13 @@ internal class NewsViewModel @Inject constructor(
     ) { loading, read, filters, news ->
         UIState(
             isLoading = loading,
-            data = NewsListUIState(news.filter { event ->
-                filters.isEmpty() || event.categoryIds.any { it in filters }
-            }, read)
+            data = NewsListUIState(
+                news.filter { event ->
+                        filters.isEmpty() || event.categoryIds.any { it in filters }
+                    }
+                    .toImmutableList(),
+                read.toImmutableSet()
+            )
         )
     }
 

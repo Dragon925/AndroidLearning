@@ -3,9 +3,7 @@ package com.github.dragon925.androidlearning.news.ui.fragments
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,37 +14,26 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import coil3.ColorImage
 import coil3.annotation.ExperimentalCoilApi
-import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePreviewHandler
 import coil3.compose.LocalAsyncImagePreviewHandler
 import com.github.dragon925.androidlearning.core.api.ui.theme.AppTheme
-import com.github.dragon925.androidlearning.core.api.ui.theme.grey
 import com.github.dragon925.androidlearning.core.api.ui.theme.white
 import com.github.dragon925.androidlearning.news.R
+import com.github.dragon925.androidlearning.news.ui.components.GradientAsyncImage
 import com.github.dragon925.androidlearning.news.ui.models.NewsItem
-import com.github.dragon925.androidlearning.news.ui.utils.PlaceholderPainter
 
 @Composable
 internal fun NewsListItem(newsItem: NewsItem, onClick: () -> Unit) {
@@ -58,39 +45,11 @@ internal fun NewsListItem(newsItem: NewsItem, onClick: () -> Unit) {
             containerColor = white
         )
     ) {
-        val placeholder = PlaceholderPainter(grey, 100f, 100f)
-        var imageSize: IntSize by remember { mutableStateOf(IntSize(10, 10)) }
-        Box(
-            Modifier.fillMaxWidth()
-                .onSizeChanged { imageSize = it }
-        ) {
-            AsyncImage(
-                model = newsItem.image,
-                contentDescription = stringResource(R.string.description_event_photo),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1.5f)
-                    .padding(AppTheme.dimens.spacingXxs),
-                placeholder = placeholder,
-                error = placeholder,
-                contentScale = ContentScale.Crop
-            )
-            Box(
-                Modifier.matchParentSize()
-                    .background(
-                        brush = Brush.radialGradient(
-                            0.0f to Color(0x00EEEEEE),
-                            0.5f to Color(0x00FFFFFF),
-                            0.75f to Color.White,
-                            center = Offset(
-                                x = imageSize.width / 2f,
-                                y = -imageSize.height * 0.15f
-                            ),
-                            radius = imageSize.width.toFloat(),
-                        )
-                    )
-            )
-        }
+        GradientAsyncImage(
+            image = newsItem.image,
+            modifier = Modifier.fillMaxWidth(),
+            contentDescription = stringResource(R.string.description_event_photo)
+        )
 
         Text(
             text = newsItem.title,

@@ -4,7 +4,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import com.github.dragon925.androidlearning.core.api.R
 
@@ -31,11 +30,11 @@ fun AppTheme(content: @Composable () -> Unit) {
     val appTextColors = AppTextColors(
         color2 = white,
         color10 = black70,
-        color13 = Color(0x61000000),
+        color13 = grey38,
         color16 = blueGrey,
         color17 = white,
         color19 = white,
-        colorPopupPlaceholder = Color(0x61000000)
+        colorPopupPlaceholder = grey38
     )
     val appDimens = AppDimens(
         spacingXxs = dimensionResource(id = R.dimen.spacing_xxs),

@@ -57,6 +57,7 @@ dependencies {
 
     implementation(libs.bundles.coroutines)
     implementation(libs.kotlinx.datetime)
+    implementation(libs.kotlinx.collections.immutable)
 
     implementation(libs.bundles.android.navigation)
 
