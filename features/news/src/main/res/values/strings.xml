@@ -39,6 +39,17 @@
     <string name="filter">Фильтр</string>
     <string name="help_category">Категории помощи</string>
     <string name="more_count">+%1$d</string>
-
+    
+    <string name="donation_gratitude">Спасибо за решение помочь!</string>
+    <string name="choose_donation_amount">Выберите размер пожертвования</string>
+    <string name="or_type_amount">или введите нужную сумму</string>
+    <string name="type_amount">Введите сумму</string>
+    <string name="amount">%1$d ₽</string>
+    <string name="cancel">Отмена</string>
+    <string name="transfer">Перевести</string>
+    <string name="donation_gratitude_notification">Спасибо, что пожертвовали %1$d ₽! Будем очень признательны, если вы сможете пожертвовать еще больше.</string>
+    <string name="donation_gratitude_notification_remind">Напоминаем, что мы будем очень признательны, если вы сможете пожертвовать еще больше.</string>
+    <string name="remind_later">Напомнить позже</string>
+    <string name="donations">Пожертвования</string>
 
 </resources>

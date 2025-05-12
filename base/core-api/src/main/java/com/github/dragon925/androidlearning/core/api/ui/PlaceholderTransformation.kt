@@ -1,4 +1,4 @@
-package com.github.dragon925.androidlearning.authorization.ui.utils
+package com.github.dragon925.androidlearning.core.api.ui
 
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping

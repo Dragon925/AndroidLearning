@@ -25,7 +25,10 @@ fun AppTheme(content: @Composable () -> Unit) {
         textStyle16 = textStyle16,
         textStyle17 = textStyle17,
         textStyle19 = textStyle19,
-        textStylePopupPlaceholder = textStylePopupPlaceholder
+        textStylePopupPlaceholder = textStylePopupPlaceholder,
+        textStylePopupHeader = textStylePopupHeader,
+        textStylePopupFieldTitle = textStylePopupFieldTitle,
+        textStylePopupButton = textStylePopupButton
     )
     val appTextColors = AppTextColors(
         color2 = white,
@@ -34,7 +37,9 @@ fun AppTheme(content: @Composable () -> Unit) {
         color16 = blueGrey,
         color17 = white,
         color19 = white,
-        colorPopupPlaceholder = grey38
+        colorPopupPlaceholder = grey38,
+        colorPopupHeader = black87,
+        colorPopupFieldTitle = black54,
     )
     val appDimens = AppDimens(
         spacingXxs = dimensionResource(id = R.dimen.spacing_xxs),
