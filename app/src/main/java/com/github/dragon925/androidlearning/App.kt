@@ -2,6 +2,7 @@ package com.github.dragon925.androidlearning
 
 import android.app.Application
 import android.content.Context
+import android.os.StrictMode
 import androidx.appcompat.content.res.AppCompatResources
 import coil3.ImageLoader
 import coil3.PlatformContext
@@ -20,7 +21,7 @@ import com.github.dragon925.androidlearning.core.di.DaggerCoreComponent
 
 class App : Application(), SingletonImageLoader.Factory, DepsHandler {
 
-    lateinit var appComponent: AppComponent
+    private lateinit var appComponent: AppComponent
     private lateinit var coreComponent: CoreComponent
 
     override val eventRepository: EventRepository
@@ -53,5 +54,18 @@ class App : Application(), SingletonImageLoader.Factory, DepsHandler {
             .context(this)
             .coreComponent(coreComponent)
             .build()
+
+        StrictMode.setThreadPolicy(
+            StrictMode.ThreadPolicy.Builder()
+                .detectAll()
+                .penaltyLog()
+                .build()
+        )
+        StrictMode.setVmPolicy(
+            StrictMode.VmPolicy.Builder()
+                .detectAll()
+                .penaltyLog()
+                .build()
+        )
     }
 }
