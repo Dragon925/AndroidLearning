@@ -9,11 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.activity.result.contract.ActivityResultContracts.TakePicturePreview
+import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -27,6 +29,7 @@ import com.github.dragon925.androidlearning.core.api.ui.ComponentViewModel
 import com.github.dragon925.androidlearning.core.api.ui.SimpleItemDecoration
 import com.github.dragon925.androidlearning.core.api.ui.UIState
 import com.github.dragon925.androidlearning.core.api.ui.createFactoryByViewModel
+import com.github.dragon925.androidlearning.core.api.ui.registerActionLauncher
 import com.github.dragon925.androidlearning.profile.R
 import com.github.dragon925.androidlearning.profile.databinding.FragmentProfileBinding
 import com.github.dragon925.androidlearning.profile.di.DaggerProfileComponent
@@ -50,9 +53,12 @@ class ProfileFragment : Fragment() {
     @Inject
     internal lateinit var viewModelFactory: ProfileViewModel.Factory
 
+    @VisibleForTesting
+    internal var componentBuilder = DaggerProfileComponent.builder()
+
     private val componentViewModel: ComponentViewModel<ProfileComponent> by viewModels {
         ComponentViewModel.createBy<ProfileComponent, ProfileDeps> {
-            DaggerProfileComponent.builder().deps(this).build()
+            componentBuilder.deps(this).build()
         }
     }
     private val viewModel: ProfileViewModel by viewModels {
@@ -62,49 +68,13 @@ class ProfileFragment : Fragment() {
 
     private val friendsAdapter = FriendsListAdapter()
 
-    private val permission = registerForActivityResult(RequestPermission()) { granted ->
-        when {
-            granted -> camera.launch(null)
-            else -> {
-                Toast.makeText(
-                    requireContext(),
-                    resources.getString(R.string.camera_permission_denied),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
+    private lateinit var permission: ActivityResultLauncher<String>
 
-    private val camera = registerForActivityResult(TakePicturePreview()) { bitmap ->
-        bitmap?.let {
-            imageLoader?.dispose()
-            hasCustomAvatar = true
-            binding.ivAvatar.setImageBitmap(it)
-        }
-    }
+    private lateinit var camera: ActivityResultLauncher<Void?>
 
-    private val pickMedia = registerForActivityResult(PickVisualMedia()) { uri ->
-        uri?.let {
-            imageLoader?.dispose()
-            hasCustomAvatar = true
-            binding.ivAvatar.setImageURI(it)
-        }
-    }
+    private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
 
-    private val openGallery = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            result.data?.data?.let { uri ->
-                try {
-                    requireContext().contentResolver.openInputStream(uri).use { inputStream ->
-                        val bitmap = inputStream?.let { BitmapFactory.decodeStream(it) }
-                        binding.ivAvatar.setImageBitmap(bitmap)
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-        }
-    }
+    private lateinit var openGallery: ActivityResultLauncher<Intent>
 
     private var imageLoader: Disposable? = null
 
@@ -131,6 +101,52 @@ class ProfileFragment : Fragment() {
 
         setFragmentResultListener(EditAvatarDialogFragment.REQUEST_KEY) { _, bundle ->
             handleEditAvatarDialogResult(bundle.getInt(EditAvatarDialogFragment.RESULT_TYPE))
+        }
+
+        permission = registerActionLauncher(RequestPermission()) { granted ->
+            when {
+                granted -> camera.launch(null)
+                else -> {
+                    Toast.makeText(
+                        requireContext(),
+                        resources.getString(R.string.camera_permission_denied),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+
+        camera = registerActionLauncher(TakePicturePreview()) { bitmap ->
+            bitmap?.let {
+                imageLoader?.dispose()
+                hasCustomAvatar = true
+                binding.ivAvatar.setImageBitmap(it)
+            }
+        }
+
+        pickMedia = registerActionLauncher(PickVisualMedia()) { uri ->
+            uri?.let {
+                imageLoader?.dispose()
+                hasCustomAvatar = true
+                binding.ivAvatar.setImageURI(it)
+            }
+        }
+
+        openGallery = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.data?.let { uri ->
+                    try {
+                        requireContext().contentResolver.openInputStream(uri).use { inputStream ->
+                            val bitmap = inputStream?.let { BitmapFactory.decodeStream(it) }
+                            imageLoader?.dispose()
+                            hasCustomAvatar = true
+                            binding.ivAvatar.setImageBitmap(bitmap)
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
         }
 
         with(binding) {

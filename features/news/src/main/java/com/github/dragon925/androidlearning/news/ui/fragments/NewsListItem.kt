@@ -36,10 +36,10 @@ import com.github.dragon925.androidlearning.news.ui.components.GradientAsyncImag
 import com.github.dragon925.androidlearning.news.ui.models.NewsItem
 
 @Composable
-internal fun NewsListItem(newsItem: NewsItem, onClick: () -> Unit) {
+internal fun NewsListItem(newsItem: NewsItem, modifier: Modifier = Modifier, onClick: () -> Unit) {
     ElevatedCard(
         onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         shape = RectangleShape,
         colors = CardDefaults.elevatedCardColors(
             containerColor = white
@@ -66,7 +66,7 @@ internal fun NewsListItem(newsItem: NewsItem, onClick: () -> Unit) {
 
         Image(
             painter = painterResource(R.drawable.bg_decor),
-            contentDescription = null,
+            contentDescription = stringResource(R.string.description_event_divider),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
@@ -100,7 +100,7 @@ internal fun NewsListItem(newsItem: NewsItem, onClick: () -> Unit) {
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_calendar),
-                contentDescription = null,
+                contentDescription = stringResource(R.string.description_event_date),
                 tint = MaterialTheme.colorScheme.onPrimary
             )
 

@@ -34,8 +34,8 @@ internal class FriendsListAdapter : ListAdapter<FriendItem, FriendsListAdapter.F
         private val binding: ItemFriendBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: FriendItem) {
-            binding.ivAvatar.load(item.avatar)
-            binding.tvName.text = item.name
+            binding.ivFriendAvatar.load(item.avatar)
+            binding.tvFriendName.text = item.name
         }
     }
 
