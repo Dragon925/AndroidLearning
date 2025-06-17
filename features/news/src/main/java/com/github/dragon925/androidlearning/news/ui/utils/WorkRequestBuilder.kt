@@ -15,6 +15,7 @@ internal inline fun <reified W: Worker> createOneTimeWorkRequest(
     val data = workDataOf(*workRequestBuilderParameters)
 
     return OneTimeWorkRequestBuilder<W>()
+        .addTag(W::class.java.simpleName)
         .setConstraints(constraints)
         .setInputData(data)
         .addExtras()
