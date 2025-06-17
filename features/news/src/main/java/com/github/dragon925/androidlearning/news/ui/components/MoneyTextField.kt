@@ -38,7 +38,7 @@ internal fun MoneyTextField(
         VisualTransformation.None
     }
     TextField(
-        value = value,
+        value = value.take(7),
         onValueChange = onValueChange,
         modifier = modifier,
         textStyle = style.copy(
@@ -48,7 +48,7 @@ internal fun MoneyTextField(
         visualTransformation = visualTransformation,
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Done,
-            keyboardType = KeyboardType.Decimal
+            keyboardType = KeyboardType.Number
         ),
         colors = TextFieldDefaults.colors(
             focusedTextColor = textColor,

@@ -49,7 +49,7 @@
     <string name="amount">%1$d ₽</string>
     <string name="cancel">Отмена</string>
     <string name="transfer">Перевести</string>
-    <string name="donation_gratitude_notification">Спасибо, что пожертвовали %1$d ₽! Будем очень признательны, если вы сможете пожертвовать еще больше.</string>
+    <string name="donation_gratitude_notification">Спасибо, что пожертвовали %1$d\u00A0₽! Будем очень признательны, если вы сможете пожертвовать еще больше.</string>
     <string name="donation_gratitude_notification_remind">Напоминаем, что мы будем очень признательны, если вы сможете пожертвовать еще больше.</string>
     <string name="remind_later">Напомнить позже</string>
     <string name="donations">Пожертвования</string>

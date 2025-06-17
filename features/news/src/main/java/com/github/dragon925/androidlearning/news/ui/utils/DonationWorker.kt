@@ -50,6 +50,12 @@ class DonationWorker(
         withReminder: Boolean = true
     ) {
         val context = applicationContext
+
+        if (ActivityCompat.checkSelfPermission(
+                context, Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) return
+
         val notificationManager = NotificationManagerCompat.from(context)
         val channel = NotificationChannel(
             CHANNEL_ID,
@@ -66,13 +72,7 @@ class DonationWorker(
             notificationBuilder.addAction(createRemindAction(context, eventId, eventName))
         }
 
-        if (ActivityCompat.checkSelfPermission(
-                context, Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            notificationManager.notify(
-                eventId.hashCode(), notificationBuilder.build())
-        }
+        notificationManager.notify(eventId.hashCode(), notificationBuilder.build())
     }
 
     private fun createNotificationBuilder(
@@ -143,7 +143,7 @@ class DonationWorker(
 
         return NotificationCompat.Action.Builder(
             R.drawable.ic_remind,
-            context.resources.getString(R.string.remind_later),
+            context.getString(R.string.remind_later),
             pendingIntent
         )
             .build()
