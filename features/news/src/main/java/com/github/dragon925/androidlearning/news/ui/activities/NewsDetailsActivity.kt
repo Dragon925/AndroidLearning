@@ -1,9 +1,14 @@
 package com.github.dragon925.androidlearning.news.ui.activities
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isGone
@@ -11,6 +16,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.work.WorkManager
 import coil3.load
 import com.github.dragon925.androidlearning.core.api.ui.ComponentViewModel
 import com.github.dragon925.androidlearning.core.api.ui.UIState
@@ -20,9 +26,11 @@ import com.github.dragon925.androidlearning.news.databinding.ActivityNewsDetails
 import com.github.dragon925.androidlearning.news.di.NewsDeps
 import com.github.dragon925.androidlearning.news.di.components.DaggerNewsDetailsComponent
 import com.github.dragon925.androidlearning.news.di.components.NewsDetailsComponent
+import com.github.dragon925.androidlearning.news.ui.fragments.MoneyDonationDialogFragment
 import com.github.dragon925.androidlearning.news.ui.models.NewsDetailItem
+import com.github.dragon925.androidlearning.news.ui.utils.DonationWorker
+import com.github.dragon925.androidlearning.news.ui.utils.createOneTimeWorkRequest
 import com.github.dragon925.androidlearning.news.ui.viewmodels.NewsDetailsViewModel
-import io.reactivex.rxjava3.disposables.CompositeDisposable
 import jakarta.inject.Inject
 import kotlinx.coroutines.launch
 
@@ -55,7 +63,11 @@ class NewsDetailsActivity : AppCompatActivity() {
             viewModelFactory.create(newsId)
         }
     }
-    private val compositeDisposable = CompositeDisposable()
+
+    private val permission = registerForActivityResult(RequestPermission()) {
+        MoneyDonationDialogFragment()
+            .show(supportFragmentManager, MoneyDonationDialogFragment.TAG)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +92,12 @@ class NewsDetailsActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect(::updateState)
             }
+        }
+
+        supportFragmentManager.setFragmentResultListener(
+            MoneyDonationDialogFragment.REQUEST_KEY, this
+        ) { _, result ->
+            handleMoneyDonation(result.getInt(MoneyDonationDialogFragment.RESULT_VALUE))
         }
     }
 
@@ -109,6 +127,10 @@ class NewsDetailsActivity : AppCompatActivity() {
                 tvMoreAvatars.isVisible = true
                 tvMoreAvatars.text = resources.getString(R.string.more_count, otherMembers)
             }
+
+            btnHelpMoney.setOnClickListener {
+                openDonationDialog()
+            }
         }
     }
 
@@ -121,8 +143,34 @@ class NewsDetailsActivity : AppCompatActivity() {
         state.data?.let { initViews(it) }
     }
 
+    private fun openDonationDialog() {
+        if (ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED &&
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+        ) {
+            permission.launch(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            MoneyDonationDialogFragment()
+                .show(supportFragmentManager, MoneyDonationDialogFragment.TAG)
+        }
+    }
+
+    private fun handleMoneyDonation(amount: Int) {
+        if (amount == 0) return
+
+        val donationWorkRequest = createOneTimeWorkRequest<DonationWorker>(
+            DonationWorker.EVENT_ID to newsId,
+            DonationWorker.EVENT_NAME to newsTitle,
+            DonationWorker.AMOUNT to amount,
+            addConstrains = { setRequiresCharging(true) }
+        )
+
+        WorkManager.getInstance(this).enqueue(donationWorkRequest)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        compositeDisposable.dispose()
+        supportFragmentManager.clearFragmentResultListener(MoneyDonationDialogFragment.REQUEST_KEY)
     }
 }

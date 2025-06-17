@@ -12,7 +12,9 @@ data class AppTextColors(
     val color16: Color,
     val color17: Color,
     val color19: Color,
-    val colorPopupPlaceholder: Color
+    val colorPopupPlaceholder: Color,
+    val colorPopupHeader: Color,
+    val colorPopupFieldTitle: Color
 )
 
 internal val LocalAppTextColors = staticCompositionLocalOf {
@@ -23,7 +25,9 @@ internal val LocalAppTextColors = staticCompositionLocalOf {
         color16 = Color.Unspecified,
         color17 = Color.Unspecified,
         color19 = Color.Unspecified,
-        colorPopupPlaceholder = Color.Unspecified
+        colorPopupPlaceholder = Color.Unspecified,
+        colorPopupHeader = Color.Unspecified,
+        colorPopupFieldTitle = Color.Unspecified
     )
 }
 
@@ -32,7 +36,9 @@ val warmGreyTwo = Color(0xFF757575)
 val lightOliveGreen = Color(0xFF9EBF50)
 val lightGreyTwo = Color(0xFFE8EDED)
 val white = Color(0xFFFFFFFF)
+val black54 = Color(0x8A000000)
 val black70 = Color(0xB3000000)
+val black87 = Color(0xDE000000)
 val grey = Color(0xFF94998A)
 val black12 = Color(0x1E000000)
 val leaf = Color(0xFF66A636)

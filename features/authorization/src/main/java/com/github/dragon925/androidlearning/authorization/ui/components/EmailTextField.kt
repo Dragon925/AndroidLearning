@@ -10,7 +10,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import com.github.dragon925.androidlearning.authorization.R
-import com.github.dragon925.androidlearning.authorization.ui.utils.PlaceholderTransformation
+import com.github.dragon925.androidlearning.core.api.ui.PlaceholderTransformation
 import com.github.dragon925.androidlearning.core.api.ui.theme.AppTheme
 
 @Composable

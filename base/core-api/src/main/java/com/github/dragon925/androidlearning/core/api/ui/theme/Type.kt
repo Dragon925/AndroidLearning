@@ -19,7 +19,10 @@ data class AppTypography(
     val textStyle16: TextStyle,
     val textStyle17: TextStyle,
     val textStyle19: TextStyle,
-    val textStylePopupPlaceholder: TextStyle
+    val textStylePopupPlaceholder: TextStyle,
+    val textStylePopupHeader: TextStyle,
+    val textStylePopupFieldTitle: TextStyle,
+    val textStylePopupButton: TextStyle
 )
 
 internal val LocalAppTypography = staticCompositionLocalOf {
@@ -30,7 +33,10 @@ internal val LocalAppTypography = staticCompositionLocalOf {
         textStyle16 = TextStyle.Default,
         textStyle17 = TextStyle.Default,
         textStyle19 = TextStyle.Default,
-        textStylePopupPlaceholder = TextStyle.Default
+        textStylePopupPlaceholder = TextStyle.Default,
+        textStylePopupHeader = TextStyle.Default,
+        textStylePopupFieldTitle = TextStyle.Default,
+        textStylePopupButton = TextStyle.Default
     )
 }
 
@@ -89,4 +95,28 @@ internal val textStyle19 = TextStyle(
     fontStyle = FontStyle.Normal,
     fontSize = 12.sp,
     lineHeight = 16.sp
+)
+
+internal val textStylePopupHeader = TextStyle(
+    fontFamily = FontFamily.SansSerif,
+    fontWeight = FontWeight.Medium,
+    fontStyle = FontStyle.Normal,
+    fontSize = 20.sp,
+    lineHeight = 28.sp
+)
+
+internal val textStylePopupFieldTitle = TextStyle(
+    fontFamily = FontFamily.SansSerif,
+    fontStyle = FontStyle.Normal,
+    fontSize = 16.sp,
+    textAlign = TextAlign.Center
+)
+
+internal val textStylePopupButton = TextStyle(
+    fontFamily = FontFamily.SansSerif,
+    fontWeight = FontWeight.Medium,
+    fontStyle = FontStyle.Normal,
+    fontSize = 14.sp,
+    letterSpacing = 0.04.sp,
+    textAlign = TextAlign.Center
 )
