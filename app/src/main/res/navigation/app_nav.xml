@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/app_nav"
-    app:startDestination="@id/screen_help">
+    app:startDestination="@id/screen_auth">
 
     <include app:graph="@navigation/auth_nav"/>
     <include app:graph="@navigation/help_nav" />

@@ -1,6 +1,9 @@
 package com.github.dragon925.androidlearning.core.api.ui
 
 import android.content.Context
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
@@ -24,3 +27,8 @@ inline fun <reified VM: ViewModel> createFactoryByViewModel(
 }
 
 inline fun <reified VM: ViewModel> MultiViewModelFactory.create(): VM = this.create(VM::class.java)
+
+fun <F: Fragment, I, O> F.registerActionLauncher(
+    contract: ActivityResultContract<I, O>,
+    callback: ActivityResultCallback<O>
+) = registerForActivityResult(contract, callback)

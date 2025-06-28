@@ -30,6 +30,8 @@
     <string name="visit_site"><u>Перейти на сайт организации</u></string>
 
     <string name="description_event_photo">Фотографии события</string>
+    <string name="description_event_divider">Разделитель названия и описания</string>
+    <string name="description_event_date">Дата</string>
 
     <string name="help_things">Помочь вещами</string>
     <string name="become_volunteer">Стать волонтером</string>

@@ -15,6 +15,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +36,9 @@ import com.github.dragon925.androidlearning.news.ui.models.NewsListUIState
 import com.github.dragon925.androidlearning.news.ui.viewmodels.NewsViewModel
 import com.github.dragon925.androidlearning.news.ui.viewmodels.UnreadNewsViewModel
 import kotlinx.collections.immutable.persistentListOf
+
+internal const val TAG_LOADING_INDICATOR = "LoadingIndicator"
+internal const val TAG_NEWS_ITEM = "NewsItem"
 
 @Composable
 internal fun NewsListScreen(
@@ -84,7 +88,8 @@ private fun NewsList(
         ) {
             if (state.isLoading) {
                 LinearProgressIndicator(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth()
+                        .testTag(TAG_LOADING_INDICATOR),
                     color = macaroniAndCheese,
                     trackColor = lightOliveGreen
                 )
@@ -99,7 +104,10 @@ private fun NewsList(
                     items = state.data?.newsList ?: emptyList(),
                     key = { it.id }
                 ) { newsItem ->
-                    NewsListItem(newsItem) {
+                    NewsListItem(
+                        newsItem,
+                        Modifier.testTag(TAG_NEWS_ITEM)
+                    ) {
                         onOpenDetails(newsItem)
                     }
                 }

@@ -7,7 +7,7 @@
     android:gravity="center">
 
     <ImageView
-        android:id="@+id/iv_avatar"
+        android:id="@+id/iv_friend_avatar"
         android:layout_width="@dimen/avatar_size"
         android:layout_height="@dimen/avatar_size"
         android:scaleType="centerCrop"
@@ -16,7 +16,7 @@
 
     <TextView
         style="@style/TextStyle8"
-        android:id="@+id/tv_name"
+        android:id="@+id/tv_friend_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"

@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.activity.viewModels
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
@@ -40,6 +41,9 @@ class NewsDetailsActivity : AppCompatActivity() {
         const val EXTRA_NEWS_ID = "NewsDetailsID"
         const val EXTRA_NEWS_TITLE = "NewsDetailsTitle"
         private const val DEFAULT_NEWS_ID = ""
+
+        @VisibleForTesting
+        internal fun getComponentBuilder() = DaggerNewsDetailsComponent.builder()
     }
 
     private var newsId: String = DEFAULT_NEWS_ID
@@ -52,8 +56,7 @@ class NewsDetailsActivity : AppCompatActivity() {
 
     private val detailsComponentViewModel: ComponentViewModel<NewsDetailsComponent> by viewModels {
         ComponentViewModel.createBy<NewsDetailsComponent, NewsDeps> {
-            DaggerNewsDetailsComponent.builder()
-                .newsId(newsId)
+            getComponentBuilder().newsId(newsId)
                 .deps(this)
                 .build()
         }
